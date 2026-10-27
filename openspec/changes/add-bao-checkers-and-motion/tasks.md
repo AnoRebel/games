@@ -73,8 +73,8 @@
 
 ## 9. Product Rename
 
-- [ ] 9.1 Add the root site config and use it for the header, home title, manifest name/short name, Apple title, install prompt, share defaults, and metadata description; verify a test asserting every surface reports the same name and a string scan finds no user-visible "Card Games".
-- [ ] 9.2 Add localized product names and game-agnostic brand copy in English (`Games`) and Swahili (`Michezo`), including tagline, subtitle, install, and invitation text; verify locale tests for both languages and no card-only wording.
+- [x] 9.1 Add the root site config and use it for the header, home title, manifest name/short name, Apple title, install prompt, share defaults, and metadata description; verify a test asserting every surface reports the same name and a string scan finds no user-visible "Card Games".
+- [x] 9.2 Add localized product names and game-agnostic brand copy in English (`Games`) and Swahili (`Michezo`), including tagline, subtitle, install, and invitation text; verify locale tests for both languages and no card-only wording.
 - [ ] 9.3 Rename root/workspace packages, imports, aliases, lockfile, database class/default filename, application keys, CSS variables/classes/attributes to `games`/`@games/*`; verify typecheck/build plus a scan allowing old ids only in migration literals and historical documents.
 - [ ] 9.4 Implement awaited, idempotent client database/key migration preserving profiles, results, uploads, saved games, and preferences; verify interrupted retry, destination conflicts, quota failure, no duplicate results, and completion only after destination verification.
 - [ ] 9.5 Implement a pre-start server database migration with writers stopped, consistent WAL-aware backup, integrity/count verification, explicit connection override support, and conflict detection; test old-only/new-only/both paths and interrupted retry. Document backup, recovery, and rollback of post-migration writes.

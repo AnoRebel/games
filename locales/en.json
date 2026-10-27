@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "Card Games",
-    "tagline": "Play card games together",
-    "subtitle": "Modular, themeable card games with realtime online and local offline multiplayer. Pick a game to create or join a room."
+    "title": "Games",
+    "tagline": "Play games together",
+    "subtitle": "Card and board games with realtime online play and local offline multiplayer. Pick a game to create or join a room."
   },
   "nav": {
     "games": "Games",
@@ -41,7 +41,7 @@
     "share": "Share",
     "copyLink": "Copy link",
     "scanToJoin": "Scan to join the game",
-    "shareText": "Join my card game!",
+    "shareText": "Join my game!",
     "playerLink": "Player link",
     "spectatorLink": "Spectator link",
     "showQr": "Show QR"
@@ -293,7 +293,7 @@
     "offlineReady": "Ready to play offline",
     "newVersion": "A new version is available",
     "reload": "Reload",
-    "installPrompt": "Install Card Games",
+    "installPrompt": "Install Games",
     "install": "Install"
   },
   "voice": {

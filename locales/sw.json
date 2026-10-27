@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "Michezo ya Karata",
-    "tagline": "Cheza michezo ya karata pamoja",
-    "subtitle": "Michezo ya karata inayoweza kubadilishwa, yenye wachezaji wengi mtandaoni na nje ya mtandao. Chagua mchezo ili kuunda au kujiunga na chumba."
+    "title": "Michezo",
+    "tagline": "Cheza michezo pamoja",
+    "subtitle": "Michezo ya karata na ya ubao, mtandaoni kwa wakati halisi na nje ya mtandao. Chagua mchezo ili kuunda au kujiunga na chumba."
   },
   "nav": {
     "games": "Michezo",
@@ -41,7 +41,7 @@
     "share": "Shiriki",
     "copyLink": "Nakili kiungo",
     "scanToJoin": "Skani ili kujiunga na mchezo",
-    "shareText": "Jiunge na mchezo wangu wa karata!",
+    "shareText": "Jiunge na mchezo wangu!",
     "playerLink": "Kiungo cha mchezaji",
     "spectatorLink": "Kiungo cha mtazamaji",
     "showQr": "Onyesha QR"
@@ -293,7 +293,7 @@
     "offlineReady": "Tayari kucheza nje ya mtandao",
     "newVersion": "Toleo jipya linapatikana",
     "reload": "Pakia upya",
-    "installPrompt": "Sakinisha Card Games",
+    "installPrompt": "Sakinisha Michezo",
     "install": "Sakinisha"
   },
   "voice": {

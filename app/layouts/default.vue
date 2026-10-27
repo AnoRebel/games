@@ -25,7 +25,7 @@ const locales = computed(() => $getLocales());
           class="font-display font-bold tracking-tight inline-flex items-center gap-1.5"
         >
           <span class="text-lg leading-none">🂡</span>
-          <span class="hidden xs:inline">Card Games</span>
+          <span class="hidden xs:inline">{{ $ts("app.title") }}</span>
         </NuxtLink>
 
         <div class="flex items-center gap-0.5">
