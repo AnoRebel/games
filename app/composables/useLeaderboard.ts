@@ -71,6 +71,11 @@ export function useLeaderboard(
  */
 export async function recordResults(entries: Omit<GameResult, "id">[]) {
   if (!import.meta.client) return;
+  // Never write into the new database before older results have been moved
+  // into it; an unresolved migration is reported by DataMigrationNotice.
+  const migration = useDataMigration();
+  await migration.ready();
+  if (migration.state.value !== "ready") return;
   const db = useDb();
   await db.results.bulkAdd(entries);
 }

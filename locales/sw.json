@@ -365,5 +365,13 @@
     "draw": "Ni sare",
     "scoredSeeds": "Kete zilizobaki mwishoni",
     "scoredPieces": "Kete zilizobaki ubaoni"
+  },
+  "migration": {
+    "title": "Data yako iliyohifadhiwa inahitaji uangalizi",
+    "failed": "Hatukuweza bado kuhamisha matokeo, picha ulizopakia na michezo uliyohifadhi kwenda toleo jipya. Viko salama — jaribu tena.",
+    "quota": "Kivinjari chako kimejaa, kwa hiyo matokeo, picha na michezo iliyohifadhiwa havijahamishwa bado. Futa nafasi kisha ujaribu tena.",
+    "conflict": "Kivinjari hiki tayari kina data mpya ya michezo, kwa hiyo matokeo yako ya zamani hayakuunganishwa nayo. Data yako ya zamani imehifadhiwa salama.",
+    "retry": "Jaribu tena",
+    "keepCurrent": "Baki na data ya sasa"
   }
 }

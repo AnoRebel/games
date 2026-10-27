@@ -365,5 +365,13 @@
     "draw": "It's a draw",
     "scoredSeeds": "Seeds held at the end",
     "scoredPieces": "Pieces left on the board"
+  },
+  "migration": {
+    "title": "Your saved data needs attention",
+    "failed": "We couldn't move your results, uploads and saved games to the new version yet. They are safe — try again.",
+    "quota": "Your browser is out of storage space, so your results, uploads and saved games couldn't be moved yet. Free some space and try again.",
+    "conflict": "This browser already has newer game data, so your older results weren't merged into it. Your older data is kept safely.",
+    "retry": "Try again",
+    "keepCurrent": "Keep current data"
   }
 }

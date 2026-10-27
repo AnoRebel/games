@@ -61,8 +61,11 @@ const setupOpen = ref(false);
 const { today: daily, markPlayed: markDailyPlayed } = useDailyChallenge();
 const isDaily = ref(false);
 
-// Auto-open the setup modal when arriving with no active game and no shared room.
-onMounted(() => {
+// Auto-open the setup modal when arriving with no active game and no shared room
+// — once any older browser data has been moved over.
+const migration = useDataMigration();
+onMounted(async () => {
+  await migration.ready();
   if (transport.value || route.query.room || !meta.value) return;
   if (route.query.daily === "1" && daily.value.gameId === gameId.value) {
     isDaily.value = true;
