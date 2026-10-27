@@ -23,7 +23,8 @@
     "test:bench": "vitest run packages/game-ai/test/benchmark.test.ts",
     "smoke:boards": "cd scripts/smoke && bun run boards.ts",
     "smoke:themes": "cd scripts/smoke && bun run themes.ts",
-    "smoke:leaderboard": "cd scripts/smoke && bun run leaderboard.ts"
+    "smoke:leaderboard": "cd scripts/smoke && bun run leaderboard.ts",
+    "smoke:integration": "cd scripts/smoke && bun run integration.ts"
   },
   "dependencies": {
     "@games/engine-core": "workspace:*",

@@ -219,6 +219,7 @@ function start() {
             <USelect
               v-model="visibility"
               size="sm"
+              class="w-full min-w-0"
               :items="[
                 { label: $ts('lobby.spectatorPublic'), value: 'public' },
                 { label: $ts('lobby.spectatorLocked'), value: 'locked' },
@@ -237,6 +238,7 @@ function start() {
             v-model="botSeats"
             size="sm"
             class="w-full"
+            data-testid="bot-seats-select"
             :items="
               Array.from({ length: totalPlayers }, (_, i) => ({
                 label: i === 0 ? $ts('setup.botSeatsNone') : `${i}`,
