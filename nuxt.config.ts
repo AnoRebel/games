@@ -1,6 +1,6 @@
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { siteConfig } from "./site.config";
+import { siteConfig } from "./site.config.ts";
 
 /**
  * Automated version string, resolved ONCE at build time:
