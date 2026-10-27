@@ -65,8 +65,10 @@ export interface ScoreResult {
   bySeat: Record<Seat, number>;
   /** Optional victory points per seat (e.g. Albastini VP). */
   victoryBySeat?: Record<Seat, number>;
-  /** Seats that won (may be multiple on a tie; empty if undecided). */
+  /** Seats that won (may be multiple on a tie; empty if undecided or drawn). */
   winners: Seat[];
+  /** True when the game ended in a draw for every seat. */
+  drawn?: boolean;
 }
 
 /** Static, serializable metadata describing a game for the UI/registry. */

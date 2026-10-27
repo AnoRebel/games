@@ -8,8 +8,8 @@ import { mount } from "@vue/test-utils";
 import RulesContent from "../app/components/RulesContent.vue";
 import { lookupGameContent } from "../app/utils/gameContent";
 
-const mountFor = (variant: string, locale: string) => {
-  const c = lookupGameContent("bao", variant, locale);
+const mountFor = (variant: string, locale: string, gameId = "bao") => {
+  const c = lookupGameContent(gameId, variant, locale);
   return mount(RulesContent, {
     props: {
       rules: c.rules,
@@ -41,4 +41,16 @@ describe("RulesContent", () => {
     expect(w.get('[data-testid="rules-missing"]').text()).toBe("missing");
     expect(w.findAll("section")).toHaveLength(0);
   });
+
+  it.each(["drafti", "english", "international"])(
+    "renders the %s checkers rules in both languages",
+    (variant) => {
+      for (const locale of ["en", "sw"]) {
+        const c = lookupGameContent("checkers", variant, locale);
+        const w = mountFor(variant, locale, "checkers");
+        expect(w.findAll("section")).toHaveLength(c.rules.length);
+        expect(w.findAll("li")).toHaveLength(c.rules.flatMap((r) => r.body).length);
+      }
+    },
+  );
 });

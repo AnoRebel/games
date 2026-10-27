@@ -20,14 +20,14 @@
 
 ## 3. Checkers Engine
 
-- [ ] 3.1 Implement the Checkers state model and per-variant setup for Drafti, English/American, and International, with seat 0 moving first; verify board size, piece counts, empty middle rows, and default variant tests.
-- [ ] 3.2 Implement man and king movement for all variants, including flying kings and short kings; verify tests for forward-only men, blocked men, and both king ranges.
-- [ ] 3.3 Implement capture generation for all variants: direction rules, multi-capture completion, no double jump, International removal timing, and the maximal-capture rule; verify perft counts of 7 for the 8×8 starts and 9 for the 10×10 start plus targeted capture fixtures.
-- [ ] 3.4 Implement promotion timing differences, including Drafti/English move termination and International stop-on-row promotion; verify one test per variant, including pass-over behavior.
-- [ ] 3.5 Implement win detection and all three draw rule sets with repetition and move counters; verify crafted endgames for every draw trigger, a draw result recorded for both seats, and a no-legal-move loss.
-- [ ] 3.6 Add the checkers move representation (origin, path, captures, promotes) and verify capture-path previews can be built from a legal move without engine calls.
-- [ ] 3.7 Add determinism, replay, and illegal-move tests for all three variants, including variant persistence through serialization.
-- [ ] 3.8 Ship Checkers rules content in English and Swahili for all three variants, stating board, captures, promotion, and draw differences; verify content lookups and panel rendering per variant.
+- [x] 3.1 Implement the Checkers state model and per-variant setup for Drafti, English/American, and International, with seat 0 moving first; verify board size, piece counts, empty middle rows, and default variant tests.
+- [x] 3.2 Implement man and king movement for all variants, including flying kings and short kings; verify tests for forward-only men, blocked men, and both king ranges.
+- [x] 3.3 Implement capture generation for all variants: direction rules, multi-capture completion, no double jump, International removal timing, and the maximal-capture rule; verify perft counts of 7 for the 8×8 starts and 9 for the 10×10 start plus targeted capture fixtures.
+- [x] 3.4 Implement promotion timing differences, including Drafti/English move termination and International stop-on-row promotion; verify one test per variant, including pass-over behavior.
+- [x] 3.5 Implement win detection and all three draw rule sets with repetition and move counters; verify crafted endgames for every draw trigger, a draw result recorded for both seats, and a no-legal-move loss.
+- [x] 3.6 Add the checkers move representation (origin, path, captures, promotes) and verify capture-path previews can be built from a legal move without engine calls.
+- [x] 3.7 Add determinism, replay, and illegal-move tests for all three variants, including variant persistence through serialization.
+- [x] 3.8 Ship Checkers rules content in English and Swahili for all three variants, stating board, captures, promotion, and draw differences; verify content lookups and panel rendering per variant.
 
 ## 4. AI Opponents
 

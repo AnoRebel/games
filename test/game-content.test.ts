@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from "vitest";
 import { baoGame } from "@card-games/game-bao";
+import { checkersGame } from "@card-games/game-checkers";
 import { contentVariants, lookupGameContent } from "../app/utils/gameContent";
 
 const text = (sections: { heading: string; body: string[] }[]) =>
@@ -67,9 +68,78 @@ describe("game content — Bao variants", () => {
   });
 });
 
+describe("game content — Checkers variants", () => {
+  it("has content for every declared Checkers variant in both locales", () => {
+    const declared = checkersGame.meta.variants!.map((v) => v.id);
+    expect(contentVariants("checkers", "en")).toEqual(declared);
+    expect(contentVariants("checkers", "sw")).toEqual(declared);
+  });
+
+  it.each([
+    [
+      "drafti",
+      [
+        "8×8",
+        "flying",
+        "forward only",
+        "any capture",
+        "ends there",
+        "One king each",
+        "12",
+      ],
+    ],
+    [
+      "english",
+      [
+        "8×8",
+        "exactly one square",
+        "forward and backward",
+        "any capture",
+        "ends the move",
+        "Forty moves",
+      ],
+    ],
+    [
+      "international",
+      [
+        "10×10",
+        "flying",
+        "forward and backward",
+        "maximum number",
+        "stops on the far row",
+        "Twenty-five",
+        "16 moves",
+      ],
+    ],
+  ])(
+    "states %s's board, kings, captures, maximal rule, promotion and draws",
+    (variant, terms) => {
+      const all = text(lookupGameContent("checkers", variant, "en").rules);
+      for (const term of terms) expect(all).toContain(term);
+    },
+  );
+
+  it("restarts the tutorial with the new variant's steps", () => {
+    const d = lookupGameContent("checkers", "drafti", "en").tutorial;
+    const i = lookupGameContent("checkers", "international", "en").tutorial;
+    expect(d[0]!.content).toContain("8×8");
+    expect(i[0]!.content).toContain("10×10");
+    const topics = text(
+      d.map((s) => ({ heading: s.title, body: [s.content] })),
+    ).toLowerCase();
+    for (const t of ["forward", "capture", "jump", "king"]) expect(topics).toContain(t);
+  });
+
+  it("serves Swahili checkers rules in the Swahili locale", () => {
+    const all = text(lookupGameContent("checkers", "international", "sw").rules);
+    expect(all).toContain("10×10");
+    expect(all).toContain("Sare");
+  });
+});
+
 describe("game content — locale handling", () => {
   it("keeps Swahili and English structurally aligned for every game and variant", () => {
-    for (const gameId of ["last-card", "albastini", "bao"]) {
+    for (const gameId of ["last-card", "albastini", "bao", "checkers"]) {
       const variants = contentVariants(gameId);
       for (const v of variants.length ? variants : [undefined]) {
         const en = lookupGameContent(gameId, v, "en");

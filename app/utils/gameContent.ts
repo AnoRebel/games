@@ -20,6 +20,7 @@ import {
   albastiniTutorialSw,
 } from "@card-games/game-albastini";
 import { baoContent, baoContentSw } from "@card-games/game-bao";
+import { checkersContent, checkersContentSw } from "@card-games/game-checkers";
 
 export type { RulesSection, TutorialStep };
 
@@ -36,11 +37,13 @@ const CONTENT: Record<string, Record<string, GameEntry>> = {
     "last-card": { rules: lastCardRules, tutorial: lastCardTutorial },
     albastini: { rules: albastiniRules, tutorial: albastiniTutorial },
     bao: { byVariant: baoContent },
+    checkers: { byVariant: checkersContent },
   },
   sw: {
     "last-card": { rules: lastCardRulesSw, tutorial: lastCardTutorialSw },
     albastini: { rules: albastiniRulesSw, tutorial: albastiniTutorialSw },
     bao: { byVariant: baoContentSw },
+    checkers: { byVariant: checkersContentSw },
   },
 };
 
