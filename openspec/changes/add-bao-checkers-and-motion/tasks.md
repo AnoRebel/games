@@ -90,10 +90,10 @@
 
 ## 11. Integration and Documentation
 
-- [ ] 11.1 Run the full verification gate: `bun run typecheck`, `bun run lint`, `bun run test`, and `bun run build` all pass; record any pre-existing warnings separately.
-- [ ] 11.2 Run the end-to-end browser smoke: offline bao and checkers with each difficulty, online room with a chosen variant, theme switch, rename surfaces, and a recorded result with provenance in the leaderboard.
-- [ ] 11.3 Check the performance budget on a mobile viewport: board interaction stays responsive during a hard bot search, animations use transform/opacity, and the client bundle increase from GSAP is recorded.
-- [ ] 11.4 Update `README.md` and the ruleset documentation for the new games, variants, rename, and the Bao ruleset scope note; verify documented commands and game lists match the shipped code.
+- [x] 11.1 Run the full verification gate: `bun run typecheck`, `bun run lint`, `bun run test`, and `bun run build` all pass; record any pre-existing warnings separately.
+- [x] 11.2 Run the end-to-end browser smoke: offline bao and checkers with each difficulty, online room with a chosen variant, theme switch, rename surfaces, and a recorded result with provenance in the leaderboard.
+- [x] 11.3 Check the performance budget on a mobile viewport: board interaction stays responsive during a hard bot search, animations use transform/opacity, and the client bundle increase from GSAP is recorded.
+- [x] 11.4 Update `README.md` and the ruleset documentation for the new games, variants, rename, and the Bao ruleset scope note; verify documented commands and game lists match the shipped code.
 
 ## Workflow follow-up
 
