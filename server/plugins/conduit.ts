@@ -12,7 +12,8 @@
  * coexists with the crossws endpoint and Vite HMR.
  */
 import type { Server } from "node:http";
-import { useRuntimeConfig } from "#imports";
+import { defineNitroPlugin } from "nitropack/runtime";
+import { useRuntimeConfig } from "nuxt/server";
 
 export default defineNitroPlugin(async (nitroApp) => {
   if (import.meta.prerender) return;

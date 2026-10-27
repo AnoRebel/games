@@ -28,10 +28,10 @@ dev_materials/
 
 # AI
 CLAUDE.md
-openspec/
 .mcp.json
 .claude/
-.impeccable.md
+.opencode/
+.pi/
 
 # LibSQL local datastore (persistent volume in prod)
 data/

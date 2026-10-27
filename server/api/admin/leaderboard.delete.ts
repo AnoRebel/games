@@ -7,6 +7,12 @@
  * left alone (they're reaped on their own schedule).
  */
 import { timingSafeEqual } from "node:crypto";
+import {
+  createError,
+  defineEventHandler,
+  getQuery,
+  getRequestHeader,
+} from "nuxt/server";
 import { clearResults } from "../../utils/db";
 
 /** Constant-time compare that doesn't leak length via early return. */

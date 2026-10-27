@@ -3,6 +3,7 @@
  * from server-authoritative online match results (the only trustworthy source;
  * offline results are client-side and never persisted here).
  */
+import { createError, defineEventHandler, getRouterParam } from "nuxt/server";
 import { globalLeaderboard } from "../../utils/db";
 
 export default defineEventHandler(async (event) => {

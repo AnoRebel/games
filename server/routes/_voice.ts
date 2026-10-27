@@ -22,6 +22,8 @@
  *   { t: 'signal', to, from, data }          → forwarded signalling
  */
 
+import { defineWebSocketHandler } from "h3";
+
 // --- abuse guards ----------------------------------------------------------
 // Signalling (SDP/ICE) is larger than a game move — allow up to 64KB.
 const MAX_MESSAGE_BYTES = 64 * 1024;

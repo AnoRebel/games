@@ -4,6 +4,7 @@
  * Returns only public (non-locked), non-finished rooms with counts. Locked rooms
  * and the passcode are never exposed here.
  */
+import { defineEventHandler } from "nuxt/server";
 import { getRoomHub } from "../utils/roomHub";
 
 export default defineEventHandler(() => {

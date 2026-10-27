@@ -8,6 +8,7 @@
  * Conduit (WebRTC P2P + relay) remains an optional enhancement behind the same
  * client-side GameTransport seam; this WS path is the reliable default carrier.
  */
+import { defineWebSocketHandler } from "h3";
 import { getRoomHub, type WsPeer } from "../utils/roomHub";
 
 // --- abuse guards ----------------------------------------------------------

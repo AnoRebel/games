@@ -3,6 +3,7 @@
  * the spectator passcode the host can bake into a spectator link.
  */
 import { requireGame } from "@card-games/engine-core";
+import { createError, defineEventHandler, getRequestIP, readBody } from "nuxt/server";
 import { getRoomHub } from "../utils/roomHub";
 import type { RoomConfig, SpectatorVisibility } from "../utils/roomTypes";
 

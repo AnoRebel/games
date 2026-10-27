@@ -54,6 +54,14 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2026-06-01",
 
+  experimental: {
+    // Compat v5 turns Nitro auto-imports off. nuxt-i18n-micro 3.30.1 still
+    // imports `useRuntimeConfig` from virtual #imports, so keep the compatibility
+    // layer until that module switches to direct imports. Our own server code
+    // imports h3/nitropack helpers explicitly.
+    nitroAutoImports: true,
+  },
+
   modules: [
     "@nuxt/ui",
     "@vueuse/nuxt",
