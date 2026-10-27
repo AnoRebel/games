@@ -23,7 +23,10 @@
   },
   "dependencies": {
     "@card-games/engine-core": "workspace:*",
+    "@card-games/game-ai": "workspace:*",
     "@card-games/game-albastini": "workspace:*",
+    "@card-games/game-bao": "workspace:*",
+    "@card-games/game-checkers": "workspace:*",
     "@card-games/game-last-card": "workspace:*",
     "@conduit/client": "npm:@jsr/conduit__client",
     "@conduit/server": "npm:@jsr/conduit__server",

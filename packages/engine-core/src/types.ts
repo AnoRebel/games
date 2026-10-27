@@ -7,6 +7,7 @@
  */
 
 import type { RngState } from "./rng";
+import type { Difficulty, VariantMeta } from "./variants";
 
 /** A seat index at the table (0-based). */
 export type Seat = number;
@@ -78,6 +79,17 @@ export interface GameMeta {
   maxPlayers: number;
   /** Player counts that are actually valid (e.g. Albastini: 2,3,4,6). */
   supportedPlayerCounts: number[];
+  /**
+   * Selectable rule variants. Omitted for games with a single ruleset; when
+   * present, config carries the chosen id as `variant`.
+   */
+  variants?: VariantMeta[];
+  /** Variant used when none is chosen (defaults to the first declared). */
+  defaultVariant?: string;
+  /** Bot difficulty tiers this game supports (all tiers when omitted). */
+  difficulties?: Difficulty[];
+  /** Tier used when none is chosen (`normal` when omitted). */
+  defaultDifficulty?: Difficulty;
 }
 
 /**

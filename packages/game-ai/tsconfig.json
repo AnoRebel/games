@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@card-games/engine-core": ["../engine-core/src/index.ts"],
+      "@card-games/game-last-card": ["../game-last-card/src/index.ts"],
+      "@card-games/game-albastini": ["../game-albastini/src/index.ts"],
+      "@card-games/game-bao": ["../game-bao/src/index.ts"],
+      "@card-games/game-checkers": ["../game-checkers/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

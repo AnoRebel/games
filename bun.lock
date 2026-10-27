@@ -6,7 +6,10 @@
       "name": "card-games",
       "dependencies": {
         "@card-games/engine-core": "workspace:*",
+        "@card-games/game-ai": "workspace:*",
         "@card-games/game-albastini": "workspace:*",
+        "@card-games/game-bao": "workspace:*",
+        "@card-games/game-checkers": "workspace:*",
         "@card-games/game-last-card": "workspace:*",
         "@conduit/client": "npm:@jsr/conduit__client",
         "@conduit/server": "npm:@jsr/conduit__server",
@@ -57,8 +60,31 @@
       "name": "@card-games/engine-core",
       "version": "0.1.0",
     },
+    "packages/game-ai": {
+      "name": "@card-games/game-ai",
+      "version": "0.1.0",
+      "dependencies": {
+        "@card-games/engine-core": "workspace:*",
+        "@card-games/game-bao": "workspace:*",
+        "@card-games/game-checkers": "workspace:*",
+      },
+    },
     "packages/game-albastini": {
       "name": "@card-games/game-albastini",
+      "version": "0.1.0",
+      "dependencies": {
+        "@card-games/engine-core": "workspace:*",
+      },
+    },
+    "packages/game-bao": {
+      "name": "@card-games/game-bao",
+      "version": "0.1.0",
+      "dependencies": {
+        "@card-games/engine-core": "workspace:*",
+      },
+    },
+    "packages/game-checkers": {
+      "name": "@card-games/game-checkers",
       "version": "0.1.0",
       "dependencies": {
         "@card-games/engine-core": "workspace:*",
@@ -277,7 +303,13 @@
 
     "@card-games/engine-core": ["@card-games/engine-core@workspace:packages/engine-core"],
 
+    "@card-games/game-ai": ["@card-games/game-ai@workspace:packages/game-ai"],
+
     "@card-games/game-albastini": ["@card-games/game-albastini@workspace:packages/game-albastini"],
+
+    "@card-games/game-bao": ["@card-games/game-bao@workspace:packages/game-bao"],
+
+    "@card-games/game-checkers": ["@card-games/game-checkers@workspace:packages/game-checkers"],
 
     "@card-games/game-last-card": ["@card-games/game-last-card@workspace:packages/game-last-card"],
 

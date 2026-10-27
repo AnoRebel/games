@@ -43,6 +43,8 @@ export const albastiniGame: GameModule<AlbastiniState, AlbastiniMove, AlbastiniC
     minPlayers: 2,
     maxPlayers: 6,
     supportedPlayerCounts: SUPPORTED_COUNTS,
+    difficulties: ["easy", "normal", "hard"],
+    defaultDifficulty: "normal",
   },
   defaultConfig: defaultAlbastiniConfig,
   createInitialState(config: AlbastiniConfig, players: Player[], seed) {

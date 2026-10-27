@@ -2,10 +2,10 @@
 
 ## 1. Foundation
 
-- [ ] 1.1 Extend the game metadata and config resolution with declared rule variants and difficulty tiers, including validation of unknown values and a no-variant regression path; verify with new `engine-core` unit tests for defaults, unknown variant/difficulty, and existing games.
-- [ ] 1.2 Scaffold `packages/game-bao`, `packages/game-checkers`, and `packages/game-ai` with package manifests, tsconfigs, and placeholder exports; wire root `package.json`, `nuxt.config.ts` `build.transpile`, and `vitest.config.ts` aliases. Verify `bun install` and `bun run typecheck` succeed with the new workspaces.
-- [ ] 1.3 Register the new game modules in `app/plugins/games.ts` and `server/utils/roomHub.ts`; verify an integration test can resolve `requireGame("bao")` and `requireGame("checkers")` in both the app test context and the room-hub test.
-- [ ] 1.4 Add the shared scene/theme and site identity constants needed by later groups without changing behavior; verify typecheck and that no existing test changes outcome.
+- [x] 1.1 Extend the game metadata and config resolution with declared rule variants and difficulty tiers, including validation of unknown values and a no-variant regression path; verify with new `engine-core` unit tests for defaults, unknown variant/difficulty, and existing games.
+- [x] 1.2 Scaffold `packages/game-bao`, `packages/game-checkers`, and `packages/game-ai` with package manifests, tsconfigs, and placeholder exports; wire root `package.json`, `nuxt.config.ts` `build.transpile`, and `vitest.config.ts` aliases. Verify `bun install` and `bun run typecheck` succeed with the new workspaces.
+- [x] 1.3 Register the new game modules in `app/plugins/games.ts` and `server/utils/roomHub.ts`; verify an integration test can resolve `requireGame("bao")` and `requireGame("checkers")` in both the app test context and the room-hub test.
+- [x] 1.4 Add the shared scene/theme and site identity constants needed by later groups without changing behavior; verify typecheck and that no existing test changes outcome.
 
 ## 2. Bao Engine
 

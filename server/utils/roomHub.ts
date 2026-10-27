@@ -20,6 +20,8 @@ import {
 } from "@card-games/engine-core";
 import { registerLastCard } from "@card-games/game-last-card";
 import { registerAlbastini } from "@card-games/game-albastini";
+import { registerBao } from "@card-games/game-bao";
+import { registerCheckers } from "@card-games/game-checkers";
 import { consola } from "consola";
 import {
   recordOnlineResults,
@@ -55,6 +57,8 @@ function ensureGames() {
   if (registered) return;
   registerLastCard();
   registerAlbastini();
+  registerBao();
+  registerCheckers();
   registered = true;
 }
 

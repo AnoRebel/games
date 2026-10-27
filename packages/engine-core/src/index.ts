@@ -49,5 +49,22 @@ export type {
 // Move application / validation / replay
 export { applyMove, replay, hasLegalMove } from "./apply";
 
+// Rule variants & difficulty tiers
+export {
+  type Difficulty,
+  type VariantMeta,
+  type ResolvedSetup,
+  DIFFICULTIES,
+  DEFAULT_DIFFICULTY,
+  GameConfigError,
+  supportedDifficulties,
+  defaultDifficulty,
+  defaultVariant,
+  resolveDifficulty,
+  resolveVariant,
+  resolveSetup,
+  variantName,
+} from "./variants";
+
 // Registry
 export { registerGame, getGame, requireGame, listGames, clearGames } from "./registry";

@@ -243,6 +243,9 @@ export default defineNuxtConfig({
       "@card-games/engine-core",
       "@card-games/game-last-card",
       "@card-games/game-albastini",
+      "@card-games/game-bao",
+      "@card-games/game-checkers",
+      "@card-games/game-ai",
     ],
   },
 

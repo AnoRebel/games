@@ -59,6 +59,8 @@ export const lastCardGame: GameModule<LastCardState, LastCardMove, LastCardConfi
     minPlayers: 2,
     maxPlayers: 6,
     supportedPlayerCounts: [2, 3, 4, 5, 6],
+    difficulties: ["easy", "normal", "hard"],
+    defaultDifficulty: "normal",
   },
   defaultConfig: defaultLastCardConfig,
   createInitialState(config: LastCardConfig, players: Player[], seed) {
