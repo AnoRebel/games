@@ -12,6 +12,7 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { createClient, type Client } from "@libsql/client";
+import { ensureServerDatabaseMigrated } from "./dbMigration";
 
 let client: Client | null = null;
 let initPromise: Promise<void> | null = null;
@@ -62,6 +63,13 @@ async function ensureSchema(c: Client): Promise<void> {
 
 /** Lazily create + migrate the client. Safe to call repeatedly. */
 export async function getDb(): Promise<Client> {
+  if (client) {
+    if (initPromise) await initPromise;
+    return client;
+  }
+  // Move a legacy database into place before anything opens (and so creates)
+  // the new one. A failure surfaces here instead of serving an empty database.
+  await ensureServerDatabaseMigrated();
   if (client) {
     if (initPromise) await initPromise;
     return client;
