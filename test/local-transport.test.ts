@@ -10,7 +10,7 @@ import {
   type LastCardMove,
 } from "@card-games/game-last-card";
 import { LocalTransport } from "../app/transports/LocalTransport";
-import { chooseBotMove } from "../app/transports/bot";
+import { chooseBotMove } from "@card-games/game-ai";
 
 const players: Player[] = [
   { id: "a", name: "A", seat: 0 },

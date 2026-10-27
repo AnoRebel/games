@@ -31,12 +31,12 @@
 
 ## 4. AI Opponents
 
-- [ ] 4.1 Move the existing card-game bot policies from `app/transports/bot.ts` into `packages/game-ai` and update app imports; verify the existing `test/bot.test.ts`, offline playthrough, and full-playthrough suites pass unchanged.
-- [ ] 4.2 Implement the deterministic policy interface and easy/normal/hard policies for Bao and Checkers, including node budgets, alpha-beta, move ordering, and per-game evaluations; verify legality, repeated-decision equality, and budget-ceiling tests.
+- [x] 4.1 Move the existing card-game bot policies from `app/transports/bot.ts` into `packages/game-ai` and update app imports; verify the existing `test/bot.test.ts`, offline playthrough, and full-playthrough suites pass unchanged.
+- [x] 4.2 Implement the deterministic policy interface and easy/normal/hard policies for Bao and Checkers, including node budgets, alpha-beta, move ordering, and per-game evaluations; verify legality, repeated-decision equality, and budget-ceiling tests.
 - [ ] 4.3 Add cooperative yielding for browser search without time-based decisions; verify a test that a yielded search returns the same move as a synchronous run and a browser smoke where input stays responsive during a hard search.
-- [ ] 4.4 Build the deterministic strength benchmark harness with checked-in seeds and a fixed move cap; run it for both games and record that hard ≥60% vs normal and normal ≥65% vs easy, tuning budgets before freezing the seeds.
-- [ ] 4.5 Wire server bot seats to the shared package and verify an offline and an in-room decision from the same state and difficulty return the same move.
-- [ ] 4.6 Verify the card-game bot regression explicitly: all three difficulties still terminate legally for Last Card and Albastini with unchanged policy outcomes.
+- [x] 4.4 Build the deterministic strength benchmark harness with checked-in seeds and a fixed move cap; run it for both games and record that hard ≥60% vs normal and normal ≥65% vs easy, tuning budgets before freezing the seeds.
+- [x] 4.5 Wire server bot seats to the shared package and verify an offline and an in-room decision from the same state and difficulty return the same move.
+- [x] 4.6 Verify the card-game bot regression explicitly: all three difficulties still terminate legally for Last Card and Albastini with unchanged policy outcomes.
 
 ## 5. Setup, Rooms, and Transport
 

@@ -5,7 +5,7 @@
  * it validates every move through the engine reducer and broadcasts redacted
  * state per recipient (no hidden-hand leaks).
  */
-import type { Seat } from "@card-games/engine-core";
+import type { Difficulty, Seat } from "@card-games/engine-core";
 
 export type SpectatorVisibility = "public" | "locked";
 
@@ -48,6 +48,13 @@ export interface RoomConfig {
    * A spectator joining past the cap is denied.
    */
   maxSpectators?: number;
+  /**
+   * Seats the server fills with bots when the game starts (after the seated
+   * humans). 0/undefined = humans only.
+   */
+  botSeats?: number;
+  /** Strength of bot-filled seats; never affects human seats. */
+  difficulty?: Difficulty;
 }
 
 /** Client → server messages. */

@@ -15,7 +15,7 @@ import type {
 import { lastCardGame } from "@card-games/game-last-card";
 import { albastiniGame } from "@card-games/game-albastini";
 import { LocalTransport } from "../app/transports/LocalTransport";
-import type { BotDifficulty } from "../app/transports/bot";
+import type { BotDifficulty } from "@card-games/game-ai";
 
 function players(n: number, humanIds: string[] = []): Player[] {
   return Array.from({ length: n }, (_, i) => ({

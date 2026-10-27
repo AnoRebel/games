@@ -345,8 +345,16 @@ function finish(
   };
 }
 
-/** Apply a legal move and settle wins and draws. */
-export function applyLegalMove(state: CheckersState, move: CheckersMove): CheckersState {
+/**
+ * Apply a legal move and settle wins and draws. Search passes
+ * `checkNextMoves: false` and detects a stuck opponent itself when it expands
+ * the child, saving one move generation per node.
+ */
+export function applyLegalMove(
+  state: CheckersState,
+  move: CheckersMove,
+  { checkNextMoves = true }: { checkNextMoves?: boolean } = {},
+): CheckersState {
   const seat = move.seat;
   const opponent = (1 - seat) as Seat;
   const board = applyToBoard(state.board, move);
@@ -388,7 +396,7 @@ export function applyLegalMove(state: CheckersState, move: CheckersMove): Checke
   if (m.men[opponent]! + m.kings[opponent]! === 0) {
     return finish(next, { winner: seat, reason: "no-pieces" });
   }
-  if (generateMoves(next, opponent).length === 0) {
+  if (checkNextMoves && generateMoves(next, opponent).length === 0) {
     return finish(next, { winner: seat, reason: "no-legal-move" });
   }
 

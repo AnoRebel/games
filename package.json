@@ -19,7 +19,8 @@
     "pwa:assets": "pwa-assets-generator",
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:bench": "vitest run packages/game-ai/test/benchmark.test.ts"
   },
   "dependencies": {
     "@card-games/engine-core": "workspace:*",

@@ -13,7 +13,7 @@ import {
   type Seat,
   applyMove,
 } from "@card-games/engine-core";
-import { chooseBotMove, type BotDifficulty } from "./bot";
+import { chooseBotMoveAsync, type BotDifficulty } from "@card-games/game-ai";
 import type { ChatMessage, GameTransport, PresenceInfo, TransportView } from "./types";
 
 export interface LocalTransportOptions<S extends BaseGameState, M extends BaseMove, C> {
@@ -50,6 +50,8 @@ export class LocalTransport<
   private chatCbs = new Set<(m: ChatMessage[]) => void>();
   private chat: ChatMessage[] = [];
   private botTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Bumps on every scheduled bot turn so a stale decision is dropped. */
+  private botTicket = 0;
   private destroyed = false;
 
   constructor(opts: LocalTransportOptions<S, M, C>) {
@@ -103,6 +105,7 @@ export class LocalTransport<
       clearTimeout(this.botTimer);
       this.botTimer = null;
     }
+    this.botTicket++;
     const active = this.state.activeSeat;
     if (active === null || this.game.isTerminal(this.state)) return;
     if (this.humanSeats.has(active)) return; // human's turn
@@ -111,14 +114,20 @@ export class LocalTransport<
     // hard bots are snappy. (A hard bot that plays worse would just feel random.)
     const paceFactor =
       this.difficulty === "easy" ? 1.4 : this.difficulty === "hard" ? 0.55 : 1;
-    this.botTimer = setTimeout(
-      () => {
-        if (this.destroyed) return;
-        const move = chooseBotMove(this.game, this.state, active, this.difficulty);
-        if (move) void this.submitMove(move);
-      },
-      Math.round(this.botDelayMs * paceFactor),
-    );
+    const delay = Math.round(this.botDelayMs * paceFactor);
+    // Think while the pacing delay runs: the move lands after the delay, not
+    // after delay + search. The search yields between slices so the page stays
+    // responsive, and a newer turn (or teardown) discards this decision.
+    const ticket = ++this.botTicket;
+    const state = this.state;
+    const paced = new Promise<void>((resolve) => {
+      this.botTimer = setTimeout(resolve, delay);
+    });
+    const decided = chooseBotMoveAsync(this.game, state, active, this.difficulty);
+    void Promise.all([decided, paced]).then(([move]) => {
+      if (this.destroyed || ticket !== this.botTicket || this.state !== state) return;
+      if (move) void this.submitMove(move);
+    });
   }
 
   onChange(cb: (v: TransportView<S, M>) => void): () => void {

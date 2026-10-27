@@ -22,6 +22,7 @@ import { registerLastCard } from "@card-games/game-last-card";
 import { registerAlbastini } from "@card-games/game-albastini";
 import { registerBao } from "@card-games/game-bao";
 import { registerCheckers } from "@card-games/game-checkers";
+import { chooseBotMoveAsync } from "@card-games/game-ai";
 import { consola } from "consola";
 import {
   recordOnlineResults,
@@ -109,12 +110,22 @@ const EMPTY_ROOM_GRACE_MS = 60_000;
  * back before it's reaped — otherwise restart-survival rooms would leak.
  */
 const REHYDRATED_ROOM_GRACE_MS = 10 * 60_000;
+/** Pause before a server bot seat moves, so humans can follow its play (ms). */
+const BOT_DELAY_MS = 700;
 /** How long a disconnected SEATED player has to reconnect before the in-progress
  *  game is auto-ended (ms). The client shows a countdown of the same length. */
 const PLAYER_GRACE_MS = 30_000;
 
+export interface RoomHubOptions {
+  /** Pause before a bot seat moves (ms). */
+  botDelayMs?: number;
+}
+
 export class RoomHub {
   private rooms = new Map<string, Room>();
+  /** Pending bot-seat turns (roomId → timer). */
+  private botTimers = new Map<string, ReturnType<typeof setTimeout>>();
+  private botDelayMs: number;
   /** Which room a peer is currently in (peer.id → roomId). */
   private peerRoom = new Map<string, string>();
   /** Pending deletion timers for rooms that just went empty. */
@@ -126,8 +137,9 @@ export class RoomHub {
   /** Debounced snapshot timers (roomId → timer) for restart-survival. */
   private snapshotTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
-  constructor() {
+  constructor(options: RoomHubOptions = {}) {
     ensureGames();
+    this.botDelayMs = options.botDelayMs ?? BOT_DELAY_MS;
   }
 
   /** Cancel a player's reconnect-grace timer (they came back, or were removed). */
@@ -165,6 +177,7 @@ export class RoomHub {
       const r = this.rooms.get(roomId);
       if (r && !r.config.persist && this.isEmpty(r)) {
         this.clearTurnTimer(roomId);
+        this.clearBotTimer(roomId);
         void deleteRoomSnapshot(roomId).catch(() => {});
         this.rooms.delete(roomId);
         log.info(`reaped empty room ${roomId} (${this.rooms.size} left)`);
@@ -288,6 +301,8 @@ export class RoomHub {
         // ever arm the reaper for it. Give players a long window to come back;
         // the first rejoin cancels the timer (see onJoin).
         this.scheduleReap(p.id, REHYDRATED_ROOM_GRACE_MS);
+        // Bots don't need a connection: resume one that was due to move.
+        this.scheduleBotTurn(p.id);
       }
       if (snaps.length) log.info(`rehydrated ${this.rooms.size} room(s) from snapshots`);
     } catch (e) {
@@ -563,7 +578,11 @@ export class RoomHub {
     const seated = [...room.members.values()]
       .filter((m) => m.seat !== null)
       .sort((a, b) => a.seat! - b.seat!);
-    if (seated.length < room.config.minPlayers) {
+    const bots = Math.max(
+      0,
+      Math.min(room.config.botSeats ?? 0, room.config.maxPlayers - seated.length),
+    );
+    if (seated.length + bots < room.config.minPlayers) {
       return this.send(peer, {
         t: "error",
         message: `Need at least ${room.config.minPlayers} players`,
@@ -580,6 +599,20 @@ export class RoomHub {
       seat: m.seat!,
       ...(teamCount ? { team: m.seat! % teamCount } : {}),
     }));
+    // Bots take the free seats after the humans.
+    const taken = new Set(players.map((p) => p.seat));
+    for (let seat = 0, added = 0; added < bots; seat++) {
+      if (taken.has(seat)) continue;
+      players.push({
+        id: `bot-${seat}`,
+        name: `Bot ${seat + 1}`,
+        seat,
+        bot: true,
+        ...(teamCount ? { team: seat % teamCount } : {}),
+      });
+      added++;
+    }
+    players.sort((a, b) => a.seat - b.seat);
     room.state = game.createInitialState(room.config.gameConfig, players, genId("seed"));
     room.phase = "in-progress";
     room.startedAt = new Date().toISOString();
@@ -601,6 +634,7 @@ export class RoomHub {
     // this null).
     room.endedBy = room.members.get(peer.id)?.name ?? "The host";
     this.clearTurnTimer(room.id);
+    this.clearBotTimer(room.id);
     void deleteRoomSnapshot(room.id).catch(() => {}); // ended → nothing to resume
     this.broadcastRoom(room);
   }
@@ -615,11 +649,19 @@ export class RoomHub {
     if (move.seat !== member.seat) {
       return this.send(peer, { t: "error", message: "not your seat" });
     }
+    const error = this.applyRoomMove(room, move);
+    if (error) return this.send(peer, { t: "error", message: error });
+  }
+
+  /**
+   * Validate and apply a move to a room's game, then settle and broadcast.
+   * Returns an error message when the engine rejects the move.
+   */
+  private applyRoomMove(room: Room, move: BaseMove): string | null {
+    if (!room.state) return "no game";
     const game = requireGame(room.config.gameId);
     const result = applyMove(game, room.state, move);
-    if (!result.ok) {
-      return this.send(peer, { t: "error", message: result.error });
-    }
+    if (!result.ok) return result.error;
     room.state = result.state;
     if (game.isTerminal(room.state)) {
       room.phase = "finished";
@@ -632,6 +674,47 @@ export class RoomHub {
       this.snapshotSoon(room.id); // keep an up-to-date resume point
     }
     this.broadcastState(room);
+    return null;
+  }
+
+  private clearBotTimer(roomId: string) {
+    const t = this.botTimers.get(roomId);
+    if (t) {
+      clearTimeout(t);
+      this.botTimers.delete(roomId);
+    }
+  }
+
+  /**
+   * If a bot holds the active seat, play its move after the bot delay using
+   * the same shared policy as offline play. The search yields between slices,
+   * so a deep decision never stalls other rooms.
+   */
+  private scheduleBotTurn(roomId: string) {
+    this.clearBotTimer(roomId);
+    const room = this.rooms.get(roomId);
+    if (!room?.state || room.phase !== "in-progress") return;
+    const active = room.state.activeSeat;
+    const bot = room.state.players.find((p) => p.seat === active && p.bot);
+    if (active === null || !bot) return;
+    const state = room.state;
+    const timer = setTimeout(() => {
+      this.botTimers.delete(roomId);
+      const game = requireGame(room.config.gameId);
+      void chooseBotMoveAsync(
+        game,
+        state,
+        active,
+        room.config.difficulty ?? "normal",
+      ).then((move) => {
+        // Drop a decision the room has moved past (end, rematch, timeout).
+        if (!move || room.state !== state || room.phase !== "in-progress") return;
+        const error = this.applyRoomMove(room, move);
+        if (error) log.warn(`bot move rejected in room ${roomId}: ${error}`);
+      });
+    }, this.botDelayMs);
+    (timer as { unref?: () => void }).unref?.();
+    this.botTimers.set(roomId, timer);
   }
 
   /** Record this finished online match to the global leaderboard (humans only,
@@ -714,6 +797,7 @@ export class RoomHub {
     // An explicit leave that empties the room → delete it right away.
     if (room.members.size === 0) {
       this.cancelReap(roomId);
+      this.clearBotTimer(roomId);
       this.rooms.delete(roomId);
       return;
     }
@@ -777,8 +861,10 @@ export class RoomHub {
   private broadcastState(room: Room) {
     // State is redacted per viewer → must send individually.
     for (const peer of room.peers.values()) this.sendStateTo(room, peer);
-    // (Re)arm the optional per-turn timer for the new active seat.
+    // (Re)arm the optional per-turn timer for the new active seat, and let a
+    // bot holding that seat move.
     this.scheduleTurnTimeout(room.id);
+    this.scheduleBotTurn(room.id);
   }
 
   private send(peer: WsPeer, msg: ServerMessage) {
@@ -810,6 +896,8 @@ export class RoomHub {
     for (const t of this.graceTimers.values()) clearTimeout(t);
     for (const t of this.turnTimers.values()) clearTimeout(t);
     for (const t of this.snapshotTimers.values()) clearTimeout(t);
+    for (const t of this.botTimers.values()) clearTimeout(t);
+    this.botTimers.clear();
     this.reapTimers.clear();
     this.graceTimers.clear();
     this.turnTimers.clear();

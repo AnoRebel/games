@@ -8,7 +8,7 @@ import {
 } from "@card-games/engine-core";
 import { lastCardGame, defaultLastCardConfig } from "@card-games/game-last-card";
 import { albastiniGame, defaultAlbastiniConfig } from "@card-games/game-albastini";
-import { chooseBotMove, type BotDifficulty } from "../app/transports/bot";
+import { chooseBotMove, type BotDifficulty } from "@card-games/game-ai";
 
 const P = (n: number): Player[] =>
   Array.from({ length: n }, (_, i) => ({ id: `p${i}`, name: `P${i}`, seat: i }));

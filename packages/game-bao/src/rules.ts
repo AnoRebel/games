@@ -426,8 +426,17 @@ function finish(state: BaoState, winner: Seat, reason: BaoEndReason): BaoState {
   return { ...state, phase: "finished", activeSeat: null, winner, endReason: reason };
 }
 
-/** Apply a resolved turn and settle the end-of-turn rules. */
-export function applyTurn(state: BaoState, seat: Seat, turn: ResolvedTurn): BaoState {
+/**
+ * Apply a resolved turn and settle the end-of-turn rules. Search passes
+ * `checkNextMoves: false` and detects a stuck opponent itself when it expands
+ * the child, saving one full move generation per node.
+ */
+export function applyTurn(
+  state: BaoState,
+  seat: Seat,
+  turn: ResolvedTurn,
+  { checkNextMoves = true }: { checkNextMoves?: boolean } = {},
+): BaoState {
   const opponent = 1 - seat;
   const { board, move } = turn;
   const reserves = { ...state.reserves, [seat]: board.ownReserve };
@@ -450,8 +459,9 @@ export function applyTurn(state: BaoState, seat: Seat, turn: ResolvedTurn): BaoS
   if (move.infinite) return finish(next, opponent, "infinite-turn");
   if (frontEmpty(next.pits[opponent]!)) return finish(next, seat, "front-row-empty");
   // Our own empty front row only loses after the opponent's turn (checked then).
-  if (resolveTurns(next, opponent).length === 0)
+  if (checkNextMoves && resolveTurns(next, opponent).length === 0) {
     return finish(next, seat, "no-legal-move");
+  }
   return next;
 }
 
