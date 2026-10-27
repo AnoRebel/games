@@ -23,8 +23,9 @@ they play.
 - **Always legal.** A bot returns one of the engine's own legal moves, or no
   move when the game is over or the seat has nothing to do. When the budget
   cuts a depth short, the best move of the last completed depth stands.
-- **Responsive.** The search yields every few thousand nodes. The browser
-  hands the event loop back between slices, and the bot thinks while its
+- **Responsive.** The search checks in every 250 nodes and hands the event
+  loop back once a slice has run for 8 ms, so slices stay short on slow phones
+  without pausing needlessly on fast machines. The bot thinks while its
   pacing delay runs, so the move lands after the delay rather than after delay
   plus thinking time. The server uses the same sliced search so a deep
   decision in one room never stalls the others.
@@ -45,3 +46,22 @@ game is a draw). It runs with the normal test suite, or on its own with
 
 Changing a budget, an evaluation weight or the seeds changes these numbers;
 re-run the benchmark and update this table with the change.
+
+## Responsiveness on a phone
+
+Measured on the production build in Chromium at 360×640 (touch, 2× pixel
+ratio) with the CPU throttled 4×, three moves each against the hard bot.
+"Long tasks" are main-thread tasks over 50 ms while the bot was thinking.
+
+| Game     | Bot  | Longest task, first move | Longest task, later moves |
+| -------- | ---- | ------------------------ | ------------------------- |
+| Checkers | hard | 155 ms                   | 67–121 ms                 |
+| Checkers | easy | 237 ms                   | 59–83 ms                  |
+| Bao      | hard | 124 ms                   | none                      |
+| Bao      | easy | 225 ms                   | none                      |
+
+The easy bot does no search, so its numbers are the cost of rendering and
+animating the move itself. The hard search adds no longer tasks than that
+baseline. With the earlier 2,000-node slices, checkers on hard reached 202 ms.
+Board animations move only `transform` and `opacity` (see
+[the animation decision](decisions/animation-library.md)).

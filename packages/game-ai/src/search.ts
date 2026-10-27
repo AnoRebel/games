@@ -10,8 +10,8 @@
  *
  * The search is written as a generator that yields every `yieldEvery` nodes.
  * Driven synchronously (Nitro, tests) the yields are ignored; driven by
- * `runAsync` the browser gets the event loop back between slices. Both run
- * exactly the same code, so the chosen move cannot differ.
+ * `runAsync` the browser gets the event loop back once a slice has used its
+ * time. Both run exactly the same code, so the chosen move cannot differ.
  */
 
 import type { Seat } from "@games/engine-core";
@@ -69,7 +69,7 @@ export function* searchSteps<S, M>(
   root: S,
   seat: Seat,
   limits: SearchLimits,
-  yieldEvery = 2_000,
+  yieldEvery = 250,
 ): Generator<void, SearchResult<M>> {
   let nodes = 0;
   const tt = new Map<string, TTEntry>();
@@ -212,14 +212,30 @@ const macrotask = () =>
     ).setTimeout(resolve, 0),
   );
 
-/** Drive a search generator, handing the event loop back between slices. */
+/** Time-boxed slicing: keep working through yields until `ms` have passed. */
+export interface SliceClock {
+  ms: number;
+  /** Millisecond clock supplied by the caller (e.g. `performance.now`). */
+  now: () => number;
+}
+
+/**
+ * Drive a search generator, handing the event loop back between slices. With
+ * a `slice` clock it pauses only once a slice has run its time, so slices stay
+ * short on slow devices without pausing needlessly on fast ones. The clock
+ * decides when to pause, never what the search returns.
+ */
 export async function runAsync<T>(
   steps: Generator<void, T>,
   pause: () => Promise<void> = macrotask,
+  slice?: SliceClock,
 ): Promise<T> {
+  let sliceStart = slice?.now() ?? 0;
   for (;;) {
     const r = steps.next();
     if (r.done) return r.value;
+    if (slice && slice.now() - sliceStart < slice.ms) continue;
     await pause();
+    if (slice) sliceStart = slice.now();
   }
 }

@@ -128,7 +128,14 @@ export class LocalTransport<
     const paced = new Promise<void>((resolve) => {
       this.botTimer = setTimeout(resolve, delay);
     });
-    const decided = chooseBotMoveAsync(this.game, state, active, this.difficulty);
+    const decided = chooseBotMoveAsync(
+      this.game,
+      state,
+      active,
+      this.difficulty,
+      undefined,
+      () => performance.now(),
+    );
     void Promise.all([decided, paced]).then(([move]) => {
       if (this.destroyed || ticket !== this.botTicket || this.state !== state) return;
       if (move) void this.submitMove(move);

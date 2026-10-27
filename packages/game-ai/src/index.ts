@@ -21,6 +21,7 @@ export {
   type SearchAdapter,
   type SearchLimits,
   type SearchResult,
+  type SliceClock,
 } from "./search";
 export { baoAdapter, evaluateBao } from "./bao";
 export { checkersAdapter, evaluateCheckers } from "./checkers";

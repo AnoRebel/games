@@ -754,6 +754,8 @@ export class RoomHub {
         state,
         active,
         room.config.difficulty ?? "normal",
+        undefined,
+        () => performance.now(),
       ).then((move) => {
         // Drop a decision the room has moved past (end, rematch, timeout).
         if (!move || room.state !== state || room.phase !== "in-progress") return;

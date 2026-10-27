@@ -92,6 +92,26 @@ describe("cooperative yielding", () => {
     expect(ticks).toBeGreaterThan(0);
   });
 
+  it("time-boxed slices pause only once a slice has run its course", async () => {
+    const s = midgame<CheckersState>(checkersGame, "international", 6);
+    const run = (sliceMs: number) => {
+      let pauses = 0;
+      let tick = 0; // a fake clock: one millisecond per reading
+      return runAsync(
+        searchSteps(checkersAdapter, s, s.activeSeat!, SEARCH_LIMITS.hard, 50),
+        async () => {
+          pauses++;
+        },
+        { ms: sliceMs, now: () => tick++ },
+      ).then((result) => ({ result, pauses }));
+    };
+    const every = await run(0);
+    const boxed = await run(1_000_000);
+    expect(boxed.result).toEqual(every.result);
+    expect(every.pauses).toBeGreaterThan(0);
+    expect(boxed.pauses).toBe(0);
+  });
+
   it("Bao searches yield too", async () => {
     const s = midgame<BaoState>(baoGame, "bao-la-kiswahili", 30);
     let pauses = 0;

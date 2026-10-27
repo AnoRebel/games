@@ -104,9 +104,14 @@ export function chooseBotMove<S extends BaseGameState, M extends BaseMove, C>(
   return pickLegal(t.moves, searchDecision<S, M>(state, seat, difficulty).move);
 }
 
+/** Longest stretch of search between hand-backs (about half a frame). */
+const SLICE_MS = 8;
+
 /**
  * The same decision as `chooseBotMove`, computed in slices that hand the
  * event loop back so the interface stays responsive during a deep search.
+ * With a millisecond clock (`now`) each slice runs for about `SLICE_MS`;
+ * without one it pauses at every yield.
  */
 export async function chooseBotMoveAsync<S extends BaseGameState, M extends BaseMove, C>(
   game: GameModule<S, M, C>,
@@ -114,6 +119,7 @@ export async function chooseBotMoveAsync<S extends BaseGameState, M extends Base
   seat: Seat,
   difficulty: Difficulty = "normal",
   pause?: () => Promise<void>,
+  now?: () => number,
 ): Promise<M | null> {
   if (!searchable(state) || difficulty === "easy") {
     return chooseBotMove(game, state, seat, difficulty);
@@ -124,6 +130,7 @@ export async function chooseBotMoveAsync<S extends BaseGameState, M extends Base
   const result = await runAsync(
     searchSteps(adapter, state, seat, SEARCH_LIMITS[difficulty]),
     pause,
+    now ? { ms: SLICE_MS, now } : undefined,
   );
   return pickLegal(t.moves, result.move);
 }
