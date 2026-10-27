@@ -66,10 +66,10 @@
 
 ## 8. Motion
 
-- [ ] 8.1 Add `gsap`, migrate every helper in `app/utils/anim.ts` behind unchanged signatures, and add board helpers for sowing, piece slide, capture removal, and promotion; verify existing animation call sites still typecheck and `rg animejs` returns no source references.
-- [ ] 8.2 Preserve reduced-motion and subtle-motion gating in the migrated helpers; verify tests with mocked `prefers-reduced-motion` and motion preference for card and board helpers.
-- [ ] 8.3 Guard all GSAP initialization for SSR and animation-failure fallback; verify the game route server-renders without browser API access and renders a static board.
-- [ ] 8.4 Remove the `animejs` dependency, update `docs/decisions/animation-library.md` with the GSAP decision and Three.js/Popmotion rejection, and verify `bun install`, build, and the documented rationale match the shipped stack.
+- [x] 8.1 Add `gsap`, migrate every helper in `app/utils/anim.ts` behind unchanged signatures, and add board helpers for sowing, piece slide, capture removal, and promotion; verify existing animation call sites still typecheck and `rg animejs` returns no source references.
+- [x] 8.2 Preserve reduced-motion and subtle-motion gating in the migrated helpers; verify tests with mocked `prefers-reduced-motion` and motion preference for card and board helpers.
+- [x] 8.3 Guard all GSAP initialization for SSR and animation-failure fallback; verify the game route server-renders without browser API access and renders a static board.
+- [x] 8.4 Remove the `animejs` dependency, update `docs/decisions/animation-library.md` with the GSAP decision and Three.js/Popmotion rejection, and verify `bun install`, build, and the documented rationale match the shipped stack.
 
 ## 9. Product Rename
 

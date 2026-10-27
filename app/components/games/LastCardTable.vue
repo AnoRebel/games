@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Last Card table — themed felt, gesture (swipe-up to play) + tap, anime.js
+ * Last Card table — themed felt, gesture (swipe-up to play) + tap, GSAP-driven motion
  * deal/flip/celebrate, suit chooser, move log, restart.
  */
 import {

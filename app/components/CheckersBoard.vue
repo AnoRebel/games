@@ -6,7 +6,7 @@
  * The viewer's side is always at the bottom. Every hint comes from the
  * engine's legal moves; spectators get the same board read-only.
  */
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import {
   isDark,
   isKing,
@@ -23,6 +23,7 @@ import {
   checkersSquare,
   checkersTap,
 } from "~/utils/boardHints";
+import { ghostOf, popCapture, promotePiece, slidePiece } from "~/utils/anim";
 
 type Translate = (key: string, params?: Record<string, string | number>) => string;
 
@@ -166,11 +167,54 @@ const announcement = computed(() => {
   return parts.join(" ");
 });
 
+// ---- motion -----------------------------------------------------------------------
+
+const host = ref<HTMLElement | null>(null);
+const squareEl = (sq: number) =>
+  host.value?.querySelector(`[data-square="${sq}"]`) ?? null;
+const pieceEl = (sq: number) => squareEl(sq)?.querySelector(".checkers-piece") ?? null;
+
+// Before the board re-renders: remember where the moving piece was and copy
+// the pieces about to be captured. After it re-renders: slide the piece along
+// its path from there, pop the captured copies, and crown a promotion.
+let pending: { from: DOMRect | null; ghosts: HTMLElement[] } | null = null;
+watch(
+  () => props.state.lastMove,
+  (move, previous) => {
+    if (!move || move === previous) return;
+    pending = {
+      from: pieceEl(move.from)?.getBoundingClientRect() ?? null,
+      ghosts: move.captures
+        .map((c) => ghostOf(pieceEl(c.square)))
+        .filter((g): g is HTMLElement => !!g),
+    };
+  },
+  { flush: "pre" },
+);
+watch(
+  () => props.state.lastMove,
+  async (move, previous) => {
+    if (!move || move === previous || !pending) return;
+    const { from, ghosts } = pending;
+    pending = null;
+    await nextTick();
+    const to = move.path[move.path.length - 1]!;
+    const via = move.path
+      .slice(0, -1)
+      .map((sq) => squareEl(sq)?.getBoundingClientRect())
+      .filter((r): r is DOMRect => !!r);
+    void popCapture(ghosts);
+    await slidePiece(pieceEl(to), from, via);
+    if (move.promotes) promotePiece(pieceEl(to)?.querySelector(".crown"));
+  },
+  { flush: "post" },
+);
+
 defineExpose({ selected });
 </script>
 
 <template>
-  <div class="games-scene-board space-y-2" data-tour="checkers-board">
+  <div ref="host" class="games-scene-board space-y-2" data-tour="checkers-board">
     <p
       v-if="interactive && hints.forcedCapture"
       class="games-board-banner"

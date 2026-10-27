@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Albastini table — themed felt, gesture hand, trump + trick display, move log,
- * restart, anime.js. Trick-taking with otea bidding.
+ * restart, GSAP-driven motion. Trick-taking with otea bidding.
  */
 import { cardId, cardShort, type Card } from "@card-games/engine-core";
 import type { AlbastiniMove, AlbastiniState } from "@card-games/game-albastini";

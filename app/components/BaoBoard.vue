@@ -7,7 +7,7 @@
  * highlighted direction pit or kichwa entry, then stop/safari if offered.
  * Spectators get the same board read-only.
  */
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import type { Player } from "@card-games/engine-core";
 import { NYUMBA, type BaoMove, type BaoState } from "@card-games/game-bao";
 import {
@@ -19,6 +19,7 @@ import {
   nextBaoChoice,
   type BaoSelection,
 } from "~/utils/boardHints";
+import { ghostOf, popCapture, sowAlong } from "~/utils/anim";
 
 type Translate = (key: string, params?: Record<string, string | number>) => string;
 
@@ -183,11 +184,37 @@ const announcement = computed(() => {
   return parts.join(" ");
 });
 
+// ---- motion -----------------------------------------------------------------------
+
+const host = ref<HTMLElement | null>(null);
+const pitEl = (seat: number, ring: number) =>
+  host.value?.querySelector(`[data-seat="${seat}"][data-ring="${ring}"] .bao-pit`) ??
+  null;
+
+// Replay each new turn: seeds travel the sown path, captured pits pop. The
+// board already shows the final counts, so skipping motion loses nothing.
+watch(
+  () => props.state.lastMove,
+  async (move, previous) => {
+    if (!move || move === previous) return;
+    await nextTick();
+    const sown = move.path
+      .flatMap((leg) => leg.pits)
+      .map((ring) => pitEl(move.seat, ring))
+      .filter((el): el is Element => !!el);
+    const ghosts = move.captures
+      .map((c) => ghostOf(pitEl(1 - move.seat, c.pit)))
+      .filter((g): g is HTMLElement => !!g);
+    void popCapture(ghosts);
+    void sowAlong(sown);
+  },
+);
+
 defineExpose({ selection });
 </script>
 
 <template>
-  <div class="games-scene-board space-y-2">
+  <div ref="host" class="games-scene-board space-y-2">
     <div class="bao-side" data-tour="bao-opponent-front">
       <span class="font-semibold truncate">{{ nameOf(other) }}</span>
       <span v-if="!learner" class="bao-chip">{{

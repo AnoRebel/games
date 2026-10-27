@@ -78,7 +78,7 @@ each hand deals the next.
 
 - **Nuxt 4** (`future.compatibilityVersion: 5`) + Nitro
 - **@nuxt/ui** (Tailwind v4) for UI
-- **VueUse** (`@vueuse/core`, `@vueuse/nuxt`) + **@vueuse/motion** + **anime.js**
+- **VueUse** (`@vueuse/core`, `@vueuse/nuxt`) + **@vueuse/motion** + **GSAP**
   for animation (see `docs/decisions/animation-library.md`)
 - **date-fns** + **@date-fns/tz** for all date/time + timezone handling
 - **valibot** for schema validation; **Dexie** (IndexedDB) for results / uploads

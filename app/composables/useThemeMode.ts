@@ -37,7 +37,7 @@ export function useThemeMode() {
 
     if (!supportsVT) {
       isDark.value = next;
-      // Anime.js cross-fade fallback where View Transitions are unavailable
+      // GSAP cross-fade fallback where View Transitions are unavailable
       // (and not reduced-motion) so the switch still feels smooth.
       if (import.meta.client && reduced.value !== "reduce") {
         crossFade(document.body);

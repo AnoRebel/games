@@ -27,7 +27,7 @@ const emit = defineEmits<{ play: [card: Card] }>();
 const el = ref<HTMLElement | null>(null);
 const { width: containerW } = useElementSize(el);
 
-// Deal-in with anime.js: stagger every card on first render, and animate only
+// Deal-in via the shared animation helpers: stagger every card on first render, and animate only
 // the newly-arrived cards when the hand grows (a draw). cardId keys make this
 // stable across reorders.
 function dealCards(ids: string[]) {

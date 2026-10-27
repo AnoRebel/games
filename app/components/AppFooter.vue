@@ -2,7 +2,7 @@
 /**
  * App footer — a centered, rounded "credit pill" with a shimmering name, a
  * pulsing heart, and gently floating suit pips. All motion is gated by the
- * user's reduced-motion preference (the suit float is anime.js; the shimmer +
+ * user's reduced-motion preference (the suit float uses the GSAP helpers; the shimmer +
  * heart are pure CSS that respects `prefers-reduced-motion`).
  */
 const year = new Date().getFullYear();
