@@ -346,7 +346,7 @@ async function passBid() {
       <div class="flex items-center justify-center gap-6 flex-wrap">
         <div
           ref="trumpRef"
-          class="flex items-center gap-2 text-white/90"
+          class="flex items-center gap-2 games-scene-text"
           data-tour="trump"
         >
           <span class="text-xs font-semibold uppercase tracking-wide">{{
@@ -359,7 +359,7 @@ async function passBid() {
         <div ref="stockRef" class="flex flex-col items-center gap-1" data-tour="stock">
           <CardPile :face-down="true" :count="stockCount" :width="48" />
           <span
-            class="text-[11px] font-medium text-white/80 inline-flex items-center gap-1"
+            class="text-[11px] font-medium games-scene-text inline-flex items-center gap-1"
           >
             <UIcon name="i-lucide-layers" />
             {{ $ts("game.deckCount", { count: stockCount }) }}
@@ -376,11 +376,14 @@ async function passBid() {
           class="flex flex-col items-center gap-1"
         >
           <PlayingCard :card="tp.card" :width="78" />
-          <span class="text-[11px] text-white/80">{{
+          <span class="text-[11px] games-scene-text">{{
             players.find((p) => p.seat === tp.seat)?.name
           }}</span>
         </div>
-        <p v-if="!ab.currentTrick.length" class="text-white/60 text-sm self-center">
+        <p
+          v-if="!ab.currentTrick.length"
+          class="games-scene-text-muted text-sm self-center"
+        >
           {{ $ts("game.noCardsYet") }}
         </p>
       </div>

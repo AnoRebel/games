@@ -83,6 +83,14 @@ const modalUi = useThemedModalUi();
           </UFieldGroup>
         </section>
 
+        <!-- Scene theme for card tables and boards -->
+        <section class="space-y-2">
+          <span class="text-xs font-medium uppercase tracking-wide text-muted">
+            {{ $ts("theme.sceneHeading") }}
+          </span>
+          <SceneThemePanel />
+        </section>
+
         <!-- Card theme + uploads -->
         <section class="space-y-2">
           <span class="text-xs font-medium uppercase tracking-wide text-muted"

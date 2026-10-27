@@ -568,7 +568,7 @@ async function draw() {
           />
         </div>
         <span
-          class="text-[11px] font-medium text-white/80 inline-flex items-center gap-1"
+          class="text-[11px] font-medium games-scene-text inline-flex items-center gap-1"
         >
           <UIcon name="i-lucide-layers" />
           {{ $ts("game.deckCount", { count: lc.drawPile?.length ?? 0 }) }}
@@ -579,7 +579,7 @@ async function draw() {
         <span
           ref="suitRef"
           class="text-sm font-semibold flex items-center gap-1.5 rounded-full px-2.5 py-1 transition"
-          :class="suitRequested ? 'cg-suit-requested' : 'text-white/90'"
+          :class="suitRequested ? 'cg-suit-requested' : 'games-scene-text'"
           :style="
             suitRequested
               ? { background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }

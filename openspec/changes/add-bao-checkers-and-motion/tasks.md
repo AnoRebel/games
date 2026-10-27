@@ -57,12 +57,12 @@
 
 ## 7. Scene Theming
 
-- [ ] 7.1 Define the scene token contract and extend Felt, Arcade, and Neon with complete light/dark scene palettes for card tables and both board families; verify a test that every built-in theme defines every role in both modes.
-- [ ] 7.2 Implement custom theme storage, global default and per-game assignments, per-role fallback, corrupt-record recovery, assignment deletion fallback, and the 20-theme limit; verify different games restore different selections and unassigned games use the global default.
-- [ ] 7.3 Implement the custom theme editor with role inputs, light/dark preview, live board/table preview, save/edit/delete, and duplicate-name handling; verify component tests for create, edit, delete, and duplicate rejection.
-- [ ] 7.4 Implement WCAG contrast validation (4.5:1 text, 3:1 graphical) across both modes and wire it into save; verify unit tests for passing/failing pairs and that a rejected save leaves the previous theme active.
-- [ ] 7.5 Apply scene tokens to the existing card tables and the new boards, compose with card-back/background uploads, and keep non-color state cues; verify a grayscale-cue component test and a browser smoke switching a custom theme mid-game.
-- [ ] 7.6 Verify themes stay viewer-local: no theme data in room state or transport messages, and a spectator renders their own theme; verify with a transport-message assertion test.
+- [x] 7.1 Define the scene token contract and extend Felt, Arcade, and Neon with complete light/dark scene palettes for card tables and both board families; verify a test that every built-in theme defines every role in both modes.
+- [x] 7.2 Implement custom theme storage, global default and per-game assignments, per-role fallback, corrupt-record recovery, assignment deletion fallback, and the 20-theme limit; verify different games restore different selections and unassigned games use the global default.
+- [x] 7.3 Implement the custom theme editor with role inputs, light/dark preview, live board/table preview, save/edit/delete, and duplicate-name handling; verify component tests for create, edit, delete, and duplicate rejection.
+- [x] 7.4 Implement WCAG contrast validation (4.5:1 text, 3:1 graphical) across both modes and wire it into save; verify unit tests for passing/failing pairs and that a rejected save leaves the previous theme active.
+- [x] 7.5 Apply scene tokens to the existing card tables and the new boards, compose with card-back/background uploads, and keep non-color state cues; verify a grayscale-cue component test and a browser smoke switching a custom theme mid-game.
+- [x] 7.6 Verify themes stay viewer-local: no theme data in room state or transport messages, and a spectator renders their own theme; verify with a transport-message assertion test.
 
 ## 8. Motion
 

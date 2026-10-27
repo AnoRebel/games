@@ -3,6 +3,18 @@
  * Bao and Checkers boards. Colours come from the scene roles, falling back to
  * the app theme until a scene theme is applied.
  */
+/* A board game's scene: the themed table surface behind the board. */
+.games-scene-surface {
+  background: var(--games-scene-felt, var(--games-scene-surface, var(--cg-surface)));
+  color: var(--games-scene-text, var(--cg-text));
+}
+/* Text placed on a scene surface (card tables and boards). */
+.games-scene-text {
+  color: color-mix(in oklch, var(--games-scene-text, white) 90%, transparent);
+}
+.games-scene-text-muted {
+  color: color-mix(in oklch, var(--games-scene-text, white) 68%, transparent);
+}
 .games-board-banner {
   display: flex;
   align-items: center;

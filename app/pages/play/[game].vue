@@ -149,6 +149,9 @@ function watchForResults(t: GameTransport) {
   });
 }
 
+// This viewer's scene theme (never shared with the room).
+const scene = useSceneTheme(gameId);
+
 // The live game's rule variant drives the rules panel and tutorial content.
 const activeVariant = ref<string | null>(null);
 watch(transport, (t, _old, onCleanup) => {
@@ -472,8 +475,13 @@ const spectatorShareUrl = computed(() => {
       @update:open="banner = null"
     />
 
-    <!-- Live game -->
-    <div v-if="transport" class="space-y-3">
+    <!-- Live game, themed by this viewer's scene theme -->
+    <div
+      v-if="transport"
+      class="space-y-3 games-scene"
+      :style="scene.style.value"
+      :data-scene-theme="scene.resolved.value.id"
+    >
       <OnlineRoomBar
         v-if="wsTransport"
         :game-id="gameId"

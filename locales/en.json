@@ -253,7 +253,41 @@
     "upload": "Upload",
     "uploaded": "Uploaded",
     "darkMode": "Dark mode",
-    "lightMode": "Light mode"
+    "lightMode": "Light mode",
+    "sceneHeading": "Game scenes",
+    "sceneThemes": "Scene themes",
+    "scope": "Apply to",
+    "allGames": "All games",
+    "thisGame": "{game} only",
+    "active": "In use",
+    "edit": "Edit {name}",
+    "delete": "Delete {name}",
+    "newTheme": "New scene theme",
+    "name": "Theme name",
+    "previewMode": "Colours for",
+    "previewTable": "Preview",
+    "save": "Save theme",
+    "unavailable": "Your chosen scene theme couldn't be loaded, so the default is showing.",
+    "roles": {
+      "surface": "Table surface",
+      "boardLight": "Light squares / pits",
+      "boardDark": "Dark squares / pits",
+      "cellBorder": "Board edge",
+      "ownPiece": "Your pieces / seeds",
+      "opponentPiece": "Opponent's pieces / seeds",
+      "accent": "Accent",
+      "legal": "Legal moves",
+      "capture": "Captures",
+      "lastMove": "Last move",
+      "text": "Text"
+    },
+    "errors": {
+      "nameEmpty": "Give the theme a name.",
+      "nameTaken": "A theme with that name already exists.",
+      "limit": "You can keep up to 20 scene themes — delete one first.",
+      "invalidColor": "{role} ({mode}) isn't a valid colour.",
+      "contrast": "{fg} on {bg} ({mode}) is too faint: {ratio}:1, needs {min}:1."
+    }
   },
   "pwa": {
     "offlineReady": "Ready to play offline",

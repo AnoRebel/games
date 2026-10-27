@@ -160,7 +160,8 @@ html.dark[data-game-theme="neon"] {
   backdrop-filter: blur(8px);
 }
 .cg-felt {
-  background: var(--cg-felt);
+  /* The active scene theme's table surface (or an uploaded background). */
+  background: var(--games-scene-felt, var(--cg-felt));
 }
 .cg-accent-text {
   color: var(--cg-accent);

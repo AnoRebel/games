@@ -253,7 +253,41 @@
     "upload": "Pakia",
     "uploaded": "Imepakiwa",
     "darkMode": "Hali ya giza",
-    "lightMode": "Hali ya mwanga"
+    "lightMode": "Hali ya mwanga",
+    "sceneHeading": "Mandhari ya michezo",
+    "sceneThemes": "Mandhari",
+    "scope": "Tumia kwa",
+    "allGames": "Michezo yote",
+    "thisGame": "{game} pekee",
+    "active": "Inatumika",
+    "edit": "Hariri {name}",
+    "delete": "Futa {name}",
+    "newTheme": "Mandhari mapya",
+    "name": "Jina la mandhari",
+    "previewMode": "Rangi za",
+    "previewTable": "Onyesho",
+    "save": "Hifadhi mandhari",
+    "unavailable": "Mandhari uliyochagua hayakupakiwa, kwa hiyo ya kawaida yanaonyeshwa.",
+    "roles": {
+      "surface": "Uso wa meza",
+      "boardLight": "Miraba / mashimo meupe",
+      "boardDark": "Miraba / mashimo meusi",
+      "cellBorder": "Ukingo wa ubao",
+      "ownPiece": "Kete zako",
+      "opponentPiece": "Kete za mpinzani",
+      "accent": "Rangi ya msisitizo",
+      "legal": "Hatua halali",
+      "capture": "Kula",
+      "lastMove": "Hatua ya mwisho",
+      "text": "Maandishi"
+    },
+    "errors": {
+      "nameEmpty": "Yape mandhari jina.",
+      "nameTaken": "Mandhari yenye jina hilo tayari yapo.",
+      "limit": "Unaweza kuweka hadi mandhari 20 — futa moja kwanza.",
+      "invalidColor": "{role} ({mode}) si rangi halali.",
+      "contrast": "{fg} juu ya {bg} ({mode}) hafifu mno: {ratio}:1, inahitaji {min}:1."
+    }
   },
   "pwa": {
     "offlineReady": "Tayari kucheza nje ya mtandao",
