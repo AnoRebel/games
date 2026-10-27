@@ -9,13 +9,13 @@ const locales = computed(() => $getLocales());
 <template>
   <div
     class="min-h-dvh flex flex-col"
-    :style="{ background: 'var(--cg-bg)', color: 'var(--cg-text)' }"
+    :style="{ background: 'var(--games-bg)', color: 'var(--games-text)' }"
   >
     <header
       class="sticky top-0 z-40 border-b"
       :style="{
-        borderColor: 'var(--cg-border)',
-        background: 'color-mix(in oklch, var(--cg-bg) 82%, transparent)',
+        borderColor: 'var(--games-border)',
+        background: 'color-mix(in oklch, var(--games-bg) 82%, transparent)',
         backdropFilter: 'blur(10px)',
       }"
     >

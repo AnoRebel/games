@@ -9,7 +9,7 @@ import {
   requireGame,
   type BaseGameState,
   type BaseMove,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 
 const snapshots: { roomId: string; data: unknown }[] = [];
 vi.mock("../server/utils/db", () => ({

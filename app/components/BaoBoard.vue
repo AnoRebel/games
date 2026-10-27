@@ -8,8 +8,8 @@
  * Spectators get the same board read-only.
  */
 import { computed, nextTick, ref, watch } from "vue";
-import type { Player } from "@card-games/engine-core";
-import { NYUMBA, type BaoMove, type BaoState } from "@card-games/game-bao";
+import type { Player } from "@games/engine-core";
+import { NYUMBA, type BaoMove, type BaoState } from "@games/game-bao";
 import {
   baoCandidates,
   baoCellOf,
@@ -368,15 +368,15 @@ defineExpose({ selection });
   justify-content: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: var(--games-scene-text, var(--cg-text));
+  color: var(--games-scene-text, var(--games-text));
 }
 .bao-chip {
   border-radius: 9999px;
   padding: 0.1rem 0.6rem;
   font-size: 0.75rem;
   font-weight: 600;
-  background: var(--games-scene-surface, var(--cg-surface));
-  border: 1px solid var(--games-scene-cell-border, var(--cg-border));
+  background: var(--games-scene-surface, var(--games-surface));
+  border: 1px solid var(--games-scene-cell-border, var(--games-border));
 }
 .bao-cell {
   position: absolute;
@@ -424,7 +424,7 @@ defineExpose({ selection });
   right: 4%;
   width: 34%;
   height: 34%;
-  fill: var(--games-scene-accent, var(--cg-accent));
+  fill: var(--games-scene-accent, var(--games-accent));
 }
 .bao-target {
   position: absolute;
@@ -446,7 +446,7 @@ defineExpose({ selection });
   outline-offset: 1px;
 }
 [data-state~="selected"] .bao-pit {
-  outline: 3px solid var(--games-scene-accent, var(--cg-accent));
+  outline: 3px solid var(--games-scene-accent, var(--games-accent));
   outline-offset: 1px;
 }
 [data-state~="direction"] .bao-pit,

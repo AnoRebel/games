@@ -4,7 +4,7 @@
  * results table (games, win rate, streaks, per-game). Shown in settings. The
  * honest "your journey" view — all local, all yours.
  */
-import { getGame } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
 
 const { $ts } = useI18n();
 const { id, name, avatar, avatarOverride, avatarChoices } = usePlayerIdentity();
@@ -23,8 +23,8 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
           type="button"
           class="text-3xl leading-none rounded-full size-12 grid place-items-center transition hover:scale-105"
           :style="{
-            background: 'var(--cg-surface)',
-            border: '1px solid var(--cg-border)',
+            background: 'var(--games-surface)',
+            border: '1px solid var(--games-border)',
           }"
           :aria-label="$ts('profile.changeAvatar')"
         >
@@ -37,7 +37,7 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
               :key="a"
               type="button"
               class="text-2xl rounded-md p-1 transition hover:scale-110"
-              :class="avatar === a ? 'ring-2 ring-[var(--cg-accent)]' : ''"
+              :class="avatar === a ? 'ring-2 ring-[var(--games-accent)]' : ''"
               @click="avatarOverride = a"
             >
               {{ a }}
@@ -55,49 +55,49 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
 
     <!-- Stats -->
     <div v-if="stats.played" class="grid grid-cols-4 gap-2 text-center">
-      <div class="rounded-lg p-2" :style="{ background: 'var(--cg-surface)' }">
+      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
         <p class="text-lg font-bold font-display tabular-nums">{{ stats.played }}</p>
         <p
           class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("profile.played") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--cg-surface)' }">
+      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
         <p class="text-lg font-bold font-display tabular-nums">{{ stats.wins }}</p>
         <p
           class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("profile.wins") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--cg-surface)' }">
+      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
         <p class="text-lg font-bold font-display tabular-nums">
           {{ pct(stats.winRate) }}
         </p>
         <p
           class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("profile.winRate") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--cg-surface)' }">
+      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
         <p class="text-lg font-bold font-display tabular-nums">
           {{ stats.currentStreak
           }}<span v-if="stats.currentStreak" class="text-sm">🔥</span>
         </p>
         <p
           class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("profile.streak") }}
         </p>
       </div>
     </div>
-    <p v-else class="text-sm text-center" :style="{ color: 'var(--cg-text-muted)' }">
+    <p v-else class="text-sm text-center" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("profile.noGames") }}
     </p>
 
@@ -109,7 +109,7 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
         class="flex items-center justify-between text-xs px-1"
       >
         <span class="font-medium">{{ gameName(g.gameId) }}</span>
-        <span :style="{ color: 'var(--cg-text-muted)' }">
+        <span :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("profile.recordLine", { wins: g.wins, played: g.played }) }}
         </span>
       </div>

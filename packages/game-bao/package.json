@@ -1,5 +1,5 @@
 {
-  "name": "@card-games/game-bao",
+  "name": "@games/game-bao",
   "version": "0.1.0",
   "type": "module",
   "main": "./src/index.ts",
@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@card-games/engine-core": "workspace:*"
+    "@games/engine-core": "workspace:*"
   },
   "scripts": {
     "test": "vitest run"

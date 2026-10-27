@@ -12,7 +12,7 @@ import type {
   Player,
   ScoreResult,
   Seat,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 
 export interface ChatMessage {
   id: string;

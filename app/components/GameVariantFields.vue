@@ -5,7 +5,7 @@
  * with the same defaults. Difficulty only appears when seats go to bots.
  */
 import { computed } from "vue";
-import { getGame, type Difficulty } from "@card-games/engine-core";
+import { getGame, type Difficulty } from "@games/engine-core";
 import { DIFFICULTY_KEYS, difficultyItems, variantItems } from "~/utils/setupOptions";
 
 const props = defineProps<{

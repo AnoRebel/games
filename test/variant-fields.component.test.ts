@@ -7,9 +7,9 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { defineComponent, h, nextTick } from "vue";
 import { mount } from "@vue/test-utils";
-import { registerBao } from "@card-games/game-bao";
-import { registerCheckers } from "@card-games/game-checkers";
-import { registerLastCard } from "@card-games/game-last-card";
+import { registerBao } from "@games/game-bao";
+import { registerCheckers } from "@games/game-checkers";
+import { registerLastCard } from "@games/game-last-card";
 import GameVariantFields from "../app/components/GameVariantFields.vue";
 
 beforeAll(() => {

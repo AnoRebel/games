@@ -228,12 +228,12 @@ defineExpose({ cellSize, zoomed, toggleZoom, focusCell: moveFocus, cellEl });
   align-items: center;
   justify-content: center;
   border-radius: 0.6rem;
-  color: var(--games-scene-text, var(--cg-text));
-  background: var(--cg-surface);
-  border: 1px solid var(--cg-border);
+  color: var(--games-scene-text, var(--games-text));
+  background: var(--games-surface);
+  border: 1px solid var(--games-border);
 }
 .games-board-zoom:focus-visible {
-  outline: 2px solid var(--cg-accent);
+  outline: 2px solid var(--games-accent);
   outline-offset: 2px;
 }
 .games-board-frame {
@@ -258,7 +258,7 @@ defineExpose({ cellSize, zoomed, toggleZoom, focusCell: moveFocus, cellEl });
   flex-shrink: 0;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 0 0 2px var(--games-scene-cell-border, var(--cg-border));
+  box-shadow: 0 0 0 2px var(--games-scene-cell-border, var(--games-border));
 }
 .games-board-cell {
   position: relative;
@@ -268,6 +268,6 @@ defineExpose({ cellSize, zoomed, toggleZoom, focusCell: moveFocus, cellEl });
 }
 .games-board-cell:focus-visible {
   z-index: 2;
-  box-shadow: inset 0 0 0 3px var(--games-scene-accent, var(--cg-accent));
+  box-shadow: inset 0 0 0 3px var(--games-scene-accent, var(--games-accent));
 }
 </style>

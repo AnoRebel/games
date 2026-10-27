@@ -4,7 +4,7 @@
  * hosts the board (default slot) and runs the end-of-game dialog with
  * rematch / new game / exit — identically offline and online.
  */
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove } from "@games/engine-core";
 import type { GameTransport } from "~/transports/types";
 
 const props = defineProps<{
@@ -61,9 +61,9 @@ async function play(move: BaseMove) {
 </script>
 
 <template>
-  <div v-if="!hasState" class="cg-surface rounded-2xl p-10 text-center space-y-2">
+  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
-    <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+    <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
     </p>
   </div>
@@ -72,11 +72,11 @@ async function play(move: BaseMove) {
     <div class="flex justify-center">
       <span
         class="text-sm font-semibold rounded-full px-4 py-1.5 min-h-11 inline-flex items-center"
-        :class="isMyTurn ? 'cg-turn-active' : ''"
+        :class="isMyTurn ? 'games-turn-active' : ''"
         :style="
           isMyTurn
-            ? { background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }
-            : { color: 'var(--cg-text-muted)' }
+            ? { background: 'var(--games-accent)', color: 'var(--games-accent-contrast)' }
+            : { color: 'var(--games-text-muted)' }
         "
         data-testid="turn-pill"
       >

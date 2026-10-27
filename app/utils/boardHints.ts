@@ -3,8 +3,8 @@
  * UI never applies game rules itself. Each board reduces a tap to an action:
  * select, narrow, clear, or play a fully determined legal move.
  */
-import { pitCell, cellPit, type BaoMove, type BaoState } from "@card-games/game-bao";
-import { previewMove, type CheckersMove } from "@card-games/game-checkers";
+import { pitCell, cellPit, type BaoMove, type BaoState } from "@games/game-bao";
+import { previewMove, type CheckersMove } from "@games/game-checkers";
 
 // ---- Checkers ---------------------------------------------------------------
 

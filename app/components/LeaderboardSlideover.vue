@@ -86,7 +86,7 @@ const scopes: { id: Scope; labelKey: string; icon: string }[] = [
           </UButton>
         </UFieldGroup>
 
-        <p class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs" :style="{ color: 'var(--games-text-muted)' }">
           {{
             scope === "global"
               ? $ts("leaderboard.globalCaption")
@@ -97,14 +97,14 @@ const scopes: { id: Scope; labelKey: string; icon: string }[] = [
         <p
           v-if="scope === 'global' && globalUnavailable"
           class="text-sm"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("leaderboard.globalUnavailable") }}
         </p>
         <p
           v-else-if="!rows.length"
           class="text-sm"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("leaderboard.empty") }}
         </p>
@@ -113,13 +113,13 @@ const scopes: { id: Scope; labelKey: string; icon: string }[] = [
             v-for="(row, i) in rows"
             :key="row.playerId"
             class="flex items-center gap-3 py-2 border-b last:border-b-0"
-            :style="{ borderColor: 'var(--cg-border)' }"
+            :style="{ borderColor: 'var(--games-border)' }"
           >
             <span class="w-7 text-center text-lg">{{ medal(i) }}</span>
             <span class="flex-1 truncate font-medium">{{ row.playerName }}</span>
             <span
               class="text-sm whitespace-nowrap"
-              :style="{ color: 'var(--cg-text-muted)' }"
+              :style="{ color: 'var(--games-text-muted)' }"
             >
               {{ $ts("leaderboard.wins", { count: row.wins }) }} ·
               {{ $ts("leaderboard.played", { count: row.played }) }}

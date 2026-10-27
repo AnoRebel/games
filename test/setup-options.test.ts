@@ -3,10 +3,10 @@
  * same choices for offline and online starts.
  */
 import { describe, it, expect, beforeAll } from "vitest";
-import { requireGame } from "@card-games/engine-core";
-import { registerBao } from "@card-games/game-bao";
-import { registerCheckers } from "@card-games/game-checkers";
-import { registerLastCard } from "@card-games/game-last-card";
+import { requireGame } from "@games/engine-core";
+import { registerBao } from "@games/game-bao";
+import { registerCheckers } from "@games/game-checkers";
+import { registerLastCard } from "@games/game-last-card";
 import {
   difficultyItems,
   hasBots,

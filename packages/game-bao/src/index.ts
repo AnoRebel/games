@@ -1,6 +1,6 @@
-// @card-games/game-bao — Bao (East African mancala) game module.
+// @games/game-bao — Bao (East African mancala) game module.
 
-import { type GameModule, type Player, registerGame } from "@card-games/engine-core";
+import { type GameModule, type Player, registerGame } from "@games/engine-core";
 import type { BaoConfig, BaoMove, BaoState } from "./state";
 import {
   createInitialState,

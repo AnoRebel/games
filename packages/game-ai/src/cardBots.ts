@@ -19,7 +19,7 @@ import type {
   Difficulty as BotDifficulty,
   GameModule,
   Seat,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 
 // ---- shared helpers --------------------------------------------------------
 

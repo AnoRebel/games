@@ -5,7 +5,7 @@
  * man advancement (promotion distance), back-row defence, centre control and
  * immediate capture threats, with kings valued by how far they can move.
  */
-import type { Seat } from "@card-games/engine-core";
+import type { Seat } from "@games/engine-core";
 import {
   applyLegalMove,
   generateMoves,
@@ -14,7 +14,7 @@ import {
   positionKey,
   type CheckersMove,
   type CheckersState,
-} from "@card-games/game-checkers";
+} from "@games/game-checkers";
 import type { SearchAdapter } from "./search";
 
 export function evaluateCheckers(

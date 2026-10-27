@@ -22,7 +22,7 @@ import {
   createRng,
   hashSeed,
   nextInt,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { baoAdapter } from "./bao";
 import { checkersAdapter } from "./checkers";
 import { chooseCardBotMove } from "./cardBots";

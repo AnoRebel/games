@@ -3,15 +3,9 @@
  * Last Card table — themed felt, gesture (swipe-up to play) + tap, GSAP-driven motion
  * deal/flip/celebrate, suit chooser, move log, restart.
  */
-import {
-  cardId,
-  cardName,
-  cardShort,
-  type Card,
-  type Suit,
-} from "@card-games/engine-core";
-import { canPlay } from "@card-games/game-last-card";
-import type { LastCardMove, LastCardState } from "@card-games/game-last-card";
+import { cardId, cardName, cardShort, type Card, type Suit } from "@games/engine-core";
+import { canPlay } from "@games/game-last-card";
+import type { LastCardMove, LastCardState } from "@games/game-last-card";
 import type { GameTransport } from "~/transports/types";
 
 const props = defineProps<{
@@ -511,9 +505,9 @@ async function draw() {
 </script>
 
 <template>
-  <div v-if="!hasState" class="cg-surface rounded-2xl p-10 text-center space-y-2">
+  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
-    <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+    <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
     </p>
   </div>
@@ -529,11 +523,11 @@ async function draw() {
         :aria-label="`${opp.name}: ${$ts('game.cardsInHand', { count: handSize(opp.seat) })}${lc.activeSeat === opp.seat ? ` — ${$ts('game.yourTurn')}` : ''}`"
         :aria-current="lc.activeSeat === opp.seat ? 'true' : undefined"
         class="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition"
-        :class="lc.activeSeat === opp.seat ? 'cg-glow' : ''"
+        :class="lc.activeSeat === opp.seat ? 'games-glow' : ''"
         :style="{
-          background: 'var(--cg-surface)',
-          border: '1px solid var(--cg-border)',
-          outline: lc.activeSeat === opp.seat ? '2px solid var(--cg-accent)' : 'none',
+          background: 'var(--games-surface)',
+          border: '1px solid var(--games-border)',
+          outline: lc.activeSeat === opp.seat ? '2px solid var(--games-accent)' : 'none',
         }"
       >
         <span class="font-medium">{{ opp.name }}</span>
@@ -545,14 +539,16 @@ async function draw() {
             :width="26"
           />
         </span>
-        <span :style="{ color: 'var(--cg-text-muted)' }">{{ handSize(opp.seat) }}</span>
+        <span :style="{ color: 'var(--games-text-muted)' }">{{
+          handSize(opp.seat)
+        }}</span>
       </div>
     </div>
 
     <!-- Felt table -->
     <div
       ref="tableRef"
-      class="relative rounded-2xl p-6 sm:p-10 flex items-center justify-center gap-8 sm:gap-14 overflow-hidden cg-felt min-h-[300px]"
+      class="relative rounded-2xl p-6 sm:p-10 flex items-center justify-center gap-8 sm:gap-14 overflow-hidden games-felt min-h-[300px]"
       data-tour="table"
     >
       <div ref="drawRef" class="flex flex-col items-center gap-1">
@@ -579,10 +575,13 @@ async function draw() {
         <span
           ref="suitRef"
           class="text-sm font-semibold flex items-center gap-1.5 rounded-full px-2.5 py-1 transition"
-          :class="suitRequested ? 'cg-suit-requested' : 'games-scene-text'"
+          :class="suitRequested ? 'games-suit-requested' : 'games-scene-text'"
           :style="
             suitRequested
-              ? { background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }
+              ? {
+                  background: 'var(--games-accent)',
+                  color: 'var(--games-accent-contrast)',
+                }
               : {}
           "
         >
@@ -609,8 +608,11 @@ async function draw() {
     <div v-if="declareMove" class="flex justify-center">
       <button
         type="button"
-        class="cg-call-last inline-flex items-center gap-2 text-sm font-bold rounded-full px-5 py-2 shadow-lg"
-        :style="{ background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }"
+        class="games-call-last inline-flex items-center gap-2 text-sm font-bold rounded-full px-5 py-2 shadow-lg"
+        :style="{
+          background: 'var(--games-accent)',
+          color: 'var(--games-accent-contrast)',
+        }"
         @click="callLastCard"
       >
         <UIcon name="i-lucide-megaphone" class="size-5" />
@@ -624,7 +626,7 @@ async function draw() {
       v-if="pendingChain && isMyTurn && passInterjection"
       class="flex flex-col items-center gap-2"
     >
-      <span class="text-xs font-semibold" :style="{ color: 'var(--cg-text-muted)' }">
+      <span class="text-xs font-semibold" :style="{ color: 'var(--games-text-muted)' }">
         {{
           pendingChain.kind === "skip"
             ? $ts("game.interjectSkipPrompt", { n: pendingChain.count })
@@ -634,7 +636,10 @@ async function draw() {
       <button
         type="button"
         class="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1.5"
-        :style="{ color: 'var(--cg-text-muted)', border: '1px solid var(--cg-border)' }"
+        :style="{
+          color: 'var(--games-text-muted)',
+          border: '1px solid var(--games-border)',
+        }"
         @click="declineInterjection"
       >
         <UIcon name="i-lucide-skip-forward" />
@@ -646,11 +651,11 @@ async function draw() {
     <div class="flex justify-center">
       <span
         class="text-sm font-semibold rounded-full px-4 py-1.5"
-        :class="isMyTurn ? 'cg-turn-active' : ''"
+        :class="isMyTurn ? 'games-turn-active' : ''"
         :style="
           isMyTurn
-            ? { background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }
-            : { color: 'var(--cg-text-muted)' }
+            ? { background: 'var(--games-accent)', color: 'var(--games-accent-contrast)' }
+            : { color: 'var(--games-text-muted)' }
         "
       >
         {{
@@ -663,11 +668,11 @@ async function draw() {
     <div v-if="canOnlyDraw" class="flex justify-center">
       <button
         type="button"
-        class="cg-must-draw inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1.5"
+        class="games-must-draw inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1.5"
         :style="{
-          background: 'color-mix(in oklch, var(--cg-accent) 18%, transparent)',
-          color: 'var(--cg-accent)',
-          border: '1px solid var(--cg-accent)',
+          background: 'color-mix(in oklch, var(--games-accent) 18%, transparent)',
+          color: 'var(--games-accent)',
+          border: '1px solid var(--games-accent)',
         }"
         @click="draw"
       >
@@ -683,7 +688,7 @@ async function draw() {
     <!-- Your hand, with a live card count -->
     <div
       class="flex items-center justify-center gap-1.5 text-xs font-medium"
-      :style="{ color: 'var(--cg-text-muted)' }"
+      :style="{ color: 'var(--games-text-muted)' }"
       data-tour="last-card"
     >
       <UIcon name="i-lucide-layers" />
@@ -727,7 +732,7 @@ async function draw() {
       <template #body>
         <!-- Step 1: play one vs all -->
         <div v-if="!choosingTop" class="space-y-3">
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{ $ts("game.playMultipleBody", { count: multiCount }) }}
           </p>
           <div class="grid grid-cols-2 gap-3">
@@ -753,7 +758,7 @@ async function draw() {
 
         <!-- Step 2: which card stays on top (sets the suit) -->
         <div v-else class="space-y-3">
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{ $ts("game.chooseTopBody") }}
           </p>
           <div class="flex flex-wrap gap-3 justify-center">
@@ -762,7 +767,7 @@ async function draw() {
               :key="i"
               type="button"
               class="rounded-xl p-1 transition hover:-translate-y-1"
-              :style="{ border: '2px solid var(--cg-border)' }"
+              :style="{ border: '2px solid var(--games-border)' }"
               :title="
                 $ts('game.topCard', {
                   card: `${topOf(b)?.rank}${suitSymOf(topOf(b)?.suit ?? '')}`,
@@ -790,7 +795,7 @@ async function draw() {
       <template #body>
         <div class="space-y-3 text-center">
           <p class="text-3xl">🔔</p>
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{ $ts("game.callLastCardBody") }}
           </p>
           <div class="grid grid-cols-2 gap-3">
@@ -841,25 +846,25 @@ async function draw() {
 
 <style scoped>
 /* A Jack-requested suit pulses to draw attention for every player. */
-.cg-suit-requested {
-  animation: cg-suit-pulse 1.3s ease-in-out infinite;
+.games-suit-requested {
+  animation: games-suit-pulse 1.3s ease-in-out infinite;
 }
-@keyframes cg-suit-pulse {
+@keyframes games-suit-pulse {
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--cg-accent) 60%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--games-accent) 60%, transparent);
   }
   50% {
     transform: scale(1.06);
-    box-shadow: 0 0 0 6px color-mix(in oklch, var(--cg-accent) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in oklch, var(--games-accent) 0%, transparent);
   }
 }
 /* The "must draw" prompt gently breathes. */
-.cg-must-draw {
-  animation: cg-breathe 1.6s ease-in-out infinite;
+.games-must-draw {
+  animation: games-breathe 1.6s ease-in-out infinite;
 }
-@keyframes cg-breathe {
+@keyframes games-breathe {
   0%,
   100% {
     opacity: 0.85;
@@ -869,41 +874,41 @@ async function draw() {
   }
 }
 /* The "Call Last Card!" button pulses urgently until you declare. */
-.cg-call-last {
-  animation: cg-call-pulse 0.9s ease-in-out infinite;
+.games-call-last {
+  animation: games-call-pulse 0.9s ease-in-out infinite;
 }
-.cg-call-last:hover {
+.games-call-last:hover {
   transform: scale(1.05);
 }
-@keyframes cg-call-pulse {
+@keyframes games-call-pulse {
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--cg-accent) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--games-accent) 55%, transparent);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 0 0 10px color-mix(in oklch, var(--cg-accent) 0%, transparent);
+    box-shadow: 0 0 0 10px color-mix(in oklch, var(--games-accent) 0%, transparent);
   }
 }
 /* "Your turn" pill breathes with an accent halo so it reads as ACTIVE. */
-.cg-turn-active {
-  animation: cg-turn-pulse 1.8s ease-in-out infinite;
+.games-turn-active {
+  animation: games-turn-pulse 1.8s ease-in-out infinite;
 }
-@keyframes cg-turn-pulse {
+@keyframes games-turn-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--cg-accent) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--games-accent) 45%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 7px color-mix(in oklch, var(--cg-accent) 0%, transparent);
+    box-shadow: 0 0 0 7px color-mix(in oklch, var(--games-accent) 0%, transparent);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cg-suit-requested,
-  .cg-must-draw,
-  .cg-call-last,
-  .cg-turn-active {
+  .games-suit-requested,
+  .games-must-draw,
+  .games-call-last,
+  .games-turn-active {
     animation: none;
   }
 }

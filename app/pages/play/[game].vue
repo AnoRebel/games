@@ -3,8 +3,8 @@
  * Game lobby — offline (LocalTransport) and online (WsTransport) play, plus
  * online room creation with spectator visibility (public/locked).
  */
-import { getGame } from "@card-games/engine-core";
-import type { BaseGameState, BaseMove, Difficulty } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
+import type { BaseGameState, BaseMove, Difficulty } from "@games/engine-core";
 import type { OfflineStart, OnlineStart } from "~/utils/setupOptions";
 import type { GameTransport } from "~/transports/types";
 import { WsTransport } from "~/transports/WsTransport";
@@ -541,21 +541,21 @@ const spectatorShareUrl = computed(() => {
     <div v-else-if="meta" class="space-y-3">
       <button
         type="button"
-        class="w-full cg-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
+        class="w-full games-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
         @click="setupOpen = true"
       >
         <p class="text-3xl mb-1">
           {{ gameId === "bao" || gameId === "checkers" ? "🎲" : "🃏" }}
         </p>
         <p class="font-display font-bold text-lg">{{ $ts("common.play") }} {{ title }}</p>
-        <p class="text-xs mt-1" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs mt-1" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("lobby.tapToSetUp") }}
         </p>
       </button>
       <!-- Join an existing online game by link, or room id + code -->
-      <div class="cg-surface rounded-2xl p-4 space-y-3">
+      <div class="games-surface rounded-2xl p-4 space-y-3">
         <p class="text-sm font-semibold flex items-center gap-1.5">
-          <UIcon name="i-lucide-link" :style="{ color: 'var(--cg-accent)' }" />
+          <UIcon name="i-lucide-link" :style="{ color: 'var(--games-accent)' }" />
           {{ $ts("lobby.joinExisting") }}
         </p>
         <UFormField :label="$ts('lobby.joinByLink')" size="sm">
@@ -569,11 +569,11 @@ const spectatorShareUrl = computed(() => {
         </UFormField>
         <div
           class="flex items-center gap-2 text-xs"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
-          <span class="flex-1 border-t" :style="{ borderColor: 'var(--cg-border)' }" />
+          <span class="flex-1 border-t" :style="{ borderColor: 'var(--games-border)' }" />
           {{ $ts("common.or") }}
-          <span class="flex-1 border-t" :style="{ borderColor: 'var(--cg-border)' }" />
+          <span class="flex-1 border-t" :style="{ borderColor: 'var(--games-border)' }" />
         </div>
         <div class="grid grid-cols-2 gap-2">
           <UFormField :label="$ts('lobby.roomId')" size="sm">
@@ -665,7 +665,7 @@ const spectatorShareUrl = computed(() => {
     >
       <template #body>
         <form class="space-y-3" @submit.prevent="submitCode">
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{
               codePrompt?.spectate
                 ? $ts("lobby.privateRoomWatch")

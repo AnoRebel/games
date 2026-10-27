@@ -9,7 +9,7 @@ import {
   defaultDifficulty,
   defaultVariant,
   supportedDifficulties,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 
 export interface SetupItem<T> {
   label: string;

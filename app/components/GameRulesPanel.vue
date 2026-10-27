@@ -4,7 +4,7 @@
  * a slideover so it opens mid-game without losing state (game-learnability).
  * Follows the current rule variant, so switching variant switches the rules.
  */
-import { getGame, variantName } from "@card-games/engine-core";
+import { getGame, variantName } from "@games/engine-core";
 
 const props = defineProps<{ gameId: string; variant?: string | null }>();
 const open = defineModel<boolean>("open", { default: false });

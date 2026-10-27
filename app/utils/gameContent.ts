@@ -12,15 +12,15 @@ import {
   lastCardTutorialSw,
   type RulesSection,
   type TutorialStep,
-} from "@card-games/game-last-card";
+} from "@games/game-last-card";
 import {
   albastiniRules,
   albastiniTutorial,
   albastiniRulesSw,
   albastiniTutorialSw,
-} from "@card-games/game-albastini";
-import { baoContent, baoContentSw } from "@card-games/game-bao";
-import { checkersContent, checkersContentSw } from "@card-games/game-checkers";
+} from "@games/game-albastini";
+import { baoContent, baoContentSw } from "@games/game-bao";
+import { checkersContent, checkersContentSw } from "@games/game-checkers";
 
 export type { RulesSection, TutorialStep };
 

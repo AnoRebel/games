@@ -9,7 +9,7 @@ import {
   type Difficulty,
   GameConfigError,
   resolveSetup,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import type { RoomConfig, SpectatorVisibility } from "./roomTypes";
 
 export interface CreateRoomBody {

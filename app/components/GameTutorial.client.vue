@@ -47,7 +47,7 @@ const manager = ref<{
   skipTourGuide: () => void;
 } | null>(null);
 
-const seen = useLocalStorage(`cg:tutorial-seen:${props.gameId}`, false);
+const seen = useLocalStorage(`games:tutorial-seen:${props.gameId}`, false);
 const showOffer = ref(false);
 
 onMounted(() => {

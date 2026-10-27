@@ -48,13 +48,13 @@ export interface SavedGame {
   savedAt: string;
 }
 
-export class CardGamesDB extends Dexie {
+export class GamesDB extends Dexie {
   results!: EntityTable<GameResult, "id">;
   themeAssets!: EntityTable<ThemeAsset, "id">;
   savedGames!: EntityTable<SavedGame, "id">;
 
   constructor() {
-    super("card-games");
+    super("games");
     this.version(1).stores({
       // Only indexed fields are listed.
       results: "++id, gameId, playerId, matchId, playedAt, rankMetric",
@@ -69,10 +69,10 @@ export class CardGamesDB extends Dexie {
   }
 }
 
-let _db: CardGamesDB | null = null;
+let _db: GamesDB | null = null;
 
 /** Lazily create the DB (client-only; IndexedDB is unavailable during SSR). */
-export function useDb(): CardGamesDB {
-  if (!_db) _db = new CardGamesDB();
+export function useDb(): GamesDB {
+  if (!_db) _db = new GamesDB();
   return _db;
 }

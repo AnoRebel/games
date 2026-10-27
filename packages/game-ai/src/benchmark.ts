@@ -15,7 +15,7 @@ import {
   applyMove,
   createRng,
   nextInt,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { chooseBotMove } from "./policy";
 
 export interface MatchSpec {

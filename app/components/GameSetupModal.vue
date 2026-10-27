@@ -5,7 +5,7 @@
  * the game's declared metadata, identically for offline and online play.
  * Used from the home cards and the play route so there's no dedicated setup page.
  */
-import { getGame } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
 import {
   type OfflineStart,
   type OnlineStart,
@@ -274,7 +274,7 @@ function start() {
         <div
           v-if="hasOptions"
           class="rounded-lg"
-          :style="{ border: '1px solid var(--cg-border)' }"
+          :style="{ border: '1px solid var(--games-border)' }"
         >
           <button
             type="button"
@@ -293,7 +293,7 @@ function start() {
           <div
             v-if="showOptions"
             class="px-3 pt-3 pb-3 space-y-3 border-t"
-            :style="{ borderColor: 'var(--cg-border)' }"
+            :style="{ borderColor: 'var(--games-border)' }"
           >
             <!-- Online-only room options -->
             <template v-if="mode === 'online'">
@@ -327,7 +327,10 @@ function start() {
                 <USwitch v-model="persist" size="sm" class="mt-0.5" />
                 <span class="text-sm">
                   {{ $ts("setup.persistRoom") }}
-                  <span class="block text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+                  <span
+                    class="block text-xs"
+                    :style="{ color: 'var(--games-text-muted)' }"
+                  >
                     {{ $ts("setup.persistRoomHint") }}
                   </span>
                 </span>

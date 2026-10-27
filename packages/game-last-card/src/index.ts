@@ -1,4 +1,4 @@
-// @card-games/game-last-card — Last Card game module.
+// @games/game-last-card — Last Card game module.
 
 import {
   type Card,
@@ -7,7 +7,7 @@ import {
   type ScoreResult,
   type Seat,
   registerGame,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { type LastCardConfig, defaultLastCardConfig } from "./config";
 import type { LastCardMove, LastCardState } from "./state";
 import { createInitialState, getLegalMoves, reducer } from "./rules";

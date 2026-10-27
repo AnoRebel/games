@@ -358,8 +358,8 @@ function errorText(e: SceneThemeError): string {
 .scene-icon {
   min-height: 44px;
   border-radius: 0.6rem;
-  border: 1px solid var(--cg-border);
-  background: var(--cg-surface);
+  border: 1px solid var(--games-border);
+  background: var(--games-surface);
   padding: 0 0.75rem;
 }
 .scene-icon {
@@ -376,8 +376,8 @@ function errorText(e: SceneThemeError): string {
 }
 .scene-chip[aria-checked="true"],
 .scene-theme[aria-pressed="true"] {
-  border-color: var(--cg-accent);
-  box-shadow: 0 0 0 2px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  border-color: var(--games-accent);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--games-accent) 45%, transparent);
   font-weight: 600;
 }
 .scene-swatch {
@@ -385,12 +385,12 @@ function errorText(e: SceneThemeError): string {
   height: 22px;
 }
 .scene-form {
-  border: 1px solid var(--cg-border);
+  border: 1px solid var(--games-border);
 }
 .scene-input {
   min-height: 36px;
   border-radius: 0.4rem;
-  border: 1px solid var(--cg-border);
+  border: 1px solid var(--games-border);
   background: transparent;
   padding: 0 0.5rem;
 }

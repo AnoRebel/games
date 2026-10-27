@@ -5,7 +5,7 @@
  * presence reactively, and calls `play()` / `sendChat()`. Works identically for
  * local and online transports.
  */
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove } from "@games/engine-core";
 import type {
   ChatMessage,
   GameTransport,

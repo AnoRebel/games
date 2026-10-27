@@ -22,10 +22,10 @@ onMounted(() => {
 <template>
   <footer class="mt-6 mb-4 flex justify-center px-3">
     <div
-      class="cg-credit group relative inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm select-none"
+      class="games-credit group relative inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm select-none"
       :style="{
-        background: 'var(--cg-surface)',
-        border: '1px solid var(--cg-border)',
+        background: 'var(--games-surface)',
+        border: '1px solid var(--games-border)',
         backdropFilter: 'blur(8px)',
       }"
     >
@@ -36,32 +36,35 @@ onMounted(() => {
           :key="s"
           data-pip
           class="inline-block"
-          :style="{ color: i % 2 ? 'oklch(0.7 0.2 25)' : 'var(--cg-text-muted)' }"
+          :style="{ color: i % 2 ? 'oklch(0.7 0.2 25)' : 'var(--games-text-muted)' }"
           >{{ s }}</span
         >
       </span>
 
-      <span :style="{ color: 'var(--cg-text-muted)' }">Made with</span>
-      <span class="cg-heart text-base leading-none" aria-label="love">❤️</span>
-      <span :style="{ color: 'var(--cg-text-muted)' }">by</span>
+      <span :style="{ color: 'var(--games-text-muted)' }">Made with</span>
+      <span class="games-heart text-base leading-none" aria-label="love">❤️</span>
+      <span :style="{ color: 'var(--games-text-muted)' }">by</span>
 
       <!-- shimmering name → links to the source -->
       <a
         href="https://github.com/AnoRebel/card_games"
         target="_blank"
         rel="noopener noreferrer"
-        class="cg-name font-display font-bold tracking-tight transition-transform group-hover:scale-105"
+        class="games-name font-display font-bold tracking-tight transition-transform group-hover:scale-105"
       >
         Ano Rebel
       </a>
 
-      <span class="hidden sm:inline text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+      <span
+        class="hidden sm:inline text-xs"
+        :style="{ color: 'var(--games-text-muted)' }"
+      >
         · {{ year }}
       </span>
       <span
         v-if="version"
         class="text-[10px] font-mono tabular-nums opacity-60"
-        :style="{ color: 'var(--cg-text-muted)' }"
+        :style="{ color: 'var(--games-text-muted)' }"
         :title="`Version ${version}`"
         >v{{ version }}</span
       >
@@ -70,42 +73,42 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.cg-credit {
+.games-credit {
   transition:
     transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s;
 }
-.cg-credit:hover {
+.games-credit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--cg-accent) 50%, transparent);
+  box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--games-accent) 50%, transparent);
 }
 
 /* Animated accent-gradient shimmer on the name. */
-.cg-name {
+.games-name {
   background-image: linear-gradient(
     100deg,
-    var(--cg-accent) 0%,
-    color-mix(in oklch, var(--cg-accent) 55%, white) 45%,
-    var(--cg-accent) 90%
+    var(--games-accent) 0%,
+    color-mix(in oklch, var(--games-accent) 55%, white) 45%,
+    var(--games-accent) 90%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: cg-shimmer 3.2s linear infinite;
+  animation: games-shimmer 3.2s linear infinite;
 }
 
-.cg-heart {
+.games-heart {
   display: inline-block;
-  animation: cg-beat 1.4s ease-in-out infinite;
+  animation: games-beat 1.4s ease-in-out infinite;
 }
 
-@keyframes cg-shimmer {
+@keyframes games-shimmer {
   to {
     background-position: -220% 0;
   }
 }
-@keyframes cg-beat {
+@keyframes games-beat {
   0%,
   100% {
     transform: scale(1);
@@ -122,13 +125,13 @@ onMounted(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cg-name,
-  .cg-heart,
-  .cg-credit {
+  .games-name,
+  .games-heart,
+  .games-credit {
     animation: none;
     transition: none;
   }
-  .cg-name {
+  .games-name {
     background-position: 0 0;
   }
 }

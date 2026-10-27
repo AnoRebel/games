@@ -15,8 +15,8 @@ import {
   squareNumber,
   type CheckersMove,
   type CheckersState,
-} from "@card-games/game-checkers";
-import type { Player } from "@card-games/engine-core";
+} from "@games/game-checkers";
+import type { Player } from "@games/engine-core";
 import {
   checkersHints,
   checkersLastMove,
@@ -374,11 +374,11 @@ defineExpose({ selected });
   cursor: default;
 }
 [data-state~="origin"] .checkers-piece {
-  outline: 2px dashed var(--games-scene-accent, var(--cg-accent));
+  outline: 2px dashed var(--games-scene-accent, var(--games-accent));
   outline-offset: 1px;
 }
 [data-state~="selected"] .checkers-piece {
-  outline: 3px solid var(--games-scene-accent, var(--cg-accent));
+  outline: 3px solid var(--games-scene-accent, var(--games-accent));
   outline-offset: 1px;
 }
 .marker-move {

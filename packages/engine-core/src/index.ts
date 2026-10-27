@@ -1,4 +1,4 @@
-// @card-games/engine-core — public surface.
+// @games/engine-core — public surface.
 //
 // Pure, deterministic, framework-free. Imports no network, DOM, or UI code:
 // the whole package type-checks against packages/tsconfig.base.json, whose

@@ -3,8 +3,8 @@
  * A player's hand: a responsive fanned/overlapping row of cards. Overlap tightens
  * as the hand grows or the viewport shrinks so it never overflows horizontally.
  */
-import type { Card } from "@card-games/engine-core";
-import { cardId } from "@card-games/engine-core";
+import type { Card } from "@games/engine-core";
+import { cardId } from "@games/engine-core";
 
 const props = withDefaults(
   defineProps<{

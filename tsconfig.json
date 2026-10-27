@@ -4,7 +4,7 @@
   // NB: do NOT add a `compilerOptions.paths` block here. TypeScript REPLACES the
   // inherited `paths` map rather than merging it, so redefining it discards all
   // ~40 aliases Nuxt generates (`~/*`, `~~/*`, `#imports`, `#app`, …) and every
-  // aliased import in the app fails to resolve. The @card-games/* workspace
+  // aliased import in the app fails to resolve. The @games/* workspace
   // packages already resolve through node_modules symlinks (each package's
   // `types`/`exports` points at its src entry), so they need no mapping.
   "extends": "./.nuxt/tsconfig.json"

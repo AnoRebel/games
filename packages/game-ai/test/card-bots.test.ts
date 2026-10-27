@@ -11,9 +11,9 @@ import {
   type BaseMove,
   type GameModule,
   type Player,
-} from "@card-games/engine-core";
-import { lastCardGame, defaultLastCardConfig } from "@card-games/game-last-card";
-import { albastiniGame, defaultAlbastiniConfig } from "@card-games/game-albastini";
+} from "@games/engine-core";
+import { lastCardGame, defaultLastCardConfig } from "@games/game-last-card";
+import { albastiniGame, defaultAlbastiniConfig } from "@games/game-albastini";
 import { chooseBotMove } from "../src/index";
 
 const P = (n: number): Player[] =>

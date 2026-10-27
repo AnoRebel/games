@@ -14,7 +14,7 @@
  * exactly the same code, so the chosen move cannot differ.
  */
 
-import type { Seat } from "@card-games/engine-core";
+import type { Seat } from "@games/engine-core";
 
 /** Everything the search needs to know about one game. */
 export interface SearchAdapter<S, M> {

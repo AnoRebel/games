@@ -14,8 +14,8 @@ export const APP_THEMES: { id: AppTheme; name: string; swatch: string }[] = [
 ];
 
 export function useAppTheme() {
-  const theme = useLocalStorage<AppTheme>("cg:app-theme", "felt");
-  const motion = useLocalStorage<MotionLevel>("cg:motion", "rich");
+  const theme = useLocalStorage<AppTheme>("games:app-theme", "felt");
+  const motion = useLocalStorage<MotionLevel>("games:motion", "rich");
 
   // Reflect onto <html> so CSS tokens apply globally.
   if (import.meta.client) {

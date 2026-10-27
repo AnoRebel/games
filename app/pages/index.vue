@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { standardDeck, getGame } from "@card-games/engine-core";
+import { standardDeck, getGame } from "@games/engine-core";
 
 const { $ts, $localePath } = useI18n();
 useHead({ title: () => $ts("app.title") });
@@ -76,7 +76,7 @@ void standardDeck;
     <section data-reveal class="pt-6 pb-2 text-center sm:text-left">
       <p
         class="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
-        :style="{ color: 'var(--cg-accent)' }"
+        :style="{ color: 'var(--games-accent)' }"
       >
         {{ $ts("home.badge") }}
       </p>
@@ -87,7 +87,7 @@ void standardDeck;
       </h1>
       <p
         class="mt-3 max-w-xl text-sm sm:text-base"
-        :style="{ color: 'var(--cg-text-muted)' }"
+        :style="{ color: 'var(--games-text-muted)' }"
       >
         {{ $ts("app.subtitle") }}
       </p>
@@ -97,7 +97,7 @@ void standardDeck;
     <NuxtLink
       data-reveal
       :to="$localePath(`/play/${daily.gameId}?daily=1`)"
-      class="block rounded-2xl p-4 cg-surface transition hover:-translate-y-0.5 flex items-center gap-3"
+      class="block rounded-2xl p-4 games-surface transition hover:-translate-y-0.5 flex items-center gap-3"
     >
       <span class="text-3xl">📅</span>
       <div class="min-w-0 flex-1">
@@ -107,7 +107,7 @@ void standardDeck;
             $ts("daily.doneToday")
           }}</UBadge>
         </p>
-        <p class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("daily.subtitle", { game: dailyGameName }) }}
         </p>
       </div>
@@ -115,7 +115,7 @@ void standardDeck;
         <p class="font-display font-bold text-lg leading-none">{{ daily.streak }}🔥</p>
         <p
           class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("daily.streak") }}
         </p>
@@ -128,7 +128,7 @@ void standardDeck;
         :key="game.id"
         :to="$localePath(game.to)"
         data-reveal
-        class="cg-game-card group relative overflow-hidden rounded-2xl p-5 cg-surface transition-transform"
+        class="games-game-card group relative overflow-hidden rounded-2xl p-5 games-surface transition-transform"
       >
         <!-- board games: a small board preview -->
         <div
@@ -158,18 +158,21 @@ void standardDeck;
             <span
               class="text-[11px] font-semibold px-1.5 py-0.5 rounded-full"
               :style="{
-                background: 'color-mix(in oklch, var(--cg-accent) 18%, transparent)',
-                color: 'var(--cg-accent)',
+                background: 'color-mix(in oklch, var(--games-accent) 18%, transparent)',
+                color: 'var(--games-accent)',
               }"
             >
               {{ game.players }}
             </span>
           </div>
-          <p class="mt-1.5 text-sm min-h-10" :style="{ color: 'var(--cg-text-muted)' }">
+          <p
+            class="mt-1.5 text-sm min-h-10"
+            :style="{ color: 'var(--games-text-muted)' }"
+          >
             {{ game.tagline }}
           </p>
           <div
-            class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold cg-accent-text"
+            class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold games-accent-text"
           >
             {{ $ts("common.play") }}
             <UIcon
@@ -196,10 +199,10 @@ void standardDeck;
 </template>
 
 <style scoped>
-.cg-game-card:hover {
+.games-game-card:hover {
   transform: translateY(-3px);
 }
-.cg-game-card:active {
+.games-game-card:active {
   transform: translateY(0) scale(0.99);
 }
 </style>

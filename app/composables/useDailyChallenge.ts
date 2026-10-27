@@ -40,8 +40,8 @@ function dayIndex(dateKey: string): number {
 
 export function useDailyChallenge() {
   // Persisted: last day completed + the streak count.
-  const lastCompleted = useLocalStorage("cg:daily-last", "");
-  const streakCount = useLocalStorage("cg:daily-streak", 0);
+  const lastCompleted = useLocalStorage("games:daily-last", "");
+  const streakCount = useLocalStorage("games:daily-streak", 0);
 
   const today = computed<DailyState>(() => {
     // new Date() is fine here — this is UI/session logic, not the engine.

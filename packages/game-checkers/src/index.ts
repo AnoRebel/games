@@ -1,6 +1,6 @@
-// @card-games/game-checkers — Checkers/draughts family game module.
+// @games/game-checkers — Checkers/draughts family game module.
 
-import { type GameModule, type Player, registerGame } from "@card-games/engine-core";
+import { type GameModule, type Player, registerGame } from "@games/engine-core";
 import type { CheckersConfig, CheckersMove, CheckersState } from "./state";
 import {
   createInitialState,

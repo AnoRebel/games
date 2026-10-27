@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** Bao table: the shared board-game frame around the Bao board. */
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
-import type { BaoMove, BaoState } from "@card-games/game-bao";
+import type { BaseGameState, BaseMove } from "@games/engine-core";
+import type { BaoMove, BaoState } from "@games/game-bao";
 import type { GameTransport } from "~/transports/types";
 
 defineProps<{

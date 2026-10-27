@@ -8,8 +8,8 @@ import {
   type Difficulty,
   type GameModule,
   type Player,
-} from "@card-games/engine-core";
-import { baoGame } from "@card-games/game-bao";
+} from "@games/engine-core";
+import { baoGame } from "@games/game-bao";
 import {
   BOARD_SIZE,
   EMPTY,
@@ -21,7 +21,7 @@ import {
   positionKey,
   type CheckersState,
   type CheckersVariant,
-} from "@card-games/game-checkers";
+} from "@games/game-checkers";
 import { SEARCH_LIMITS, chooseBotMove, easyChoice, searchDecision } from "../src/index";
 
 const PLAYERS: Player[] = [

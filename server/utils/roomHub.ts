@@ -19,12 +19,12 @@ import {
   applyMove,
   requireGame,
   resolveSetup,
-} from "@card-games/engine-core";
-import { registerLastCard } from "@card-games/game-last-card";
-import { registerAlbastini } from "@card-games/game-albastini";
-import { registerBao } from "@card-games/game-bao";
-import { registerCheckers } from "@card-games/game-checkers";
-import { chooseBotMoveAsync } from "@card-games/game-ai";
+} from "@games/engine-core";
+import { registerLastCard } from "@games/game-last-card";
+import { registerAlbastini } from "@games/game-albastini";
+import { registerBao } from "@games/game-bao";
+import { registerCheckers } from "@games/game-checkers";
+import { chooseBotMoveAsync } from "@games/game-ai";
 import { consola } from "consola";
 import {
   recordOnlineResults,

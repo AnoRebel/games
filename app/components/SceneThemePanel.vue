@@ -3,7 +3,7 @@
  * Settings section for scene themes: the editor bound to this browser's theme
  * store. Opened from a game, it can also give that game its own theme.
  */
-import { getGame } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
 import { BUILTIN_SCENE_THEMES } from "~/utils/sceneThemes";
 
 const route = useRoute();

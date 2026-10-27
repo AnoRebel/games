@@ -19,7 +19,7 @@ import {
   type ScoreResult,
   type Seat,
   createRng,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import {
   type BaoCapture,
   type BaoConfig,

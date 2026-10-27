@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { applyMove, type Player } from "@card-games/engine-core";
+import { applyMove, type Player } from "@games/engine-core";
 import {
   albastiniGame,
   defaultAlbastiniConfig,

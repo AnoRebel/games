@@ -16,7 +16,7 @@ vi.mock("../server/utils/db", () => ({
 }));
 const { RoomHub } = await import("../server/utils/roomHub");
 const { buildRoomConfig } = await import("../server/utils/roomConfig");
-const { requireGame } = await import("@card-games/engine-core");
+const { requireGame } = await import("@games/engine-core");
 
 const THEME_WORDS = /scene|theme|palette|--games|#[0-9a-f]{6}/i;
 

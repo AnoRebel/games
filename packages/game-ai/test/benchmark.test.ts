@@ -8,8 +8,8 @@
  * deepening to depth 6 / 60k nodes), 4 random opening plies, move cap below.
  */
 import { describe, it, expect } from "vitest";
-import { baoGame } from "@card-games/game-bao";
-import { checkersGame } from "@card-games/game-checkers";
+import { baoGame } from "@games/game-bao";
+import { checkersGame } from "@games/game-checkers";
 import { playBenchmarkGame, runMatch, type MatchSpec } from "../src/index";
 
 const BENCHMARK_SEEDS = [

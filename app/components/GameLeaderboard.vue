@@ -10,7 +10,7 @@ const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
 </script>
 
 <template>
-  <div class="cg-surface rounded-xl overflow-hidden">
+  <div class="games-surface rounded-xl overflow-hidden">
     <button
       type="button"
       class="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold"
@@ -35,7 +35,7 @@ const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
         <p
           v-if="!rows.length"
           class="px-3 pb-3 text-sm"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("leaderboard.empty") }}
         </p>
@@ -44,13 +44,13 @@ const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
             v-for="(row, i) in rows"
             :key="row.playerId"
             class="flex items-center gap-3 py-1.5 border-t first:border-t-0"
-            :style="{ borderColor: 'var(--cg-border)' }"
+            :style="{ borderColor: 'var(--games-border)' }"
           >
             <span class="w-6 text-center">{{ medal(i) }}</span>
             <span class="flex-1 truncate font-medium">{{ row.playerName }}</span>
             <span
               class="text-sm whitespace-nowrap"
-              :style="{ color: 'var(--cg-text-muted)' }"
+              :style="{ color: 'var(--games-text-muted)' }"
             >
               {{ $ts("leaderboard.wins", { count: row.wins }) }} ·
               {{ $ts("leaderboard.played", { count: row.played }) }}

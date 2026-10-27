@@ -6,8 +6,8 @@
  */
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import { applyMove, type Player } from "@card-games/engine-core";
-import { baoGame, type BaoState } from "@card-games/game-bao";
+import { applyMove, type Player } from "@games/engine-core";
+import { baoGame, type BaoState } from "@games/game-bao";
 import {
   EMPTY,
   KING_0,
@@ -16,7 +16,7 @@ import {
   checkersGame,
   positionKey,
   type CheckersState,
-} from "@card-games/game-checkers";
+} from "@games/game-checkers";
 import BoardGrid from "../app/components/BoardGrid.vue";
 import BaoBoard from "../app/components/BaoBoard.vue";
 import CheckersBoard from "../app/components/CheckersBoard.vue";

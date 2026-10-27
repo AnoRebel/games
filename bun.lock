@@ -5,15 +5,15 @@
     "": {
       "name": "card-games",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
-        "@card-games/game-ai": "workspace:*",
-        "@card-games/game-albastini": "workspace:*",
-        "@card-games/game-bao": "workspace:*",
-        "@card-games/game-checkers": "workspace:*",
-        "@card-games/game-last-card": "workspace:*",
         "@conduit/client": "npm:@jsr/conduit__client",
         "@conduit/server": "npm:@jsr/conduit__server",
         "@date-fns/tz": "^1.5.0",
+        "@games/engine-core": "workspace:*",
+        "@games/game-ai": "workspace:*",
+        "@games/game-albastini": "workspace:*",
+        "@games/game-bao": "workspace:*",
+        "@games/game-checkers": "workspace:*",
+        "@games/game-last-card": "workspace:*",
         "@libsql/client": "^0.18.0",
         "@nuxt/fonts": "1.2.0",
         "@nuxt/icon": "2.6.1",
@@ -59,44 +59,44 @@
       },
     },
     "packages/engine-core": {
-      "name": "@card-games/engine-core",
+      "name": "@games/engine-core",
       "version": "0.1.0",
     },
     "packages/game-ai": {
-      "name": "@card-games/game-ai",
+      "name": "@games/game-ai",
       "version": "0.1.0",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
-        "@card-games/game-bao": "workspace:*",
-        "@card-games/game-checkers": "workspace:*",
+        "@games/engine-core": "workspace:*",
+        "@games/game-bao": "workspace:*",
+        "@games/game-checkers": "workspace:*",
       },
     },
     "packages/game-albastini": {
-      "name": "@card-games/game-albastini",
+      "name": "@games/game-albastini",
       "version": "0.1.0",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
+        "@games/engine-core": "workspace:*",
       },
     },
     "packages/game-bao": {
-      "name": "@card-games/game-bao",
+      "name": "@games/game-bao",
       "version": "0.1.0",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
+        "@games/engine-core": "workspace:*",
       },
     },
     "packages/game-checkers": {
-      "name": "@card-games/game-checkers",
+      "name": "@games/game-checkers",
       "version": "0.1.0",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
+        "@games/engine-core": "workspace:*",
       },
     },
     "packages/game-last-card": {
-      "name": "@card-games/game-last-card",
+      "name": "@games/game-last-card",
       "version": "0.1.0",
       "dependencies": {
-        "@card-games/engine-core": "workspace:*",
+        "@games/engine-core": "workspace:*",
       },
     },
   },
@@ -303,18 +303,6 @@
 
     "@capsizecss/unpack": ["@capsizecss/unpack@4.0.1", "", { "dependencies": { "fontkitten": "^1.0.3" } }, "sha512-CuNiSqg7+e1cO/GjffyMOm5Tt2jUF9CWHHnvQ/UkqvtkGfHdgwEC0wpmq7fkN3gxwpRnrAN0WzO3vREKmNolMQ=="],
 
-    "@card-games/engine-core": ["@card-games/engine-core@workspace:packages/engine-core"],
-
-    "@card-games/game-ai": ["@card-games/game-ai@workspace:packages/game-ai"],
-
-    "@card-games/game-albastini": ["@card-games/game-albastini@workspace:packages/game-albastini"],
-
-    "@card-games/game-bao": ["@card-games/game-bao@workspace:packages/game-bao"],
-
-    "@card-games/game-checkers": ["@card-games/game-checkers@workspace:packages/game-checkers"],
-
-    "@card-games/game-last-card": ["@card-games/game-last-card@workspace:packages/game-last-card"],
-
     "@clack/core": ["@clack/core@1.5.1", "", { "dependencies": { "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ=="],
 
     "@clack/prompts": ["@clack/prompts@1.8.1", "", { "dependencies": { "@clack/core": "1.5.1", "fast-string-width": "^3.0.2", "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ=="],
@@ -428,6 +416,18 @@
     "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
 
     "@floating-ui/vue": ["@floating-ui/vue@2.0.1", "", { "dependencies": { "@floating-ui/dom": "^1.8.0", "@floating-ui/utils": "^0.2.12" }, "peerDependencies": { "vue": ">=3.3.0" } }, "sha512-043dyEKD9TDSfz080YH2vobubgg+NIo/9Fw4RAl7sEMpD8Am1DNrrSTl/GpMBjyGHoD/FbJY2QLawY+HSQsEIA=="],
+
+    "@games/engine-core": ["@games/engine-core@workspace:packages/engine-core"],
+
+    "@games/game-ai": ["@games/game-ai@workspace:packages/game-ai"],
+
+    "@games/game-albastini": ["@games/game-albastini@workspace:packages/game-albastini"],
+
+    "@games/game-bao": ["@games/game-bao@workspace:packages/game-bao"],
+
+    "@games/game-checkers": ["@games/game-checkers@workspace:packages/game-checkers"],
+
+    "@games/game-last-card": ["@games/game-last-card@workspace:packages/game-last-card"],
 
     "@humanfs/core": ["@humanfs/core@0.19.2", "", { "dependencies": { "@humanfs/types": "^0.15.0" } }, "sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA=="],
 

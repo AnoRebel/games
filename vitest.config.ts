@@ -10,12 +10,12 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      "@card-games/engine-core": r("./packages/engine-core/src/index.ts"),
-      "@card-games/game-last-card": r("./packages/game-last-card/src/index.ts"),
-      "@card-games/game-albastini": r("./packages/game-albastini/src/index.ts"),
-      "@card-games/game-bao": r("./packages/game-bao/src/index.ts"),
-      "@card-games/game-checkers": r("./packages/game-checkers/src/index.ts"),
-      "@card-games/game-ai": r("./packages/game-ai/src/index.ts"),
+      "@games/engine-core": r("./packages/engine-core/src/index.ts"),
+      "@games/game-last-card": r("./packages/game-last-card/src/index.ts"),
+      "@games/game-albastini": r("./packages/game-albastini/src/index.ts"),
+      "@games/game-bao": r("./packages/game-bao/src/index.ts"),
+      "@games/game-checkers": r("./packages/game-checkers/src/index.ts"),
+      "@games/game-ai": r("./packages/game-ai/src/index.ts"),
       "~/": r("./app/"),
       "@/": r("./app/"),
     },

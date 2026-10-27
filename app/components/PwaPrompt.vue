@@ -19,8 +19,8 @@ watch(
         icon: "i-lucide-wifi-off",
         duration: 4000,
         ui: {
-          root: "bg-[var(--cg-surface-solid)] ring-2 ring-[var(--cg-accent)]/40 text-[var(--cg-text)]",
-          icon: "text-[var(--cg-accent)] size-5",
+          root: "bg-[var(--games-surface-solid)] ring-2 ring-[var(--games-accent)]/40 text-[var(--games-text)]",
+          icon: "text-[var(--games-accent)] size-5",
         },
       });
       $pwa?.cancelPrompt();
@@ -37,11 +37,11 @@ watch(
         v-if="$pwa.needRefresh"
         class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 rounded-full pl-4 pr-2 py-2 shadow-2xl"
         :style="{
-          background: 'var(--cg-surface-solid)',
-          border: '1px solid var(--cg-border)',
+          background: 'var(--games-surface-solid)',
+          border: '1px solid var(--games-border)',
         }"
       >
-        <UIcon name="i-lucide-sparkles" :style="{ color: 'var(--cg-accent)' }" />
+        <UIcon name="i-lucide-sparkles" :style="{ color: 'var(--games-accent)' }" />
         <span class="text-sm">{{ $ts("pwa.newVersion") }}</span>
         <UButton size="xs" color="primary" @click="$pwa.updateServiceWorker()">
           {{ $ts("pwa.reload") }}
@@ -62,11 +62,11 @@ watch(
         v-if="$pwa.showInstallPrompt && !$pwa.needRefresh"
         class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-3 rounded-full pl-4 pr-2 py-2 shadow-2xl"
         :style="{
-          background: 'var(--cg-surface-solid)',
-          border: '1px solid var(--cg-border)',
+          background: 'var(--games-surface-solid)',
+          border: '1px solid var(--games-border)',
         }"
       >
-        <UIcon name="i-lucide-download" :style="{ color: 'var(--cg-accent)' }" />
+        <UIcon name="i-lucide-download" :style="{ color: 'var(--games-accent)' }" />
         <span class="text-sm">{{ $ts("pwa.installPrompt") }}</span>
         <UButton size="xs" color="primary" @click="$pwa.install()">
           {{ $ts("pwa.install") }}

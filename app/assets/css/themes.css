@@ -9,163 +9,163 @@
 
 /* Baseline default (felt-dark) applied before [data-game-theme] hydrates. */
 :root {
-  --cg-bg: oklch(0.22 0.03 155);
-  --cg-bg-2: oklch(0.26 0.035 155);
-  --cg-surface: oklch(0.29 0.03 155 / 0.7);
-  --cg-surface-solid: oklch(0.3 0.03 155);
-  --cg-border: oklch(0.4 0.03 150 / 0.5);
-  --cg-text: oklch(0.95 0.01 140);
-  --cg-text-muted: oklch(0.72 0.02 145);
-  --cg-accent: oklch(0.8 0.13 85);
-  --cg-accent-contrast: oklch(0.25 0.04 90);
-  --cg-felt: radial-gradient(
+  --games-bg: oklch(0.22 0.03 155);
+  --games-bg-2: oklch(0.26 0.035 155);
+  --games-surface: oklch(0.29 0.03 155 / 0.7);
+  --games-surface-solid: oklch(0.3 0.03 155);
+  --games-border: oklch(0.4 0.03 150 / 0.5);
+  --games-text: oklch(0.95 0.01 140);
+  --games-text-muted: oklch(0.72 0.02 145);
+  --games-accent: oklch(0.8 0.13 85);
+  --games-accent-contrast: oklch(0.25 0.04 90);
+  --games-felt: radial-gradient(
     ellipse 120% 100% at 50% -10%,
     oklch(0.42 0.09 155),
     oklch(0.24 0.06 158) 70%
   );
-  --cg-radius: 0.7rem;
-  --cg-card-shadow: 0 6px 16px -6px oklch(0.1 0.05 150 / 0.6);
-  --cg-glow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 55%, transparent),
-    0 0 14px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  --games-radius: 0.7rem;
+  --games-card-shadow: 0 6px 16px -6px oklch(0.1 0.05 150 / 0.6);
+  --games-glow:
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 55%, transparent),
+    0 0 14px color-mix(in oklch, var(--games-accent) 45%, transparent);
 }
 
 /* ---------- FELT (casino green + gold) ---------- */
 [data-game-theme="felt"] {
   /* light */
-  --cg-bg: oklch(0.94 0.02 150);
-  --cg-bg-2: oklch(0.97 0.015 150);
-  --cg-surface: oklch(1 0 0 / 0.7);
-  --cg-surface-solid: oklch(0.99 0.01 150);
-  --cg-border: oklch(0.75 0.04 150 / 0.5);
-  --cg-text: oklch(0.27 0.04 155);
-  --cg-text-muted: oklch(0.5 0.03 150);
-  --cg-accent: oklch(0.58 0.12 80);
-  --cg-accent-contrast: oklch(0.99 0.01 90);
-  --cg-felt: radial-gradient(
+  --games-bg: oklch(0.94 0.02 150);
+  --games-bg-2: oklch(0.97 0.015 150);
+  --games-surface: oklch(1 0 0 / 0.7);
+  --games-surface-solid: oklch(0.99 0.01 150);
+  --games-border: oklch(0.75 0.04 150 / 0.5);
+  --games-text: oklch(0.27 0.04 155);
+  --games-text-muted: oklch(0.5 0.03 150);
+  --games-accent: oklch(0.58 0.12 80);
+  --games-accent-contrast: oklch(0.99 0.01 90);
+  --games-felt: radial-gradient(
     ellipse 120% 100% at 50% -10%,
     oklch(0.55 0.11 152),
     oklch(0.4 0.09 155) 72%
   );
-  --cg-radius: 0.7rem;
-  --cg-card-shadow: 0 6px 16px -6px oklch(0.4 0.05 150 / 0.4);
-  --cg-glow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 55%, transparent),
-    0 0 14px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  --games-radius: 0.7rem;
+  --games-card-shadow: 0 6px 16px -6px oklch(0.4 0.05 150 / 0.4);
+  --games-glow:
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 55%, transparent),
+    0 0 14px color-mix(in oklch, var(--games-accent) 45%, transparent);
 }
 html.dark[data-game-theme="felt"] {
-  --cg-bg: oklch(0.22 0.03 155);
-  --cg-bg-2: oklch(0.26 0.035 155);
-  --cg-surface: oklch(0.29 0.03 155 / 0.7);
-  --cg-surface-solid: oklch(0.3 0.03 155);
-  --cg-border: oklch(0.4 0.03 150 / 0.5);
-  --cg-text: oklch(0.95 0.01 140);
-  --cg-text-muted: oklch(0.72 0.02 145);
-  --cg-accent: oklch(0.8 0.13 85);
-  --cg-accent-contrast: oklch(0.25 0.04 90);
-  --cg-felt: radial-gradient(
+  --games-bg: oklch(0.22 0.03 155);
+  --games-bg-2: oklch(0.26 0.035 155);
+  --games-surface: oklch(0.29 0.03 155 / 0.7);
+  --games-surface-solid: oklch(0.3 0.03 155);
+  --games-border: oklch(0.4 0.03 150 / 0.5);
+  --games-text: oklch(0.95 0.01 140);
+  --games-text-muted: oklch(0.72 0.02 145);
+  --games-accent: oklch(0.8 0.13 85);
+  --games-accent-contrast: oklch(0.25 0.04 90);
+  --games-felt: radial-gradient(
     ellipse 120% 100% at 50% -10%,
     oklch(0.42 0.09 155),
     oklch(0.24 0.06 158) 70%
   );
-  --cg-radius: 0.7rem;
-  --cg-card-shadow: 0 6px 16px -6px oklch(0.1 0.05 150 / 0.6);
-  --cg-glow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 55%, transparent),
-    0 0 14px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  --games-radius: 0.7rem;
+  --games-card-shadow: 0 6px 16px -6px oklch(0.1 0.05 150 / 0.6);
+  --games-glow:
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 55%, transparent),
+    0 0 14px color-mix(in oklch, var(--games-accent) 45%, transparent);
 }
 
 /* ---------- ARCADE (vibrant) ---------- */
 [data-game-theme="arcade"] {
-  --cg-bg: oklch(0.96 0.03 280);
-  --cg-bg-2: oklch(0.99 0.02 280);
-  --cg-surface: oklch(1 0 0 / 0.85);
-  --cg-surface-solid: oklch(1 0 0);
-  --cg-border: oklch(0.8 0.08 290 / 0.6);
-  --cg-text: oklch(0.28 0.06 285);
-  --cg-text-muted: oklch(0.5 0.05 285);
-  --cg-accent: oklch(0.68 0.2 350);
-  --cg-accent-contrast: oklch(0.99 0.01 350);
-  --cg-felt: linear-gradient(135deg, oklch(0.78 0.16 200), oklch(0.74 0.17 320));
-  --cg-radius: 1.1rem;
-  --cg-card-shadow: 0 8px 0 -2px oklch(0.7 0.12 290 / 0.35);
-  --cg-glow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 55%, transparent),
-    0 0 14px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  --games-bg: oklch(0.96 0.03 280);
+  --games-bg-2: oklch(0.99 0.02 280);
+  --games-surface: oklch(1 0 0 / 0.85);
+  --games-surface-solid: oklch(1 0 0);
+  --games-border: oklch(0.8 0.08 290 / 0.6);
+  --games-text: oklch(0.28 0.06 285);
+  --games-text-muted: oklch(0.5 0.05 285);
+  --games-accent: oklch(0.68 0.2 350);
+  --games-accent-contrast: oklch(0.99 0.01 350);
+  --games-felt: linear-gradient(135deg, oklch(0.78 0.16 200), oklch(0.74 0.17 320));
+  --games-radius: 1.1rem;
+  --games-card-shadow: 0 8px 0 -2px oklch(0.7 0.12 290 / 0.35);
+  --games-glow:
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 55%, transparent),
+    0 0 14px color-mix(in oklch, var(--games-accent) 45%, transparent);
 }
 html.dark[data-game-theme="arcade"] {
-  --cg-bg: oklch(0.2 0.04 285);
-  --cg-bg-2: oklch(0.24 0.05 285);
-  --cg-surface: oklch(0.27 0.05 285 / 0.8);
-  --cg-surface-solid: oklch(0.26 0.05 285);
-  --cg-border: oklch(0.5 0.12 320 / 0.5);
-  --cg-text: oklch(0.96 0.02 320);
-  --cg-text-muted: oklch(0.72 0.05 320);
-  --cg-accent: oklch(0.72 0.2 350);
-  --cg-accent-contrast: oklch(0.18 0.04 350);
-  --cg-felt: linear-gradient(135deg, oklch(0.42 0.14 250), oklch(0.4 0.16 330));
-  --cg-radius: 1.1rem;
-  --cg-card-shadow: 0 8px 0 -2px oklch(0.4 0.14 320 / 0.5);
-  --cg-glow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 55%, transparent),
-    0 0 14px color-mix(in oklch, var(--cg-accent) 45%, transparent);
+  --games-bg: oklch(0.2 0.04 285);
+  --games-bg-2: oklch(0.24 0.05 285);
+  --games-surface: oklch(0.27 0.05 285 / 0.8);
+  --games-surface-solid: oklch(0.26 0.05 285);
+  --games-border: oklch(0.5 0.12 320 / 0.5);
+  --games-text: oklch(0.96 0.02 320);
+  --games-text-muted: oklch(0.72 0.05 320);
+  --games-accent: oklch(0.72 0.2 350);
+  --games-accent-contrast: oklch(0.18 0.04 350);
+  --games-felt: linear-gradient(135deg, oklch(0.42 0.14 250), oklch(0.4 0.16 330));
+  --games-radius: 1.1rem;
+  --games-card-shadow: 0 8px 0 -2px oklch(0.4 0.14 320 / 0.5);
+  --games-glow:
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 55%, transparent),
+    0 0 14px color-mix(in oklch, var(--games-accent) 45%, transparent);
 }
 
 /* ---------- NEON (dark luxe + electric) ---------- */
 [data-game-theme="neon"] {
   /* light variant — bright with the same electric accent */
-  --cg-bg: oklch(0.95 0.02 220);
-  --cg-bg-2: oklch(0.98 0.015 220);
-  --cg-surface: oklch(1 0 0 / 0.75);
-  --cg-surface-solid: oklch(0.99 0.01 220);
-  --cg-border: oklch(0.7 0.08 200 / 0.5);
-  --cg-text: oklch(0.25 0.04 230);
-  --cg-text-muted: oklch(0.48 0.04 225);
-  --cg-accent: oklch(0.62 0.15 200);
-  --cg-accent-contrast: oklch(0.99 0.01 220);
-  --cg-felt: radial-gradient(
+  --games-bg: oklch(0.95 0.02 220);
+  --games-bg-2: oklch(0.98 0.015 220);
+  --games-surface: oklch(1 0 0 / 0.75);
+  --games-surface-solid: oklch(0.99 0.01 220);
+  --games-border: oklch(0.7 0.08 200 / 0.5);
+  --games-text: oklch(0.25 0.04 230);
+  --games-text-muted: oklch(0.48 0.04 225);
+  --games-accent: oklch(0.62 0.15 200);
+  --games-accent-contrast: oklch(0.99 0.01 220);
+  --games-felt: radial-gradient(
     ellipse 120% 100% at 50% 0%,
     oklch(0.72 0.1 215),
     oklch(0.6 0.1 230) 72%
   );
-  --cg-radius: 0.5rem;
-  --cg-card-shadow: 0 4px 14px -4px oklch(0.5 0.1 210 / 0.4);
-  --cg-glow: 0 0 10px oklch(0.62 0.15 200 / 0.35);
+  --games-radius: 0.5rem;
+  --games-card-shadow: 0 4px 14px -4px oklch(0.5 0.1 210 / 0.4);
+  --games-glow: 0 0 10px oklch(0.62 0.15 200 / 0.35);
 }
 html.dark[data-game-theme="neon"] {
-  --cg-bg: oklch(0.16 0.02 265);
-  --cg-bg-2: oklch(0.19 0.025 265);
-  --cg-surface: oklch(0.22 0.03 265 / 0.7);
-  --cg-surface-solid: oklch(0.21 0.03 265);
-  --cg-border: oklch(0.5 0.1 200 / 0.4);
-  --cg-text: oklch(0.95 0.02 220);
-  --cg-text-muted: oklch(0.68 0.04 230);
-  --cg-accent: oklch(0.82 0.18 190);
-  --cg-accent-contrast: oklch(0.16 0.03 220);
-  --cg-felt: radial-gradient(
+  --games-bg: oklch(0.16 0.02 265);
+  --games-bg-2: oklch(0.19 0.025 265);
+  --games-surface: oklch(0.22 0.03 265 / 0.7);
+  --games-surface-solid: oklch(0.21 0.03 265);
+  --games-border: oklch(0.5 0.1 200 / 0.4);
+  --games-text: oklch(0.95 0.02 220);
+  --games-text-muted: oklch(0.68 0.04 230);
+  --games-accent: oklch(0.82 0.18 190);
+  --games-accent-contrast: oklch(0.16 0.03 220);
+  --games-felt: radial-gradient(
     ellipse 120% 100% at 50% 0%,
     oklch(0.28 0.08 230),
     oklch(0.15 0.04 265) 70%
   );
-  --cg-radius: 0.5rem;
-  --cg-card-shadow: 0 0 18px -2px oklch(0.82 0.18 190 / 0.4);
-  --cg-glow: 0 0 12px oklch(0.82 0.18 190 / 0.5);
+  --games-radius: 0.5rem;
+  --games-card-shadow: 0 0 18px -2px oklch(0.82 0.18 190 / 0.4);
+  --games-glow: 0 0 12px oklch(0.82 0.18 190 / 0.5);
 }
 
 /* Utility surfaces built on the theme tokens. */
-.cg-surface {
-  background: var(--cg-surface);
-  border: 1px solid var(--cg-border);
-  border-radius: var(--cg-radius);
+.games-surface {
+  background: var(--games-surface);
+  border: 1px solid var(--games-border);
+  border-radius: var(--games-radius);
   backdrop-filter: blur(8px);
 }
-.cg-felt {
+.games-felt {
   /* The active scene theme's table surface (or an uploaded background). */
-  background: var(--games-scene-felt, var(--cg-felt));
+  background: var(--games-scene-felt, var(--games-felt));
 }
-.cg-accent-text {
-  color: var(--cg-accent);
+.games-accent-text {
+  color: var(--games-accent);
 }
-.cg-glow {
-  box-shadow: var(--cg-glow);
+.games-glow {
+  box-shadow: var(--games-glow);
 }

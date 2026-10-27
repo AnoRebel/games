@@ -4,9 +4,9 @@
  * plays to a finish, and the chosen variant and difficulty are kept.
  */
 import { describe, it, expect, beforeAll } from "vitest";
-import { GameConfigError, type BaseGameState } from "@card-games/engine-core";
-import { registerBao } from "@card-games/game-bao";
-import { registerCheckers } from "@card-games/game-checkers";
+import { GameConfigError, type BaseGameState } from "@games/engine-core";
+import { registerBao } from "@games/game-bao";
+import { registerCheckers } from "@games/game-checkers";
 import { createLocalTransport } from "../app/composables/useLocalGame";
 
 beforeAll(() => {

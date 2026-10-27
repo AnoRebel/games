@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** Checkers table: the shared board-game frame around the checkers board. */
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
-import type { CheckersMove, CheckersState } from "@card-games/game-checkers";
+import type { BaseGameState, BaseMove } from "@games/engine-core";
+import type { CheckersMove, CheckersState } from "@games/game-checkers";
 import type { GameTransport } from "~/transports/types";
 
 defineProps<{

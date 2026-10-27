@@ -5,7 +5,7 @@
  * condition is an empty front row); the strong evaluation adds occupied front
  * pits, working nyumba and capture potential.
  */
-import type { Seat } from "@card-games/engine-core";
+import type { Seat } from "@games/engine-core";
 import {
   FRONT,
   NYUMBA,
@@ -13,7 +13,7 @@ import {
   resolveTurns,
   type BaoMove,
   type BaoState,
-} from "@card-games/game-bao";
+} from "@games/game-bao";
 import type { SearchAdapter } from "./search";
 
 function sideStats(state: BaoState, seat: Seat) {

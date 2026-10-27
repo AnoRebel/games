@@ -5,8 +5,8 @@
  * correctly. Spectators see a read-only indicator and no share/host controls.
  */
 import type { WsTransport, RoomInfo } from "~/transports/WsTransport";
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
-import { getGame, variantName } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove } from "@games/engine-core";
+import { getGame, variantName } from "@games/engine-core";
 import { DIFFICULTY_KEYS, variantItems } from "~/utils/setupOptions";
 
 const props = defineProps<{
@@ -126,7 +126,7 @@ onBeforeUnmount(() => offConn?.());
       :description="$ts('game.playerLeftCountdown', { count: graceSeconds })"
     />
 
-    <div class="cg-surface rounded-xl p-2.5 flex flex-wrap items-center gap-2">
+    <div class="games-surface rounded-xl p-2.5 flex flex-wrap items-center gap-2">
       <!-- Game and rule variant (host may change the variant between games) -->
       <USelect
         v-if="canConfigure"
@@ -187,7 +187,7 @@ onBeforeUnmount(() => offConn?.());
         <template #content>
           <div
             class="p-3 text-xs max-w-64 space-y-1.5"
-            :style="{ color: 'var(--cg-text-muted)' }"
+            :style="{ color: 'var(--games-text-muted)' }"
           >
             <p>
               <strong class="text-default">{{ $ts("room.playerLink") }}</strong> —

@@ -7,7 +7,7 @@
  * `(row + col)` odd — are ever occupied.
  */
 
-import type { BaseGameState, BaseMove, Seat } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Seat } from "@games/engine-core";
 
 export type CheckersVariant = "drafti" | "english" | "international";
 

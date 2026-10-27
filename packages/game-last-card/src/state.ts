@@ -2,7 +2,7 @@
  * Last Card state & move types.
  */
 
-import type { BaseGameState, BaseMove, Card, Seat, Suit } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Card, Seat, Suit } from "@games/engine-core";
 import type { LastCardConfig } from "./config";
 
 /**

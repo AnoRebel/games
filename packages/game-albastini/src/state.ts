@@ -2,7 +2,7 @@
  * Albastini state & move types.
  */
 
-import type { BaseGameState, BaseMove, Card, Seat, Suit } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Card, Seat, Suit } from "@games/engine-core";
 import type { AlbastiniConfig } from "./config";
 
 /** A card played into the current trick by a seat. */

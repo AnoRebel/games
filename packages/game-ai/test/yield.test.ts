@@ -3,9 +3,9 @@
  * synchronous run returns, and hands the event loop back while it works.
  */
 import { describe, it, expect } from "vitest";
-import { applyMove, createRng, nextInt, type Player } from "@card-games/engine-core";
-import { checkersGame, type CheckersState } from "@card-games/game-checkers";
-import { baoGame, type BaoState } from "@card-games/game-bao";
+import { applyMove, createRng, nextInt, type Player } from "@games/engine-core";
+import { checkersGame, type CheckersState } from "@games/game-checkers";
+import { baoGame, type BaoState } from "@games/game-bao";
 import {
   SEARCH_LIMITS,
   checkersAdapter,

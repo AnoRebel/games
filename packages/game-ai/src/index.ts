@@ -1,9 +1,9 @@
-// @card-games/game-ai — bot opponents shared by offline play and server rooms.
+// @games/game-ai — bot opponents shared by offline play and server rooms.
 //
 // Pure and framework-free like the game packages, so both the Nuxt app and the
 // Nitro server import the same policies and make the same decisions.
 
-export type { Difficulty as BotDifficulty } from "@card-games/engine-core";
+export type { Difficulty as BotDifficulty } from "@games/engine-core";
 export {
   SEARCH_LIMITS,
   SEARCH_GAMES,

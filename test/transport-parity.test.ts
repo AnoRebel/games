@@ -4,7 +4,7 @@
  * LocalTransport or through a server room.
  */
 import { describe, it, expect, vi } from "vitest";
-import { requireGame, type BaseGameState, type BaseMove } from "@card-games/engine-core";
+import { requireGame, type BaseGameState, type BaseMove } from "@games/engine-core";
 import { LocalTransport } from "../app/transports/LocalTransport";
 
 vi.mock("../server/utils/db", () => ({

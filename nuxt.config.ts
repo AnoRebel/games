@@ -180,7 +180,7 @@ export default defineNuxtConfig({
     translationDir: "locales",
     meta: true,
     // Remember the chosen locale across reloads.
-    localeCookie: "cg-locale",
+    localeCookie: "games-locale",
   },
 
   // Prettier owns formatting; keep ESLint focused on code-quality rules only.
@@ -241,12 +241,12 @@ export default defineNuxtConfig({
   // Transpile the workspace engine/game packages (shipped as TS source).
   build: {
     transpile: [
-      "@card-games/engine-core",
-      "@card-games/game-last-card",
-      "@card-games/game-albastini",
-      "@card-games/game-bao",
-      "@card-games/game-checkers",
-      "@card-games/game-ai",
+      "@games/engine-core",
+      "@games/game-last-card",
+      "@games/game-albastini",
+      "@games/game-bao",
+      "@games/game-checkers",
+      "@games/game-ai",
     ],
   },
 

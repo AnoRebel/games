@@ -3,8 +3,8 @@
  * mixing languages, and every variant ships English and Swahili rules.
  */
 import { describe, it, expect } from "vitest";
-import { baoGame } from "@card-games/game-bao";
-import { checkersGame } from "@card-games/game-checkers";
+import { baoGame } from "@games/game-bao";
+import { checkersGame } from "@games/game-checkers";
 import { contentVariants, lookupGameContent } from "../app/utils/gameContent";
 
 const text = (sections: { heading: string; body: string[] }[]) =>

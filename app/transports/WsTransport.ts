@@ -12,7 +12,7 @@ import type {
   Player,
   ScoreResult,
   Seat,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import type { ChatMessage, GameTransport, PresenceInfo, TransportView } from "./types";
 
 interface ServerStateMsg {

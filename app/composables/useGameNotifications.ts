@@ -6,7 +6,7 @@
  * Nuxt UI toasts. Gated by the notifications preference; reduced-motion is
  * respected by Nuxt UI's toast animations.
  */
-import type { BaseGameState, BaseMove, Seat } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Seat } from "@games/engine-core";
 import type { GameTransport } from "~/transports/types";
 
 interface LastCardish extends BaseGameState {
@@ -51,12 +51,12 @@ export function useGameNotifications(
       icon,
       duration: opts.duration ?? 4500,
       ui: {
-        root: "bg-[var(--cg-surface-solid)] ring-2 ring-[var(--cg-accent)]/40 text-[var(--cg-text)] shadow-lg",
-        title: "text-[var(--cg-text)] font-semibold",
+        root: "bg-[var(--games-surface-solid)] ring-2 ring-[var(--games-accent)]/40 text-[var(--games-text)] shadow-lg",
+        title: "text-[var(--games-text)] font-semibold",
         icon: opts.accent
-          ? "text-[var(--cg-accent)] size-6"
-          : "text-[var(--cg-text-muted)] size-5",
-        progress: "bg-[var(--cg-accent)]",
+          ? "text-[var(--games-accent)] size-6"
+          : "text-[var(--games-text-muted)] size-5",
+        progress: "bg-[var(--games-accent)]",
       },
     });
   const notifyTop = (title: string, icon: string) =>

@@ -38,7 +38,7 @@ function rich(): boolean {
   if (reduced()) return false;
   if (!isClient()) return true;
   try {
-    return (localStorage.getItem("cg:motion") ?? '"rich"').includes("rich");
+    return (localStorage.getItem("games:motion") ?? '"rich"').includes("rich");
   } catch {
     return true;
   }
@@ -347,7 +347,7 @@ export function confetti(count = 90): void {
   if (!canAnimate() || !rich()) return;
   const rand = gsap.utils.random;
   const colors = [
-    "var(--cg-accent)",
+    "var(--games-accent)",
     "oklch(0.82 0.18 30)",
     "oklch(0.85 0.17 140)",
     "oklch(0.82 0.16 250)",
@@ -415,7 +415,7 @@ export function burst(container: HTMLElement) {
   if (!canAnimate() || !rich()) return;
   const rand = gsap.utils.random;
   const colors = [
-    "var(--cg-accent)",
+    "var(--games-accent)",
     "oklch(0.8 0.16 30)",
     "oklch(0.82 0.16 140)",
     "oklch(0.8 0.16 250)",
@@ -477,7 +477,7 @@ export function sowAlong(pits: Element[]): Promise<void> {
   const hop = Math.max(0.035, Math.min(0.09, 1.4 / pits.length));
   const seed = document.createElement("span");
   const start = centre(pits[0]!);
-  seed.style.cssText = `position:fixed;left:${start.x - 6}px;top:${start.y - 6}px;width:12px;height:12px;border-radius:9999px;pointer-events:none;z-index:50;background:var(--games-scene-accent, var(--cg-accent));box-shadow:0 0 6px rgb(0 0 0 / 0.4);will-change:transform`;
+  seed.style.cssText = `position:fixed;left:${start.x - 6}px;top:${start.y - 6}px;width:12px;height:12px;border-radius:9999px;pointer-events:none;z-index:50;background:var(--games-scene-accent, var(--games-accent));box-shadow:0 0 6px rgb(0 0 0 / 0.4);will-change:transform`;
   document.body.appendChild(seed);
   return new Promise<void>((resolve) => {
     const done = () => {

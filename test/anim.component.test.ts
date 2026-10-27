@@ -15,7 +15,7 @@ function setMotion({ reduced, pref }: { reduced: boolean; pref: "rich" | "subtle
     vi.fn((q: string) => ({ matches: reduced && q.includes("reduce"), media: q })),
   );
   window.matchMedia = globalThis.matchMedia;
-  localStorage.setItem("cg:motion", JSON.stringify(pref));
+  localStorage.setItem("games:motion", JSON.stringify(pref));
 }
 
 const el = () => {

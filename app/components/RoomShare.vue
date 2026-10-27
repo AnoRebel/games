@@ -85,7 +85,7 @@ async function nativeShare() {
           </UButton>
         </UFieldGroup>
 
-        <p class="text-xs font-medium" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs font-medium" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("invite.scanToJoin") }}
         </p>
         <!-- eslint-disable-next-line vue/no-v-html -- our own generated QR SVG, not user input -->

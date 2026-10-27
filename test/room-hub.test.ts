@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { RoomHub, type WsPeer } from "../server/utils/roomHub";
 import type { RoomConfig } from "../server/utils/roomTypes";
-import { defaultLastCardConfig } from "@card-games/game-last-card";
+import { defaultLastCardConfig } from "@games/game-last-card";
 
 /** A mock peer that records everything sent to it. */
 class MockPeer implements WsPeer {

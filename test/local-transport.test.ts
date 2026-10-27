@@ -3,14 +3,14 @@
  * Runs in the node vitest env (no DOM needed for the transport itself).
  */
 import { describe, it, expect } from "vitest";
-import { replay, type Player } from "@card-games/engine-core";
+import { replay, type Player } from "@games/engine-core";
 import {
   lastCardGame,
   defaultLastCardConfig,
   type LastCardMove,
-} from "@card-games/game-last-card";
+} from "@games/game-last-card";
 import { LocalTransport } from "../app/transports/LocalTransport";
-import { chooseBotMove } from "@card-games/game-ai";
+import { chooseBotMove } from "@games/game-ai";
 
 const players: Player[] = [
   { id: "a", name: "A", seat: 0 },

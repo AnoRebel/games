@@ -12,8 +12,8 @@ import {
   type Player,
   type Seat,
   applyMove,
-} from "@card-games/engine-core";
-import { chooseBotMoveAsync, type BotDifficulty } from "@card-games/game-ai";
+} from "@games/engine-core";
+import { chooseBotMoveAsync, type BotDifficulty } from "@games/game-ai";
 import type { ChatMessage, GameTransport, PresenceInfo, TransportView } from "./types";
 
 export interface LocalTransportOptions<S extends BaseGameState, M extends BaseMove, C> {

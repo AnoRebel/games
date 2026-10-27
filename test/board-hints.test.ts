@@ -3,9 +3,9 @@
  * one remains — the UI never decides legality itself.
  */
 import { describe, it, expect } from "vitest";
-import type { Player } from "@card-games/engine-core";
-import { baoGame, type BaoState } from "@card-games/game-bao";
-import { checkersGame, type CheckersMove } from "@card-games/game-checkers";
+import type { Player } from "@games/engine-core";
+import { baoGame, type BaoState } from "@games/game-bao";
+import { checkersGame, type CheckersMove } from "@games/game-checkers";
 import {
   baoCellOf,
   baoPitAt,

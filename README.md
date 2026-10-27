@@ -1,4 +1,4 @@
-# Card Games
+# Games
 
 Modular multiplayer card games platform. Ships **Last Card** (shedding) and
 **Albastini** (trick-taking) on a shared, game-agnostic engine with offline

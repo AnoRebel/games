@@ -3,10 +3,10 @@
  * the search runs while the delay elapses.
  */
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { checkersGame } from "@card-games/game-checkers";
+import { checkersGame } from "@games/game-checkers";
 
-vi.mock("@card-games/game-ai", async (importOriginal) => {
-  const real = await importOriginal<typeof import("@card-games/game-ai")>();
+vi.mock("@games/game-ai", async (importOriginal) => {
+  const real = await importOriginal<typeof import("@games/game-ai")>();
   return {
     ...real,
     // A search that takes 150ms of (fake) time.

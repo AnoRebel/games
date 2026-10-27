@@ -11,7 +11,7 @@ import {
   type BaseGameState,
   type BaseMove,
   type Player,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { LocalTransport } from "~/transports/LocalTransport";
 
 export interface LocalGameSetup {

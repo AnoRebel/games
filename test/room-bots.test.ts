@@ -4,9 +4,9 @@
  * would choose.
  */
 import { describe, it, expect, vi } from "vitest";
-import type { BaseGameState, BaseMove, Difficulty } from "@card-games/engine-core";
-import { requireGame } from "@card-games/engine-core";
-import { chooseBotMove, chooseBotMoveAsync } from "@card-games/game-ai";
+import type { BaseGameState, BaseMove, Difficulty } from "@games/engine-core";
+import { requireGame } from "@games/engine-core";
+import { chooseBotMove, chooseBotMoveAsync } from "@games/game-ai";
 import { LocalTransport } from "../app/transports/LocalTransport";
 
 vi.mock("../server/utils/db", () => ({

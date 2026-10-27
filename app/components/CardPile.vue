@@ -4,7 +4,7 @@
  * the top card). Slight offsets give a tactile "stack" look without per-card DOM
  * for every card (we render at most a few backing layers).
  */
-import type { Card } from "@card-games/engine-core";
+import type { Card } from "@games/engine-core";
 
 const props = withDefaults(
   defineProps<{

@@ -5,7 +5,7 @@
  * it validates every move through the engine reducer and broadcasts redacted
  * state per recipient (no hidden-hand leaks).
  */
-import type { Difficulty, Seat } from "@card-games/engine-core";
+import type { Difficulty, Seat } from "@games/engine-core";
 
 export type SpectatorVisibility = "public" | "locked";
 

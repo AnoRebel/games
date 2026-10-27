@@ -19,7 +19,7 @@ let initPromise: Promise<void> | null = null;
 function makeClient(): Client {
   // NUXT_LIBSQL_URL can be a remote Turso URL (libsql://…) with an auth token,
   // else fall back to a local file. The dir must be a persistent mount in prod.
-  const url = process.env.NUXT_LIBSQL_URL || "file:./data/card-games.db";
+  const url = process.env.NUXT_LIBSQL_URL || "file:./data/games.db";
   const authToken = process.env.NUXT_LIBSQL_AUTH_TOKEN || undefined;
   // LibSQL won't create the parent dir for a local file — ensure it exists.
   if (url.startsWith("file:")) {

@@ -1,5 +1,5 @@
 {
-  "name": "@card-games/game-ai",
+  "name": "@games/game-ai",
   "version": "0.1.0",
   "type": "module",
   "main": "./src/index.ts",
@@ -8,9 +8,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@card-games/engine-core": "workspace:*",
-    "@card-games/game-bao": "workspace:*",
-    "@card-games/game-checkers": "workspace:*"
+    "@games/engine-core": "workspace:*",
+    "@games/game-bao": "workspace:*",
+    "@games/game-checkers": "workspace:*"
   },
   "scripts": {
     "test": "vitest run"

@@ -6,7 +6,7 @@ import {
   replay,
   resolveSetup,
   type Player,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import {
   BOARD_SIZE,
   EMPTY,

@@ -11,7 +11,7 @@
  * the fifth pit from the player's left.
  */
 
-import type { BaseGameState, BaseMove, Seat } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Seat } from "@games/engine-core";
 
 export type BaoVariant = "bao-la-kiswahili" | "bao-la-kujifunza";
 

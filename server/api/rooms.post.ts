@@ -2,7 +2,7 @@
  * POST /api/rooms — create a room. Returns the room id and (for locked rooms)
  * the spectator passcode the host can bake into a spectator link.
  */
-import { requireGame } from "@card-games/engine-core";
+import { requireGame } from "@games/engine-core";
 import {
   buildRoomConfig,
   GameConfigError,

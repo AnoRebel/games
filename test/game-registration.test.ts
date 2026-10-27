@@ -4,7 +4,7 @@
  * shows up at runtime as "no game registered", so assert it here.
  */
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { clearGames, requireGame, listGames } from "@card-games/engine-core";
+import { clearGames, requireGame, listGames } from "@games/engine-core";
 
 vi.mock("../server/utils/db", () => ({
   loadRoomSnapshots: async () => [],
@@ -41,7 +41,7 @@ describe("game registration — room hub", () => {
   it("registers every game module on construction", async () => {
     clearGames();
     vi.resetModules();
-    const engine = await import("@card-games/engine-core");
+    const engine = await import("@games/engine-core");
     const { RoomHub } = await import("../server/utils/roomHub");
     const hub = new RoomHub();
     for (const id of ALL) expect(engine.requireGame(id).id).toBe(id);

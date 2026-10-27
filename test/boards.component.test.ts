@@ -7,8 +7,8 @@
 import { describe, it, expect } from "vitest";
 import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
-import { applyMove, createRng, nextInt, type Player } from "@card-games/engine-core";
-import { baoGame, type BaoMove, type BaoState } from "@card-games/game-bao";
+import { applyMove, createRng, nextInt, type Player } from "@games/engine-core";
+import { baoGame, type BaoMove, type BaoState } from "@games/game-bao";
 import {
   BOARD_SIZE,
   EMPTY,
@@ -19,7 +19,7 @@ import {
   positionKey,
   type CheckersMove,
   type CheckersState,
-} from "@card-games/game-checkers";
+} from "@games/game-checkers";
 import BoardGrid from "../app/components/BoardGrid.vue";
 import BaoBoard from "../app/components/BaoBoard.vue";
 import CheckersBoard from "../app/components/CheckersBoard.vue";
