@@ -22,7 +22,8 @@
     "test:watch": "vitest",
     "test:bench": "vitest run packages/game-ai/test/benchmark.test.ts",
     "smoke:boards": "cd scripts/smoke && bun run boards.ts",
-    "smoke:themes": "cd scripts/smoke && bun run themes.ts"
+    "smoke:themes": "cd scripts/smoke && bun run themes.ts",
+    "smoke:leaderboard": "cd scripts/smoke && bun run leaderboard.ts"
   },
   "dependencies": {
     "@games/engine-core": "workspace:*",

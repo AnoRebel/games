@@ -239,7 +239,26 @@
     "scopeMine": "My games",
     "scopeMineOffline": "My offline",
     "globalCaption": "Ranked online matches, shared by everyone.",
-    "localCaption": "Games played on this device only."
+    "localCaption": "Games played on this device only.",
+    "metricPenalty": "Ranked by wins, then lowest penalty",
+    "metricVp": "Ranked by wins, then victory points",
+    "metricWins": "Ranked by wins, then win rate",
+    "wdl": "{wins} W · {draws} D · {losses} L",
+    "history": "Recent plays",
+    "noHistory": "No plays recorded yet.",
+    "unknown": "Unknown",
+    "notApplicable": "N/A",
+    "bot": "Bot",
+    "tier": {
+      "new": "New",
+      "regular": "Regular",
+      "veteran": "Veteran"
+    },
+    "result": {
+      "win": "Win",
+      "draw": "Draw",
+      "loss": "Loss"
+    }
   },
   "tutorial": {
     "offerTitle": "New here?",

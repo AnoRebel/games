@@ -81,12 +81,12 @@
 
 ## 10. Leaderboard
 
-- [ ] 10.1 Extend the client result model and Dexie schema to v3 with variant, difficulty, and draw fields while keeping old rows readable; verify a migration test that loads a v2 database and displays legacy rows as unknown provenance.
-- [ ] 10.2 Extend the server results schema additively, record provenance from room config, and return a bounded recent-play history from the leaderboard endpoint; verify schema-init against an existing database and an API test for provenance and legacy rows.
-- [ ] 10.3 Implement the per-game metric mapping (Last Card penalty, Albastini VP, Bao/Checkers win-draw-loss) and the wins → win rate → games → name ordering; verify aggregation tests for wins, draws, losses, ties, and unchanged card-game metrics.
-- [ ] 10.4 Display game, variant, difficulty, experience tier, result, and date per play beside standings; verify labels, unknown legacy provenance, and not-applicable difficulty for human-only plays.
-- [ ] 10.6 Persist per-game experience-tier snapshots (New 0–9, Regular 10–49, Veteran 50+) after counting a completed play, alongside idempotent result insertion; test 9/10 and 49/50 boundaries, per-game independence, duplicate insertion, and unchanged historical tiers. Show current tiers in standings without affecting ranking.
-- [ ] 10.5 Verify the leaderboard remains readable on mobile with the new columns and history; verify a browser smoke at 360px width.
+- [x] 10.1 Extend the client result model and Dexie schema to v3 with variant, difficulty, and draw fields while keeping old rows readable; verify a migration test that loads a v2 database and displays legacy rows as unknown provenance.
+- [x] 10.2 Extend the server results schema additively, record provenance from room config, and return a bounded recent-play history from the leaderboard endpoint; verify schema-init against an existing database and an API test for provenance and legacy rows.
+- [x] 10.3 Implement the per-game metric mapping (Last Card penalty, Albastini VP, Bao/Checkers win-draw-loss) and the wins → win rate → games → name ordering; verify aggregation tests for wins, draws, losses, ties, and unchanged card-game metrics.
+- [x] 10.4 Display game, variant, difficulty, experience tier, result, and date per play beside standings; verify labels, unknown legacy provenance, and not-applicable difficulty for human-only plays.
+- [x] 10.6 Persist per-game experience-tier snapshots (New 0–9, Regular 10–49, Veteran 50+) after counting a completed play, alongside idempotent result insertion; test 9/10 and 49/50 boundaries, per-game independence, duplicate insertion, and unchanged historical tiers. Show current tiers in standings without affecting ranking.
+- [x] 10.5 Verify the leaderboard remains readable on mobile with the new columns and history; verify a browser smoke at 360px width.
 
 ## 11. Integration and Documentation
 

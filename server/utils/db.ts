@@ -13,6 +13,17 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { createClient, type Client } from "@libsql/client";
 import { ensureServerDatabaseMigrated } from "./dbMigration";
+import {
+  recentHistory,
+  orderStandings,
+  tierFor,
+  type ExperienceTier,
+  type HistoryEntry,
+  type PlayDifficulty,
+  type RankingMetric,
+  type Standing,
+  rankingMetric,
+} from "../../shared/leaderboard";
 
 let client: Client | null = null;
 let initPromise: Promise<void> | null = null;
@@ -59,6 +70,22 @@ async function ensureSchema(c: Client): Promise<void> {
     ],
     "write",
   );
+  // Additive provenance columns. Existing rows keep NULL variant/difficulty/
+  // tier (shown as unknown) and count as not drawn.
+  const info = await c.execute(`PRAGMA table_info(results)`);
+  const have = new Set(info.rows.map((r) => String(r.name)));
+  const added: [string, string][] = [
+    ["variant", "TEXT"],
+    ["difficulty", "TEXT"],
+    ["drawn", "INTEGER NOT NULL DEFAULT 0"],
+    ["experience_tier", "TEXT"],
+  ];
+  for (const [col, type] of added) {
+    if (!have.has(col)) await c.execute(`ALTER TABLE results ADD COLUMN ${col} ${type}`);
+  }
+  await c.execute(
+    `CREATE INDEX IF NOT EXISTS idx_results_game_player ON results(game_id, player_id)`,
+  );
 }
 
 /** Lazily create + migrate the client. Safe to call repeatedly. */
@@ -93,69 +120,151 @@ export interface OnlineResult {
   playerId: string;
   playerName: string;
   won: boolean;
+  /** The match ended in a draw. */
+  drawn?: boolean;
   score: number;
   rankMetric: number;
   playedAt: string;
+  /** From the room's config: rule variant (null if the game has none). */
+  variant?: string | null;
+  /** From the room's config: bot strength, or `none` with no bot seats. */
+  difficulty?: PlayDifficulty;
 }
 
-/** Record online match results (one row per human seat). Idempotent per match. */
+/**
+ * Record online match results (one row per human seat). Idempotent per match
+ * and player: a repeat insert changes nothing. A new row snapshots the
+ * player's per-game experience tier after counting this play, in the same
+ * transaction.
+ */
 export async function recordOnlineResults(rows: OnlineResult[]): Promise<void> {
   if (!rows.length) return;
   const db = await getDb();
-  await db.batch(
-    rows.map((r) => ({
-      sql: `INSERT OR IGNORE INTO results
-        (game_id, match_id, player_id, player_name, won, score, rank_metric, played_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [
-        r.gameId,
-        r.matchId,
-        r.playerId,
-        r.playerName,
-        r.won ? 1 : 0,
-        r.score,
-        r.rankMetric,
-        r.playedAt,
-      ],
-    })),
-    "write",
-  );
+  const tx = await db.transaction("write");
+  try {
+    for (const r of rows) {
+      const inserted = await tx.execute({
+        sql: `INSERT OR IGNORE INTO results
+          (game_id, match_id, player_id, player_name, won, drawn, score, rank_metric,
+           played_at, variant, difficulty)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          r.gameId,
+          r.matchId,
+          r.playerId,
+          r.playerName,
+          r.won ? 1 : 0,
+          r.drawn ? 1 : 0,
+          r.score,
+          r.rankMetric,
+          r.playedAt,
+          r.variant ?? null,
+          r.difficulty ?? null,
+        ],
+      });
+      if (inserted.rowsAffected === 0) continue; // already recorded
+      const n = await tx.execute({
+        sql: `SELECT COUNT(*) AS n FROM results WHERE game_id = ? AND player_id = ?`,
+        args: [r.gameId, r.playerId],
+      });
+      await tx.execute({
+        sql: `UPDATE results SET experience_tier = ? WHERE match_id = ? AND player_id = ?`,
+        args: [tierFor(Number(n.rows[0]!.n)), r.matchId, r.playerId],
+      });
+    }
+    await tx.commit();
+  } finally {
+    tx.close();
+  }
 }
 
-export interface LeaderboardEntry {
-  playerId: string;
-  playerName: string;
-  played: number;
-  wins: number;
+export interface LeaderboardEntry extends Standing {
+  /** Kept for older clients: the best single-match metric. */
   bestMetric: number;
 }
 
-/** Global leaderboard for a game — aggregated across all persisted online play. */
+export interface GlobalLeaderboard {
+  metric: RankingMetric;
+  rows: LeaderboardEntry[];
+  /** Most recent plays, newest first. */
+  history: HistoryEntry[];
+}
+
+/**
+ * Global leaderboard for a game — aggregated across all persisted online
+ * play, ordered by the game's ranking metric, with a bounded per-play history.
+ */
 export async function globalLeaderboard(
   gameId: string,
   limit = 50,
-): Promise<LeaderboardEntry[]> {
+  historyLimit = 20,
+): Promise<GlobalLeaderboard> {
   const db = await getDb();
   const rs = await db.execute({
     sql: `SELECT player_id,
-                 MAX(player_name) AS player_name,
-                 COUNT(*)        AS played,
-                 SUM(won)        AS wins,
-                 MAX(rank_metric) AS best
+                 (SELECT player_name FROM results r2
+                   WHERE r2.game_id = results.game_id AND r2.player_id = results.player_id
+                   ORDER BY played_at DESC LIMIT 1) AS player_name,
+                 COUNT(*)          AS played,
+                 SUM(won)          AS wins,
+                 SUM(drawn)        AS draws,
+                 MAX(rank_metric)  AS best,
+                 SUM(rank_metric)  AS total
           FROM results
           WHERE game_id = ?
-          GROUP BY player_id
-          ORDER BY wins DESC, best DESC
-          LIMIT ?`,
-    args: [gameId, limit],
+          GROUP BY player_id`,
+    args: [gameId],
   });
-  return rs.rows.map((row) => ({
-    playerId: String(row.player_id),
-    playerName: String(row.player_name),
-    played: Number(row.played),
-    wins: Number(row.wins),
-    bestMetric: Number(row.best),
-  }));
+  const standingsRows: Standing[] = rs.rows.map((row) => {
+    const played = Number(row.played);
+    const wins = Number(row.wins);
+    const draws = Number(row.draws ?? 0);
+    return {
+      playerId: String(row.player_id),
+      playerName: String(row.player_name),
+      played,
+      wins,
+      draws,
+      losses: played - wins - draws,
+      winRate: played ? (wins + draws / 2) / played : 0,
+      best: Number(row.best),
+      totalMetric: Number(row.total),
+      tier: tierFor(played),
+    };
+  });
+  // The global board keeps its established card-game order (wins, best).
+  const rows = orderStandings(gameId, standingsRows, { metric: "best" })
+    .slice(0, limit)
+    .map((r) => ({ ...r, bestMetric: r.best }));
+
+  const recent = await db.execute({
+    sql: `SELECT player_id, player_name, game_id, variant, difficulty, won, drawn,
+                 experience_tier, played_at
+          FROM results WHERE game_id = ?
+          ORDER BY played_at DESC LIMIT ?`,
+    args: [gameId, historyLimit],
+  });
+  const history: HistoryEntry[] = recentHistory(
+    recent.rows.map((row) => {
+      // Rows recorded before provenance existed have no difficulty at all.
+      const legacy = row.difficulty === null;
+      return {
+        playerId: String(row.player_id),
+        playerName: String(row.player_name),
+        gameId: String(row.game_id),
+        variant: legacy || row.variant === null ? null : String(row.variant),
+        difficulty: legacy ? null : (String(row.difficulty) as PlayDifficulty),
+        result: Number(row.won) ? "win" : Number(row.drawn) ? "draw" : "loss",
+        tier:
+          row.experience_tier === null
+            ? null
+            : (String(row.experience_tier) as ExperienceTier),
+        playedAt: String(row.played_at),
+      } satisfies HistoryEntry;
+    }),
+    historyLimit,
+  );
+  return { metric: rankingMetric(gameId), rows, history };
 }
 
 /**

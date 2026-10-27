@@ -239,7 +239,26 @@
     "scopeMine": "Michezo yangu",
     "scopeMineOffline": "Yangu nje ya mtandao",
     "globalCaption": "Michezo ya mtandaoni yenye viwango, inayoshirikiwa na wote.",
-    "localCaption": "Michezo iliyochezwa kwenye kifaa hiki pekee."
+    "localCaption": "Michezo iliyochezwa kwenye kifaa hiki pekee.",
+    "metricPenalty": "Hupangwa kwa ushindi, kisha adhabu ndogo zaidi",
+    "metricVp": "Hupangwa kwa ushindi, kisha alama za ushindi",
+    "metricWins": "Hupangwa kwa ushindi, kisha kiwango cha ushindi",
+    "wdl": "Ushindi {wins} · Sare {draws} · Kushindwa {losses}",
+    "history": "Michezo ya karibuni",
+    "noHistory": "Hakuna michezo iliyorekodiwa bado.",
+    "unknown": "Haijulikani",
+    "notApplicable": "Haihusiki",
+    "bot": "Roboti",
+    "tier": {
+      "new": "Mgeni",
+      "regular": "Mzoefu",
+      "veteran": "Mkongwe"
+    },
+    "result": {
+      "win": "Ushindi",
+      "draw": "Sare",
+      "loss": "Kushindwa"
+    }
   },
   "tutorial": {
     "offerTitle": "Mgeni hapa?",

@@ -7,6 +7,7 @@
  * D5b). Reactive reads use `liveQuery` via the `useLiveQuery` composable.
  */
 import Dexie, { type EntityTable } from "dexie";
+import type { ExperienceTier, PlayDifficulty } from "#shared/leaderboard";
 
 /** One finished-game result, used to build per-game leaderboards. */
 export interface GameResult {
@@ -27,6 +28,18 @@ export interface GameResult {
   matchId: string;
   /** Where the match was played — separates public/private/offline boards. */
   visibility?: "public" | "private" | "offline";
+  /**
+   * Provenance, recorded from v3 on. Rows written earlier lack these fields
+   * and are shown with unknown provenance.
+   */
+  /** Rule variant id; null for games without variants. */
+  variant?: string | null;
+  /** Bot strength in the match; `none` when no seat was a bot. */
+  difficulty?: PlayDifficulty;
+  /** The match ended in a draw. */
+  drawn?: boolean;
+  /** The player's per-game experience tier right after this play. */
+  experienceTier?: ExperienceTier;
 }
 
 /** A user-uploaded theme asset (card back or background image). */
@@ -65,6 +78,12 @@ export class GamesDB extends Dexie {
     this.version(2).stores({
       results:
         "++id, gameId, playerId, matchId, playedAt, rankMetric, [gameId+visibility]",
+    });
+    // v3 adds provenance fields (unindexed) plus indexes for idempotent
+    // recording and per-game play counts. Older rows stay readable as-is.
+    this.version(3).stores({
+      results:
+        "++id, gameId, playerId, matchId, playedAt, rankMetric, [gameId+visibility], [gameId+playerId], [matchId+playerId]",
     });
   }
 }

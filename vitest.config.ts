@@ -16,6 +16,7 @@ export default defineConfig({
       "@games/game-bao": r("./packages/game-bao/src/index.ts"),
       "@games/game-checkers": r("./packages/game-checkers/src/index.ts"),
       "@games/game-ai": r("./packages/game-ai/src/index.ts"),
+      "#shared/": r("./shared/"),
       "~/": r("./app/"),
       "@/": r("./app/"),
     },

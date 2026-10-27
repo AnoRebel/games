@@ -44,6 +44,7 @@ import type {
   ServerMessage,
 } from "./roomTypes";
 import { roomVariant } from "./roomConfig";
+import { seatResult } from "../../shared/leaderboard";
 
 const log = consola.withTag("rooms");
 
@@ -235,16 +236,12 @@ export class RoomHub {
       // On a skip/reverse interjection window, timing out must PASS — never
       // spend the player's card for them. Elsewhere the first legal move stands.
       const auto = moves.find((m) => m.type === "pass-interjection") ?? moves[0]!;
-      const res = applyMove(game, r.state, auto);
-      if (!res.ok) return;
-      r.state = res.state;
-      log.info(`turn timeout: auto-played for seat ${active} in room ${roomId}`);
-      if (game.isTerminal(r.state)) {
-        r.phase = "finished";
-        r.endedAt = new Date().toISOString();
-        this.broadcastRoom(r);
+      // Same path as a submitted move: a game finished by the auto-play is a
+      // natural finish, so its result is recorded too. Broadcasting re-arms
+      // the next turn timer.
+      if (this.applyRoomMove(r, auto) === null) {
+        log.info(`turn timeout: auto-played for seat ${active} in room ${roomId}`);
       }
-      this.broadcastState(r); // re-arms the next turn timer
     }, limit);
     (timer as { unref?: () => void }).unref?.();
     this.turnTimers.set(roomId, timer);
@@ -775,23 +772,30 @@ export class RoomHub {
     const game = requireGame(room.config.gameId);
     const scores = game.getScores(room.state);
     const matchId = `${room.id}:${room.startedAt ?? ""}`;
+    // Provenance comes from the room's own config, never from a client.
+    const variant = roomVariant(room.config);
+    const hasBots = room.state.players.some((p) => p.bot);
+    const difficulty = hasBots ? (room.config.difficulty ?? "normal") : "none";
     const rows: OnlineResult[] = [];
     for (const m of room.members.values()) {
       if (m.seat === null) continue; // spectators
-      const seat = m.seat;
-      const raw = scores.bySeat[seat] ?? 0;
+      const { won, drawn, score, rankMetric } = seatResult(
+        room.config.gameId,
+        scores,
+        m.seat,
+      );
       rows.push({
         gameId: room.config.gameId,
         matchId,
         playerId: m.playerId,
         playerName: m.name,
-        won: scores.winners.includes(seat),
-        score: raw,
-        rankMetric:
-          room.config.gameId === "last-card"
-            ? -raw
-            : (scores.victoryBySeat?.[seat] ?? raw),
+        won,
+        drawn,
+        score,
+        rankMetric,
         playedAt: new Date().toISOString(),
+        variant,
+        difficulty,
       });
     }
     void recordOnlineResults(rows)

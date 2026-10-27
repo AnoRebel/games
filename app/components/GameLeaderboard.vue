@@ -6,7 +6,8 @@ const props = defineProps<{ gameId: string }>();
 const { rows } = useLeaderboard(() => props.gameId);
 const open = ref(true);
 
-const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
+const { $ts } = useI18n();
+const t = (key: string, params?: Record<string, string | number>) => $ts(key, params);
 </script>
 
 <template>
@@ -39,24 +40,9 @@ const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
         >
           {{ $ts("leaderboard.empty") }}
         </p>
-        <ol v-else class="px-3 pb-2">
-          <li
-            v-for="(row, i) in rows"
-            :key="row.playerId"
-            class="flex items-center gap-3 py-1.5 border-t first:border-t-0"
-            :style="{ borderColor: 'var(--games-border)' }"
-          >
-            <span class="w-6 text-center">{{ medal(i) }}</span>
-            <span class="flex-1 truncate font-medium">{{ row.playerName }}</span>
-            <span
-              class="text-sm whitespace-nowrap"
-              :style="{ color: 'var(--games-text-muted)' }"
-            >
-              {{ $ts("leaderboard.wins", { count: row.wins }) }} ·
-              {{ $ts("leaderboard.played", { count: row.played }) }}
-            </span>
-          </li>
-        </ol>
+        <div v-else class="px-3 pb-2">
+          <LeaderboardStandings :game-id="gameId" :rows="rows" :t="t" />
+        </div>
       </div>
     </div>
   </div>

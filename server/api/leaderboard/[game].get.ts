@@ -10,12 +10,12 @@ export default defineEventHandler(async (event) => {
   const game = getRouterParam(event, "game");
   if (!game) throw createError({ statusCode: 400, statusMessage: "game required" });
   try {
-    const rows = await globalLeaderboard(game, 50);
-    return { gameId: game, rows };
+    const board = await globalLeaderboard(game, 50, 20);
+    return { gameId: game, ...board };
   } catch (e) {
     // Datastore unavailable (e.g. no volume mounted) — degrade gracefully to an
     // empty board rather than 500ing the whole page.
     console.error("[leaderboard] query failed:", e);
-    return { gameId: game, rows: [], unavailable: true };
+    return { gameId: game, rows: [], history: [], unavailable: true };
   }
 });

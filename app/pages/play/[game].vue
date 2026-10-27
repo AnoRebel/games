@@ -6,6 +6,7 @@
 import { getGame } from "@games/engine-core";
 import type { BaseGameState, BaseMove, Difficulty } from "@games/engine-core";
 import type { OfflineStart, OnlineStart } from "~/utils/setupOptions";
+import { seatResult, type PlayDifficulty } from "#shared/leaderboard";
 import type { GameTransport } from "~/transports/types";
 import { WsTransport } from "~/transports/WsTransport";
 
@@ -123,30 +124,46 @@ function watchForResults(t: GameTransport) {
     });
     if (isDaily.value) markDailyPlayed(); // advance the daily streak
 
+    // Provenance comes from the match itself: its variant, and the bot
+    // strength if any seat was a bot (online: the room's settings).
+    const variant = (view.state as { variant?: unknown }).variant;
+    const room = wsTransport.value?.getRoomInfo();
+    const hasBots = players.some((p) => p.bot) || (room?.botSeats ?? 0) > 0;
+    const difficulty: PlayDifficulty = !hasBots
+      ? "none"
+      : t.mode === "local"
+        ? (t as unknown as { botDifficulty: PlayDifficulty }).botDifficulty
+        : (room?.difficulty ?? "normal");
     void recordResults(
       // Only record real humans — bots must never appear on the leaderboard.
       players
         .filter((p) => !p.bot)
-        .map((p) => ({
-          gameId: gameId.value,
-          playerId: p.id,
-          playerName: p.name,
-          won: scores.winners.includes(p.seat),
-          score: scores.bySeat[p.seat] ?? 0,
-          // higher-is-better metric: Last Card penalty is lower-better → negate.
-          rankMetric:
-            gameId.value === "last-card"
-              ? -(scores.bySeat[p.seat] ?? 0)
-              : (scores.victoryBySeat?.[p.seat] ?? scores.bySeat[p.seat] ?? 0),
-          playedAt: new Date().toISOString(),
-          matchId: key,
-          visibility:
-            t.mode === "local"
-              ? "offline"
-              : onlineVisibility.value === "locked"
-                ? "private"
-                : "public",
-        })),
+        .map((p) => {
+          const { won, drawn, score, rankMetric } = seatResult(
+            gameId.value,
+            scores,
+            p.seat,
+          );
+          return {
+            gameId: gameId.value,
+            playerId: p.id,
+            playerName: p.name,
+            won,
+            drawn,
+            score,
+            rankMetric,
+            playedAt: new Date().toISOString(),
+            matchId: key,
+            visibility:
+              t.mode === "local"
+                ? ("offline" as const)
+                : onlineVisibility.value === "locked"
+                  ? ("private" as const)
+                  : ("public" as const),
+            variant: typeof variant === "string" ? variant : null,
+            difficulty,
+          };
+        }),
     );
     off();
   });
