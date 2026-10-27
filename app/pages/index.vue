@@ -39,6 +39,26 @@ const games = computed(() => [
       { rank: 13 as const, suit: "s" as const },
     ],
   },
+  {
+    id: "bao",
+    name: "Bao",
+    tagline: $ts("home.taglineBao"),
+    players: "2",
+    to: "/play/bao",
+    font: "font-display",
+    accent: "oklch(0.72 0.12 60)",
+    board: "bao" as const,
+  },
+  {
+    id: "checkers",
+    name: "Checkers",
+    tagline: $ts("home.taglineCheckers"),
+    players: "2",
+    to: "/play/checkers",
+    font: "font-display",
+    accent: "oklch(0.7 0.1 200)",
+    board: "checkers" as const,
+  },
 ]);
 
 const root = ref<HTMLElement | null>(null);
@@ -110,8 +130,16 @@ void standardDeck;
         data-reveal
         class="cg-game-card group relative overflow-hidden rounded-2xl p-5 cg-surface transition-transform"
       >
-        <!-- floating sample cards -->
+        <!-- board games: a small board preview -->
         <div
+          v-if="'board' in game && game.board"
+          class="absolute right-3 top-3 opacity-95 transition-transform duration-300 group-hover:-translate-y-1 group-hover:-rotate-2"
+        >
+          <BoardPreview :kind="game.board" />
+        </div>
+        <!-- card games: floating sample cards -->
+        <div
+          v-else
           class="absolute -right-4 -top-2 flex opacity-90 transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-3"
         >
           <PlayingCard

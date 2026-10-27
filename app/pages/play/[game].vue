@@ -410,7 +410,13 @@ const spectatorShareUrl = computed(() => {
         />
         <h1
           class="text-xl font-bold truncate"
-          :class="gameId === 'albastini' ? 'font-albastini italic' : 'font-last-card'"
+          :class="
+            gameId === 'albastini'
+              ? 'font-albastini italic'
+              : gameId === 'last-card'
+                ? 'font-last-card'
+                : 'font-display'
+          "
         >
           {{ title }}
         </h1>
@@ -487,6 +493,26 @@ const spectatorShareUrl = computed(() => {
         @new-game="newGame"
         @exit="quit"
       />
+      <BaoTable
+        v-else-if="gameId === 'bao'"
+        :key="`bao-${transportRev}`"
+        :transport="transport as any"
+        :can-rematch="canRematch"
+        :share-url="wsTransport ? shareUrl : null"
+        @restart="restart"
+        @new-game="newGame"
+        @exit="quit"
+      />
+      <CheckersTable
+        v-else-if="gameId === 'checkers'"
+        :key="`ck-${transportRev}`"
+        :transport="transport as any"
+        :can-rematch="canRematch"
+        :share-url="wsTransport ? shareUrl : null"
+        @restart="restart"
+        @new-game="newGame"
+        @exit="quit"
+      />
       <AlbastiniTable
         v-else-if="gameId === 'albastini'"
         :key="`ab-${transportRev}`"
@@ -510,7 +536,9 @@ const spectatorShareUrl = computed(() => {
         class="w-full cg-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
         @click="setupOpen = true"
       >
-        <p class="text-3xl mb-1">🃏</p>
+        <p class="text-3xl mb-1">
+          {{ gameId === "bao" || gameId === "checkers" ? "🎲" : "🃏" }}
+        </p>
         <p class="font-display font-bold text-lg">{{ $ts("common.play") }} {{ title }}</p>
         <p class="text-xs mt-1" :style="{ color: 'var(--cg-text-muted)' }">
           {{ $ts("lobby.tapToSetUp") }}

@@ -26,8 +26,21 @@ const emit = defineEmits<{ rematch: []; newGame: []; exit: [] }>();
 const modalUi = useThemedModalUi();
 
 // Albastini ranks by victory points (higher better); Last Card by penalty
-// (lower better). Use victoryBySeat when present, else raw score.
+// (lower better); the board games show seeds / pieces left (higher better).
+// Use victoryBySeat when present, else raw score.
 const useVp = computed(() => !!props.scores?.victoryBySeat);
+const boardGame = computed(() => props.gameId === "bao" || props.gameId === "checkers");
+const higherBetter = computed(() => useVp.value || boardGame.value);
+const scoredLabel = computed(() =>
+  useVp.value
+    ? "game.scoredVp"
+    : props.gameId === "bao"
+      ? "board.scoredSeeds"
+      : props.gameId === "checkers"
+        ? "board.scoredPieces"
+        : "game.scoredPenalty",
+);
+const drawn = computed(() => !!props.scores?.drawn);
 const rows = computed(() => {
   const s = props.scores;
   if (!s) return [];
@@ -40,7 +53,7 @@ const rows = computed(() => {
       won: s.winners.includes(p.seat),
       you: p.seat === props.viewerSeat,
     }))
-    .sort((a, b) => (useVp.value ? b.score - a.score : a.score - b.score));
+    .sort((a, b) => (higherBetter.value ? b.score - a.score : a.score - b.score));
 });
 const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
 const youWon = computed(
@@ -75,14 +88,20 @@ const winnerNames = computed(() =>
       <div v-else class="space-y-4">
         <!-- Headline -->
         <div class="text-center space-y-1">
-          <p class="text-4xl">{{ youWon ? "🏆" : "🎴" }}</p>
+          <p class="text-4xl">
+            {{ youWon ? "🏆" : drawn ? "🤝" : boardGame ? "🏁" : "🎴" }}
+          </p>
           <p class="font-display text-lg font-bold">
             {{
-              youWon ? $ts("game.youWin") : $ts("game.wins", { name: winnerNames || "—" })
+              drawn
+                ? $ts("board.draw")
+                : youWon
+                  ? $ts("game.youWin")
+                  : $ts("game.wins", { name: winnerNames || "—" })
             }}
           </p>
           <p class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">
-            {{ useVp ? $ts("game.scoredVp") : $ts("game.scoredPenalty") }}
+            {{ $ts(scoredLabel) }}
           </p>
         </div>
 

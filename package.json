@@ -20,7 +20,8 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:bench": "vitest run packages/game-ai/test/benchmark.test.ts"
+    "test:bench": "vitest run packages/game-ai/test/benchmark.test.ts",
+    "smoke:boards": "cd scripts/smoke && bun run boards.ts"
   },
   "dependencies": {
     "@card-games/engine-core": "workspace:*",

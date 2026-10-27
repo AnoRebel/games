@@ -33,7 +33,7 @@
 
 - [x] 4.1 Move the existing card-game bot policies from `app/transports/bot.ts` into `packages/game-ai` and update app imports; verify the existing `test/bot.test.ts`, offline playthrough, and full-playthrough suites pass unchanged.
 - [x] 4.2 Implement the deterministic policy interface and easy/normal/hard policies for Bao and Checkers, including node budgets, alpha-beta, move ordering, and per-game evaluations; verify legality, repeated-decision equality, and budget-ceiling tests.
-- [ ] 4.3 Add cooperative yielding for browser search without time-based decisions; verify a test that a yielded search returns the same move as a synchronous run and a browser smoke where input stays responsive during a hard search.
+- [x] 4.3 Add cooperative yielding for browser search without time-based decisions; verify a test that a yielded search returns the same move as a synchronous run and a browser smoke where input stays responsive during a hard search.
 - [x] 4.4 Build the deterministic strength benchmark harness with checked-in seeds and a fixed move cap; run it for both games and record that hard ≥60% vs normal and normal ≥65% vs easy, tuning budgets before freezing the seeds.
 - [x] 4.5 Wire server bot seats to the shared package and verify an offline and an in-room decision from the same state and difficulty return the same move.
 - [x] 4.6 Verify the card-game bot regression explicitly: all three difficulties still terminate legally for Last Card and Albastini with unchanged policy outcomes.
@@ -49,11 +49,11 @@
 
 ## 6. Board Presentation
 
-- [ ] 6.1 Build the shared `BoardGrid` with CSS-grid cells, roving tabindex, arrow-key navigation, Enter/Space activation, accessible cell names, and a polite announcement region; verify component tests for grid roles, focus movement, and announcements.
-- [ ] 6.2 Build `BaoTable` on the shared grid with seed counts, nyumba marker, legal sow destinations, forced-capture state, last move, and spectator read-only mode; verify component tests for hints, markers, and non-interactive spectators.
-- [ ] 6.3 Build `CheckersTable` with men/kings, non-color crown glyph, legal destinations, capture-path previews, forced capture, promotion, and last move; verify component tests for each state.
-- [ ] 6.4 Make both tables responsive with fit-mode board targets at least 24px, zoom/pan mode with 44px targets, 44px non-board controls, no page overflow at 360×640, orientation reflow, and focus preservation; verify phone/desktop browser smoke including keyboard zoom.
-- [ ] 6.5 Add the new games to the home page and play-route table switch, including game-over/rematch flows; verify a browser smoke from home card to first move and from game over to rematch.
+- [x] 6.1 Build the shared `BoardGrid` with CSS-grid cells, roving tabindex, arrow-key navigation, Enter/Space activation, accessible cell names, and a polite announcement region; verify component tests for grid roles, focus movement, and announcements.
+- [x] 6.2 Build `BaoTable` on the shared grid with seed counts, nyumba marker, legal sow destinations, forced-capture state, last move, and spectator read-only mode; verify component tests for hints, markers, and non-interactive spectators.
+- [x] 6.3 Build `CheckersTable` with men/kings, non-color crown glyph, legal destinations, capture-path previews, forced capture, promotion, and last move; verify component tests for each state.
+- [x] 6.4 Make both tables responsive with fit-mode board targets at least 24px, zoom/pan mode with 44px targets, 44px non-board controls, no page overflow at 360×640, orientation reflow, and focus preservation; verify phone/desktop browser smoke including keyboard zoom.
+- [x] 6.5 Add the new games to the home page and play-route table switch, including game-over/rematch flows; verify a browser smoke from home card to first move and from game over to rematch.
 
 ## 7. Scene Theming
 
