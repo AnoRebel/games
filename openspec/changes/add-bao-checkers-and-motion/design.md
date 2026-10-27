@@ -35,7 +35,7 @@ Both new games are perfect-information, two-player, deterministic board games. N
 - No matchmaking, Elo/skill rating, tournaments, clocks, puzzles, or analysis mode. Player tiers measure completed-play experience only.
 - No server-side writing of offline results.
 - No shared/room-wide themes; themes stay viewer-local.
-- No live GitHub, domain, or Dokploy rename in this checkpoint; target GitHub repository is `AnoRebel/games` in a later authorized operation.
+- No domain cut-over: `games.anorebel.net` is served alongside the legacy origin; the repository is `AnoRebel/games`.
 
 ## Decisions
 
@@ -171,7 +171,7 @@ Client startup awaits migration before opening gameplay or recording results. Co
 
 For the default server database, run a pre-start migration with writers stopped: detect old/new paths, back up the legacy SQLite database with a consistent snapshot including WAL contents, copy to a temporary destination, verify integrity and table counts, then promote to `games.db`. Preserve the backup; if both paths contain databases without a completed migration marker, fail explicitly. Respect explicit `NUXT_LIBSQL_URL` connections without rewriting remote URLs. Re-running after verified completion is a no-op. Keep the current origin during client migration; a future domain change needs its own cross-origin transfer plan.
 
-The current remote remains `AnoRebel/card-games` for this push. Target `AnoRebel/games` and deployment renaming are follow-up operations, not unattended code substitutions to live infrastructure.
+The repository is `AnoRebel/games` and the deployment is named **Games**, serving both `games.anorebel.net` and the legacy `card-games.anorebel.net`. Retiring the legacy origin needs its own cross-origin transfer plan.
 
 ### D10. Leaderboard provenance and metric mapping
 
@@ -212,7 +212,7 @@ Vitest stays node-only; board component tests use the existing Nuxt/Vue test set
 - **Additive DB migration on libsql** → Guard the `ALTER TABLE`, keep columns nullable, and verify against a copy of an existing database in the migration test.
 - **Custom themes can produce ugly or inaccessible scenes** → Validate contrast in both modes, preview on real boards, and fall back per role.
 - **GSAP increases the client bundle** → Import only the core/plugins used, keep the helpers tree-shakeable, and verify the build budget in CI.
-- **Rename risks lost data or split identities** → Keep the origin, migrate internal ids with verified backups and idempotent copies, and block on ambiguous destinations. Infrastructure renames are deferred.
+- **Rename risks lost data or split identities** → Keep the origin, migrate internal ids with verified backups and idempotent copies, and block on ambiguous destinations. Both origins stay live until a cross-origin transfer exists.
 
 ## Migration Plan
 

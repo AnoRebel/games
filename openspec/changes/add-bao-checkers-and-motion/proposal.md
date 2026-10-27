@@ -47,7 +47,7 @@ The platform currently ships only two card games. Bao and checkers are the obvio
 - App: game registration, home cards, setup modal (variant + difficulty), play route, new `BaoTable.vue` and `CheckersTable.vue`, content lookup, i18n.
 - Server: game registration in the room hub; variant/difficulty validation; no new transport protocol.
 - Dependencies: add `gsap`; remove `animejs`; update the animation ADR.
-- Branding: locale strings, header, manifest, share defaults, metadata, `@games/*` packages, storage/class/CSS names, and database names; verified one-time migration preserves existing data. GitHub and Dokploy renames remain deferred.
+- Branding: locale strings, header, manifest, share defaults, metadata, `@games/*` packages, storage/class/CSS names, and database names; verified one-time migration preserves existing data. The repository is `AnoRebel/games` and the deployment serves `games.anorebel.net` while keeping the legacy origin for data migration.
 - Theming: scene token set, defaults for every game, custom-theme editor, global fallback, and per-game theme assignments; card-back/background uploads remain.
 - Tests: new engine test suites, perft-style move-generation checks, AI strength/termination tests, offline/online parity tests, and browser smoke tests for both boards.
 - Leaderboard storage: additive variant, difficulty, draw, and experience-tier snapshots; New (0–9 plays), Regular (10–49), Veteran (50+) per game. Existing rows remain readable with unknown provenance; no destructive migration.

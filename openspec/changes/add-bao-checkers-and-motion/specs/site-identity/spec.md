@@ -103,9 +103,13 @@ Migration SHALL preserve legacy data until destination writes are verified, SHAL
 - **WHEN** both legacy and renamed server database files already exist
 - **THEN** startup SHALL report the conflict rather than replace either database
 
-### Requirement: Deferred infrastructure rename
-The target repository name SHALL be `AnoRebel/games`. This planning checkpoint SHALL use the existing GitHub remote; renaming GitHub, domains, and Dokploy SHALL be a separate authorized operation. Source links SHALL not point to a nonexistent repository.
+### Requirement: Infrastructure naming
+The source repository SHALL be `AnoRebel/games` and the deployment SHALL be named **Games** and served at `games.anorebel.net`. The legacy `card-games.anorebel.net` origin SHALL keep serving the same deployment until browser data migration is complete, because browser storage is bound to its origin. Source links SHALL point to `AnoRebel/games`.
 
-#### Scenario: Checkpoint push
-- **WHEN** these planning artifacts are committed
-- **THEN** they SHALL be pushed to the current repository without changing live deployment identifiers
+#### Scenario: New origin
+- **WHEN** a player opens `games.anorebel.net`
+- **THEN** the site SHALL load from the same deployment as the legacy origin
+
+#### Scenario: Legacy origin retained
+- **WHEN** a returning player opens `card-games.anorebel.net`
+- **THEN** the site SHALL still load with their existing local data

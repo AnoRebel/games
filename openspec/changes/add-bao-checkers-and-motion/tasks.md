@@ -97,6 +97,6 @@
 
 ## Workflow follow-up
 
-- Rename GitHub to `AnoRebel/games` and update source links/remotes only when separately authorized; then update Dokploy naming/domain with a migration plan. Keep this checkpoint on the current origin.
+- [x] Rename GitHub to `AnoRebel/games`, update the remote, and rename the deployment to **Games** with `games.anorebel.net` served alongside the retained `card-games.anorebel.net` origin.
 - Archive the change after review and the full verification gate pass.
 - Verify the archived specs include the new capabilities and the updated theming, leaderboard, rooms, learnability, card presentation, and engine-core deltas.
