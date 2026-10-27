@@ -25,6 +25,8 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@libsql/client";
+import { format } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 
 export const LEGACY_DB_FILE = "card-games.db";
 export const DB_FILE = "games.db";
@@ -98,7 +100,8 @@ export async function migrateServerDatabase(
   mkdirSync(dir, { recursive: true });
   rmSync(tmp, { force: true });
   rmSync(marker, { force: true });
-  const stamp = (opts.now?.() ?? new Date()).toISOString().replace(/[:.]/g, "-");
+  const at = new TZDate(opts.now?.() ?? new Date(), "UTC");
+  const stamp = format(at, "yyyyMMdd'T'HHmmss'Z'");
   const backup = join(dir, `${LEGACY_DB_FILE}.backup-${stamp}`);
 
   const expected = await tableCounts(legacy);
@@ -132,7 +135,7 @@ export async function migrateServerDatabase(
   writeFileSync(
     marker,
     JSON.stringify(
-      { from: legacy, backup, counts, at: new Date().toISOString() },
+      { from: legacy, backup, counts, at: format(at, "yyyy-MM-dd'T'HH:mm:ss'Z'") },
       null,
       2,
     ),

@@ -6,6 +6,7 @@
  * without bots shows the difficulty as not applicable.
  */
 import { format } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 import { getGame, variantName } from "@games/engine-core";
 import type { HistoryEntry } from "#shared/leaderboard";
 import { DIFFICULTY_KEYS } from "~/utils/setupOptions";
@@ -35,9 +36,11 @@ function labels(e: HistoryEntry) {
   return { game, variant, difficulty, tier };
 }
 
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 function when(iso: string) {
   try {
-    return format(new Date(iso), "d MMM yyyy, HH:mm");
+    return format(new TZDate(iso, tz), "d MMM yyyy, HH:mm");
   } catch {
     return iso;
   }

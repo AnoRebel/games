@@ -15,7 +15,7 @@ user waits for the migration, so no writer is active while it runs.
 **What it does:**
 
 1. Takes a consistent backup of the legacy database —
-   `data/card-games.db.backup-<timestamp>` — with `VACUUM INTO`, which
+   `data/card-games.db.backup-<UTC time>` (e.g. `backup-20261027T000000Z`) — with `VACUUM INTO`, which
    includes committed rows still in the write-ahead log.
 2. Copies the legacy database to `data/games.db.tmp` the same way.
 3. Verifies the copy: `PRAGMA integrity_check` must report `ok`, and the
