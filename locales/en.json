@@ -27,7 +27,8 @@
     "public": "Public",
     "private": "Private",
     "spectating": "Spectating",
-    "noRules": "No rules available for this game yet."
+    "noRules": "No rules available for this game yet.",
+    "rulesMissing": "Rules for this game are not available in English yet."
   },
   "daily": {
     "title": "Daily Challenge",

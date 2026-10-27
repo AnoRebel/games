@@ -27,7 +27,8 @@
     "public": "Wazi",
     "private": "Faragha",
     "spectating": "Unatazama",
-    "noRules": "Hakuna sheria za mchezo huu bado."
+    "noRules": "Hakuna sheria za mchezo huu bado.",
+    "rulesMissing": "Sheria za mchezo huu bado hazipatikani kwa Kiswahili."
   },
   "daily": {
     "title": "Changamoto ya Kila Siku",

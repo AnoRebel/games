@@ -156,6 +156,18 @@ function watchForResults(t: GameTransport) {
   });
 }
 
+// The live game's rule variant drives the rules panel and tutorial content.
+const activeVariant = ref<string | null>(null);
+watch(transport, (t, _old, onCleanup) => {
+  activeVariant.value = null;
+  if (!t) return;
+  const off = t.onChange((view) => {
+    const v = (view.state as { variant?: unknown } | undefined)?.variant;
+    activeVariant.value = typeof v === "string" ? v : null;
+  });
+  onCleanup(off);
+});
+
 // Event toasts: bound once in setup; the composable watches the transport ref
 // internally (so useToast/useI18n resolve in proper setup context).
 useGameNotifications(transport as Ref<GameTransport | null>, gameId);
@@ -492,7 +504,7 @@ const spectatorShareUrl = computed(() => {
 
       <!-- Floating chat (renders fixed) -->
       <GameChat :transport="transport as any" :name="playerName" />
-      <GameTutorial ref="tutorialRef" :game-id="gameId" />
+      <GameTutorial ref="tutorialRef" :game-id="gameId" :variant="activeVariant" />
     </div>
 
     <!-- Idle: leaderboard preview + a prompt to set up (modal auto-opens) -->
@@ -600,7 +612,12 @@ const spectatorShareUrl = computed(() => {
       @start-offline="onSetupOffline"
       @start-online="onSetupOnline"
     />
-    <GameRulesPanel v-if="meta" v-model:open="showRules" :game-id="gameId" />
+    <GameRulesPanel
+      v-if="meta"
+      v-model:open="showRules"
+      :game-id="gameId"
+      :variant="activeVariant"
+    />
     <LeaderboardSlideover v-if="meta" v-model:open="showLeaderboard" :game-id="gameId" />
 
     <!-- Passcode prompt for a private (locked) room -->

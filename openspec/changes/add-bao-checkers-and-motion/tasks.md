@@ -9,14 +9,14 @@
 
 ## 2. Bao Engine
 
-- [ ] 2.1 Implement the Bao state model with the 16-pit ring, opposite-pit mapping, kichwa/kimbi/nyumba indices, and standard 32-seed setup; verify tests for initial counts, seed conservation (64), and nyumba placement.
-- [ ] 2.2 Implement sowing, relay, and compulsory captures with kichwa entry direction rules; verify table-driven tests for empty-pit termination, relay continuation, opposite-pit capture, forced capture, and repeated captures.
-- [ ] 2.3 Implement kunamua turn generation: reserve placement, forced capturing placement, kutakata start priorities, and working-nyumba restrictions; verify the opening exposes exactly 4 legal turns and the no-legal-move loss case.
-- [ ] 2.4 Implement nyumba rules: working threshold, kutakata stop, safari on a non-capturing end, capture precedence, and permanent loss of house status; verify a test per decision plus a stop/safari choice test.
-- [ ] 2.5 Implement mtaji turn generation: pit-size limits, compulsory captures, front-row preference, sole-kichwa direction, empty-front-row back-row restriction, plus the front-row-empty and no-legal-move losses and the 192-seed infinite cutoff; verify scenario tests for each.
-- [ ] 2.6 Implement Bao la Kujifunza setup and phase shortcut, expose both variants with Kiswahili as default, and verify variant resolution, full-board seeding, and a played-out learner game reaches a legal terminal state.
-- [ ] 2.7 Add the complete Bao turn representation (start, direction, entry, safari, path, captures) and ensure the reducer re-simulates and rejects forged moves; verify determinism/replay and illegal-move-unchanged tests.
-- [ ] 2.8 Ship Bao rules content in English and Swahili for both variants, including the documented omission of pit blocking/taxation and the win conditions; verify content lookups resolve per locale and variant and the rules panel renders them.
+- [x] 2.1 Implement the Bao state model with the 16-pit ring, opposite-pit mapping, kichwa/kimbi/nyumba indices, and standard 32-seed setup; verify tests for initial counts, seed conservation (64), and nyumba placement.
+- [x] 2.2 Implement sowing, relay, and compulsory captures with kichwa entry direction rules; verify table-driven tests for empty-pit termination, relay continuation, opposite-pit capture, forced capture, and repeated captures.
+- [x] 2.3 Implement kunamua turn generation: reserve placement, forced capturing placement, kutakata start priorities, and working-nyumba restrictions; verify the opening exposes exactly 4 legal turns and the no-legal-move loss case.
+- [x] 2.4 Implement nyumba rules: working threshold, kutakata stop, safari on a non-capturing end, capture precedence, and permanent loss of house status; verify a test per decision plus a stop/safari choice test.
+- [x] 2.5 Implement mtaji turn generation: pit-size limits, compulsory captures, front-row preference, sole-kichwa direction, empty-front-row back-row restriction, plus the front-row-empty and no-legal-move losses and the 192-seed infinite cutoff; verify scenario tests for each.
+- [x] 2.6 Implement Bao la Kujifunza setup and phase shortcut, expose both variants with Kiswahili as default, and verify variant resolution, full-board seeding, and a played-out learner game reaches a legal terminal state.
+- [x] 2.7 Add the complete Bao turn representation (start, direction, entry, safari, path, captures) and ensure the reducer re-simulates and rejects forged moves; verify determinism/replay and illegal-move-unchanged tests.
+- [x] 2.8 Ship Bao rules content in English and Swahili for both variants, including the documented omission of pit blocking/taxation and the win conditions; verify content lookups resolve per locale and variant and the rules panel renders them.
 
 ## 3. Checkers Engine
 

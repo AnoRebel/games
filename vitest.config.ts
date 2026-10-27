@@ -1,9 +1,13 @@
 import { fileURLToPath } from "node:url";
+import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vitest/config";
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 export default defineConfig({
+  // Component tests mount SFCs directly (they opt into a DOM per file with
+  // `@vitest-environment happy-dom`); everything else stays node-only.
+  plugins: [vue()],
   resolve: {
     alias: {
       "@card-games/engine-core": r("./packages/engine-core/src/index.ts"),
