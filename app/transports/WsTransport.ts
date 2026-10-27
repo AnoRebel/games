@@ -8,6 +8,7 @@
 import type {
   BaseGameState,
   BaseMove,
+  Difficulty,
   Player,
   ScoreResult,
   Seat,
@@ -38,6 +39,9 @@ interface ServerRoomMsg {
     maxPlayers?: number;
     disconnectGraceUntil?: number | null;
     endedBy?: string | null;
+    variant?: string | null;
+    difficulty?: Difficulty;
+    botSeats?: number;
   };
 }
 
@@ -55,6 +59,12 @@ export interface RoomInfo {
   disconnectGraceUntil: number | null;
   /** Name of the host who manually ended the game; null otherwise. */
   endedBy: string | null;
+  /** The room's rule variant (null for games without variants). */
+  variant: string | null;
+  /** Strength of bot-filled seats. */
+  difficulty: Difficulty;
+  /** Seats the server fills with bots at start. */
+  botSeats: number;
   /** Snapshot version, bumped on every room update for reactivity. */
   rev: number;
 }
@@ -110,6 +120,9 @@ export class WsTransport<
     maxPlayers: 6,
     disconnectGraceUntil: null,
     endedBy: null,
+    variant: null,
+    difficulty: "normal",
+    botSeats: 0,
     rev: 0,
   };
 
@@ -264,9 +277,13 @@ export class WsTransport<
           connected: m.connected,
           spectator: m.spectator,
         }));
-        this.players = msg.room.members
-          .filter((m) => m.seat !== null)
-          .map((m) => ({ id: m.playerId, name: m.name, seat: m.seat! }));
+        // Before a game starts the seated members are the players; once state
+        // arrives it is authoritative (and includes any bot seats).
+        if (!this.view) {
+          this.players = msg.room.members
+            .filter((m) => m.seat !== null)
+            .map((m) => ({ id: m.playerId, name: m.name, seat: m.seat! }));
+        }
         // keep our seat + spectator status in sync
         {
           const me = msg.room.members.find((m) => m.clientId === this.myClientId);
@@ -287,6 +304,9 @@ export class WsTransport<
           maxPlayers: msg.room.maxPlayers ?? 6,
           disconnectGraceUntil: msg.room.disconnectGraceUntil ?? null,
           endedBy: msg.room.endedBy ?? null,
+          variant: msg.room.variant ?? null,
+          difficulty: msg.room.difficulty ?? "normal",
+          botSeats: msg.room.botSeats ?? 0,
           rev: this.roomInfo.rev + 1,
         };
         // Notify the UI that room membership/host changed (presence, seating)
@@ -295,6 +315,8 @@ export class WsTransport<
         if (this.view) for (const cb of this.changeCbs) cb(this.view);
         break;
       case "state":
+        // Game state lists every seat, bots included (members are humans only).
+        if (Array.isArray(msg.state?.players)) this.players = msg.state.players;
         this.view = {
           ready: true,
           state: msg.state as S,
@@ -326,6 +348,10 @@ export class WsTransport<
   }
   endGame() {
     this.sendRaw({ t: "end", roomId: this.opts.roomId });
+  }
+  /** Host: change the rule variant or bot settings (lobby / between games). */
+  configure(change: { variant?: string; difficulty?: Difficulty; botSeats?: number }) {
+    this.sendRaw({ t: "configure", roomId: this.opts.roomId, ...change });
   }
   setVisibility(visibility: "public" | "locked", passcode?: string) {
     this.sendRaw({ t: "set-visibility", roomId: this.opts.roomId, visibility, passcode });

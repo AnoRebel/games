@@ -83,7 +83,13 @@
     "spectatorsUnlimited": "No limit",
     "spectatorsNone": "None",
     "persistRoom": "Keep room open",
-    "persistRoomHint": "Stays alive when empty; otherwise it's closed shortly after everyone leaves."
+    "persistRoomHint": "Stays alive when empty; otherwise it's closed shortly after everyone leaves.",
+    "variant": "Rules",
+    "botSeats": "Bot seats",
+    "botSeatsNone": "None — humans only",
+    "diffEasyHelp": "Plays any legal move — good for learning.",
+    "diffNormalHelp": "Looks a couple of moves ahead and takes safe captures.",
+    "diffHardHelp": "Searches deeper and punishes mistakes."
   },
   "room": {
     "aboutLinks": "About room links",
@@ -102,7 +108,8 @@
     "endGame": "End the game",
     "waitingForHost": "Waiting for host…",
     "reconnecting": "Reconnecting…",
-    "reconnectingBody": "Connection lost — trying to rejoin. Your seat is held."
+    "reconnectingBody": "Connection lost — trying to rejoin. Your seat is held.",
+    "botSeats": "Bots: {count}"
   },
   "lobby": {
     "playOffline": "Play offline",

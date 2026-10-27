@@ -71,6 +71,14 @@ export type ClientMessage =
   | { t: "take-seat"; roomId: string; seat: Seat }
   | { t: "start"; roomId: string }
   | { t: "end"; roomId: string }
+  | {
+      /** Host changes rule variant / bot settings — lobby or after a game only. */
+      t: "configure";
+      roomId: string;
+      variant?: string;
+      difficulty?: Difficulty;
+      botSeats?: number;
+    }
   | { t: "move"; roomId: string; move: unknown }
   | { t: "chat"; roomId: string; body: string }
   | {
@@ -98,6 +106,8 @@ export type ServerMessage =
 export interface PublicRoomInfo {
   id: string;
   gameId: string;
+  /** Rule variant id, for games that have variants. */
+  variant: string | null;
   phase: RoomPhase;
   seated: number;
   spectators: number;
@@ -117,6 +127,12 @@ export interface ChatMessage {
 export interface RoomSnapshot {
   id: string;
   gameId: string;
+  /** Rule variant id, for games that have variants. */
+  variant: string | null;
+  /** Strength of bot-filled seats (only meaningful when botSeats > 0). */
+  difficulty: Difficulty;
+  /** Seats the server fills with bots at start. */
+  botSeats: number;
   phase: RoomPhase;
   hostClientId: string | null;
   members: RoomMember[];

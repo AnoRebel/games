@@ -30,6 +30,8 @@ export interface LocalGameSetup {
   humanIds?: string[];
   seed?: string;
   config?: unknown;
+  /** Pause before a bot moves (ms); defaults to the transport's pacing. */
+  botDelayMs?: number;
 }
 
 let seedCounter = 0;
@@ -82,5 +84,6 @@ export function createLocalTransport(setup: LocalGameSetup) {
     seed,
     humanSeats,
     difficulty,
+    botDelayMs: setup.botDelayMs,
   });
 }

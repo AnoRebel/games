@@ -83,7 +83,13 @@
     "spectatorsUnlimited": "Hakuna kikomo",
     "spectatorsNone": "Hakuna",
     "persistRoom": "Weka chumba wazi",
-    "persistRoomHint": "Hubaki hai kikiwa tupu; vinginevyo hufungwa muda mfupi baada ya wote kuondoka."
+    "persistRoomHint": "Hubaki hai kikiwa tupu; vinginevyo hufungwa muda mfupi baada ya wote kuondoka.",
+    "variant": "Sheria",
+    "botSeats": "Viti vya roboti",
+    "botSeatsNone": "Hakuna — binadamu tu",
+    "diffEasyHelp": "Hucheza hatua yoyote halali — nzuri kwa kujifunza.",
+    "diffNormalHelp": "Huangalia hatua mbili mbele na hula pale ilipo salama.",
+    "diffHardHelp": "Hutafuta kwa kina zaidi na huadhibu makosa."
   },
   "room": {
     "aboutLinks": "Kuhusu viungo vya chumba",
@@ -102,7 +108,8 @@
     "endGame": "Maliza mchezo",
     "waitingForHost": "Kumsubiri mwenyeji…",
     "reconnecting": "Inaunganisha upya…",
-    "reconnectingBody": "Muunganisho umekatika — tunajaribu kurudi. Kiti chako kimehifadhiwa."
+    "reconnectingBody": "Muunganisho umekatika — tunajaribu kurudi. Kiti chako kimehifadhiwa.",
+    "botSeats": "Roboti: {count}"
   },
   "lobby": {
     "playOffline": "Cheza nje ya mtandao",

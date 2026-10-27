@@ -4,7 +4,8 @@
  * online room creation with spectator visibility (public/locked).
  */
 import { getGame } from "@card-games/engine-core";
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
+import type { BaseGameState, BaseMove, Difficulty } from "@card-games/engine-core";
+import type { OfflineStart, OnlineStart } from "~/utils/setupOptions";
 import type { GameTransport } from "~/transports/types";
 import { WsTransport } from "~/transports/WsTransport";
 
@@ -75,11 +76,7 @@ onMounted(() => {
   setupOpen.value = true;
 });
 
-function onSetupOffline(cfg: {
-  totalPlayers: number;
-  humanCount: number;
-  config?: Record<string, unknown> | null;
-}) {
+function onSetupOffline(cfg: OfflineStart) {
   totalPlayers.value = cfg.totalPlayers;
   humanCount.value = cfg.humanCount;
   offlineConfig.value = cfg.config ?? null;
@@ -89,21 +86,17 @@ const onlineConfig = ref<Record<string, unknown> | null>(null);
 const onlineTurnTimeoutMs = ref<number | undefined>(undefined);
 const onlinePersist = ref<boolean | undefined>(undefined);
 const onlineMaxSpectators = ref<number | undefined>(undefined);
-function onSetupOnline(cfg: {
-  totalPlayers: number;
-  visibility: "public" | "locked";
-  customId?: string;
-  config?: Record<string, unknown> | null;
-  turnTimeoutMs?: number;
-  persist?: boolean;
-  maxSpectators?: number;
-}) {
+const onlineDifficulty = ref<Difficulty | undefined>(undefined);
+const onlineBotSeats = ref(0);
+function onSetupOnline(cfg: OnlineStart) {
   totalPlayers.value = cfg.totalPlayers;
   onlineVisibility.value = cfg.visibility;
   onlineConfig.value = cfg.config ?? null;
   onlineTurnTimeoutMs.value = cfg.turnTimeoutMs;
   onlinePersist.value = cfg.persist;
   onlineMaxSpectators.value = cfg.maxSpectators;
+  onlineDifficulty.value = cfg.difficulty;
+  onlineBotSeats.value = cfg.botSeats;
   createOnlineRoom(cfg.customId);
 }
 
@@ -257,6 +250,8 @@ async function createOnlineRoom(customId?: string) {
           turnTimeoutMs: onlineTurnTimeoutMs.value,
           persist: onlinePersist.value,
           maxSpectators: onlineMaxSpectators.value,
+          difficulty: onlineDifficulty.value,
+          botSeats: onlineBotSeats.value || undefined,
         },
       },
     );
@@ -475,6 +470,7 @@ const spectatorShareUrl = computed(() => {
     <div v-if="transport" class="space-y-3">
       <OnlineRoomBar
         v-if="wsTransport"
+        :game-id="gameId"
         :transport="wsTransport"
         :share-url="shareUrl"
         :spectator-url="spectatorShareUrl"

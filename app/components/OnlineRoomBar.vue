@@ -6,8 +6,11 @@
  */
 import type { WsTransport, RoomInfo } from "~/transports/WsTransport";
 import type { BaseGameState, BaseMove } from "@card-games/engine-core";
+import { getGame, variantName } from "@card-games/engine-core";
+import { DIFFICULTY_KEYS, variantItems } from "~/utils/setupOptions";
 
 const props = defineProps<{
+  gameId: string;
   transport: WsTransport<BaseGameState, BaseMove>;
   shareUrl: string;
   spectatorUrl: string;
@@ -37,9 +40,31 @@ const phase = computed(() => info.value?.phase ?? "lobby");
 const seated = computed(() => info.value?.seated ?? 0);
 const here = computed(() => info.value?.here ?? 0);
 const minPlayers = computed(() => info.value?.minPlayers ?? 2);
+// Bot seats count toward the start requirement; humans fill seats first.
+const botSeats = computed(() => info.value?.botSeats ?? 0);
 const canStart = computed(
-  () => isHost.value && phase.value === "lobby" && seated.value >= minPlayers.value,
+  () =>
+    isHost.value &&
+    phase.value === "lobby" &&
+    seated.value + botSeats.value >= minPlayers.value,
 );
+
+// The room's game and rule variant, always visible; the host may change the
+// variant between games, never during one.
+const meta = computed(() => getGame(props.gameId)?.meta ?? null);
+const variantLabel = computed(() =>
+  meta.value ? (variantName(meta.value, info.value?.variant) ?? null) : null,
+);
+const variants = computed(() => variantItems(meta.value));
+const canConfigure = computed(
+  () => isHost.value && phase.value !== "in-progress" && variants.value.length > 1,
+);
+const difficultyLabel = computed(() =>
+  $ts(DIFFICULTY_KEYS[info.value?.difficulty ?? "normal"].label),
+);
+function setVariant(v: string) {
+  if (v && v !== info.value?.variant) props.transport.configure({ variant: v });
+}
 // Explain WHY start is unavailable. Once the game has left the lobby the reason
 // is that it's already running — not a shortage of players, which is what the
 // bare "need players" fallback used to (misleadingly) claim.
@@ -102,6 +127,35 @@ onBeforeUnmount(() => offConn?.());
     />
 
     <div class="cg-surface rounded-xl p-2.5 flex flex-wrap items-center gap-2">
+      <!-- Game and rule variant (host may change the variant between games) -->
+      <USelect
+        v-if="canConfigure"
+        :model-value="info?.variant ?? undefined"
+        size="xs"
+        class="min-w-36"
+        :items="variants"
+        :aria-label="$ts('setup.variant')"
+        data-testid="room-variant"
+        @update:model-value="(v: string) => setVariant(v)"
+      />
+      <UBadge
+        v-else-if="variantLabel"
+        color="primary"
+        variant="subtle"
+        icon="i-lucide-scroll-text"
+        data-testid="room-variant"
+      >
+        {{ meta?.name }} · {{ variantLabel }}
+      </UBadge>
+      <UBadge
+        v-if="botSeats > 0"
+        color="neutral"
+        variant="subtle"
+        icon="i-lucide-bot"
+        :title="$ts('setup.difficulty')"
+      >
+        {{ $ts("room.botSeats", { count: botSeats }) }} · {{ difficultyLabel }}
+      </UBadge>
       <UBadge color="info" variant="subtle" icon="i-lucide-users">
         {{ $ts("game.seated", { count: seated }) }} ·
         {{ $ts("game.here", { count: here }) }}

@@ -3,25 +3,14 @@
  * the spectator passcode the host can bake into a spectator link.
  */
 import { requireGame } from "@card-games/engine-core";
+import {
+  buildRoomConfig,
+  GameConfigError,
+  type CreateRoomBody,
+} from "../utils/roomConfig";
 import { createError, defineEventHandler, getRequestIP, readBody } from "nuxt/server";
 import { getRoomHub } from "../utils/roomHub";
-import type { RoomConfig, SpectatorVisibility } from "../utils/roomTypes";
-
-interface CreateBody {
-  gameId: string;
-  gameConfig?: unknown;
-  playerCount?: number;
-  spectatorVisibility?: SpectatorVisibility;
-  spectatorPasscode?: string;
-  /** Optional memorable room id; sanitized server-side, falls back if taken. */
-  customId?: string;
-  /** Optional per-turn time limit (ms); auto-plays an idle seat on expiry. */
-  turnTimeoutMs?: number;
-  /** Keep the room alive while empty. Off by default — empty rooms are reaped. */
-  persist?: boolean;
-  /** Spectator cap. Omit/0 from the client = unlimited; -1 = none allowed. */
-  maxSpectators?: number;
-}
+import type { SpectatorVisibility } from "../utils/roomTypes";
 
 // Global room cap and a small per-IP create rate limit — a room lingers ≥60s
 // even if never joined, so unbounded creation is a memory-exhaustion vector.
@@ -42,7 +31,7 @@ function rateLimited(ip: string, now: number): boolean {
 }
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<CreateBody>(event);
+  const body = await readBody<CreateRoomBody>(event);
   if (!body?.gameId) {
     throw createError({ statusCode: 400, statusMessage: "gameId required" });
   }
@@ -79,40 +68,21 @@ export default defineEventHandler(async (event) => {
           .padStart(6, "0")
       : "";
 
-  const maxPlayers = Math.min(
-    body.playerCount ?? game.meta.maxPlayers,
-    game.meta.maxPlayers,
-  );
-
-  // MERGE the client's (possibly partial) variant config OVER the full engine
-  // defaults — a partial like { rounds: 3 } must not drop suitChangeCards etc.,
-  // or getLegalMoves crashes on the missing fields.
-  const gameConfig =
-    body.gameConfig && typeof body.gameConfig === "object"
-      ? { ...(game.defaultConfig() as object), ...(body.gameConfig as object) }
-      : game.defaultConfig();
-
-  const config: RoomConfig = {
-    gameId: body.gameId,
-    gameConfig,
-    maxPlayers,
-    minPlayers: game.meta.minPlayers,
-    spectatorVisibility: visibility,
-    spectatorPasscode: passcode,
-    // Clamp to a sane range (5s–120s) if a limit was requested.
-    turnTimeoutMs:
-      body.turnTimeoutMs && body.turnTimeoutMs > 0
-        ? Math.min(120_000, Math.max(5_000, body.turnTimeoutMs))
-        : undefined,
-    persist: body.persist === true,
-    // The client sends -1 for "no spectators" and omits the field for unlimited
-    // (0 would be ambiguous with "none"). Normalize to: undefined = unlimited,
-    // 0 = none, n>0 = cap. Clamp to a sane ceiling.
-    maxSpectators:
-      typeof body.maxSpectators === "number" && body.maxSpectators !== 0
-        ? Math.min(500, Math.max(0, body.maxSpectators === -1 ? 0 : body.maxSpectators))
-        : undefined,
-  };
+  // Variant and difficulty are validated against the game's declaration; an
+  // unsupported value is rejected by name rather than silently replaced.
+  let config;
+  try {
+    config = buildRoomConfig(
+      game,
+      { ...body, spectatorVisibility: visibility },
+      passcode,
+    );
+  } catch (e) {
+    if (e instanceof GameConfigError) {
+      throw createError({ statusCode: 400, statusMessage: e.message });
+    }
+    throw e;
+  }
 
   const roomId = hub.createRoom(config, body.customId);
   return {

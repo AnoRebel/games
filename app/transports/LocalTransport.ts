@@ -65,6 +65,11 @@ export class LocalTransport<
     this.scheduleBotIfNeeded();
   }
 
+  /** Strength the bot seats play at. */
+  get botDifficulty(): BotDifficulty {
+    return this.difficulty;
+  }
+
   /** In hotseat, the viewer IS whoever's turn it is (among humans). */
   get viewerSeat(): Seat | null {
     const active = this.state.activeSeat;

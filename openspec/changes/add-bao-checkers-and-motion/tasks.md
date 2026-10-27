@@ -40,12 +40,12 @@
 
 ## 5. Setup, Rooms, and Transport
 
-- [ ] 5.1 Update the setup modal to read declared variants and difficulties from game metadata and emit them for offline and online starts; verify a component test for defaults, variant switching, and unsupported games without variants.
-- [ ] 5.2 Thread variant and difficulty through `createLocalTransport` and `LocalTransport`; verify an offline runtime test that plays both new games at each difficulty and keeps the chosen config.
-- [ ] 5.3 Validate and persist variant/difficulty in room creation and start, preserve them across rehydration and rematch, and reject mid-game changes; verify room-hub and rehydrate tests for valid, invalid, default, and rematch cases.
-- [ ] 5.4 Show the selected variant in the lobby and keep difficulty limited to bot seats; verify a room test where two humans start at `easy` and no move is altered.
-- [ ] 5.5 Add offline/online parity tests for each new variant, including identical seed and move sequences producing identical final states.
-- [ ] 5.6 Add all setup, room, and game-selection strings in English and Swahili; verify every new key exists in both locale files.
+- [x] 5.1 Update the setup modal to read declared variants and difficulties from game metadata and emit them for offline and online starts; verify a component test for defaults, variant switching, and unsupported games without variants.
+- [x] 5.2 Thread variant and difficulty through `createLocalTransport` and `LocalTransport`; verify an offline runtime test that plays both new games at each difficulty and keeps the chosen config.
+- [x] 5.3 Validate and persist variant/difficulty in room creation and start, preserve them across rehydration and rematch, and reject mid-game changes; verify room-hub and rehydrate tests for valid, invalid, default, and rematch cases.
+- [x] 5.4 Show the selected variant in the lobby and keep difficulty limited to bot seats; verify a room test where two humans start at `easy` and no move is altered.
+- [x] 5.5 Add offline/online parity tests for each new variant, including identical seed and move sequences producing identical final states.
+- [x] 5.6 Add all setup, room, and game-selection strings in English and Swahili; verify every new key exists in both locale files.
 
 ## 6. Board Presentation
 

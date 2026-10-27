@@ -15,8 +15,10 @@ import {
   type BaseMove,
   type Player,
   type Seat,
+  GameConfigError,
   applyMove,
   requireGame,
+  resolveSetup,
 } from "@card-games/engine-core";
 import { registerLastCard } from "@card-games/game-last-card";
 import { registerAlbastini } from "@card-games/game-albastini";
@@ -41,6 +43,7 @@ import type {
   RoomSnapshot,
   ServerMessage,
 } from "./roomTypes";
+import { roomVariant } from "./roomConfig";
 
 const log = consola.withTag("rooms");
 
@@ -119,6 +122,8 @@ const PLAYER_GRACE_MS = 30_000;
 export interface RoomHubOptions {
   /** Pause before a bot seat moves (ms). */
   botDelayMs?: number;
+  /** Seed for a room's next game (defaults to a fresh generated seed). */
+  seedFor?: (roomId: string) => string;
 }
 
 export class RoomHub {
@@ -126,6 +131,7 @@ export class RoomHub {
   /** Pending bot-seat turns (roomId → timer). */
   private botTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private botDelayMs: number;
+  private seedFor: (roomId: string) => string;
   /** Which room a peer is currently in (peer.id → roomId). */
   private peerRoom = new Map<string, string>();
   /** Pending deletion timers for rooms that just went empty. */
@@ -140,6 +146,7 @@ export class RoomHub {
   constructor(options: RoomHubOptions = {}) {
     ensureGames();
     this.botDelayMs = options.botDelayMs ?? BOT_DELAY_MS;
+    this.seedFor = options.seedFor ?? (() => genId("seed"));
   }
 
   /** Cancel a player's reconnect-grace timer (they came back, or were removed). */
@@ -367,6 +374,7 @@ export class RoomHub {
       out.push({
         id,
         gameId: room.config.gameId,
+        variant: roomVariant(room.config),
         phase: room.phase,
         seated: members.filter((m) => m.seat !== null).length,
         spectators: members.filter((m) => m.spectator && m.connected).length,
@@ -396,6 +404,8 @@ export class RoomHub {
         return this.onStart(peer, msg);
       case "end":
         return this.onEnd(peer, msg);
+      case "configure":
+        return this.onConfigure(peer, msg);
       case "move":
         return this.onMove(peer, msg);
       case "chat":
@@ -613,7 +623,11 @@ export class RoomHub {
       added++;
     }
     players.sort((a, b) => a.seat - b.seat);
-    room.state = game.createInitialState(room.config.gameConfig, players, genId("seed"));
+    room.state = game.createInitialState(
+      room.config.gameConfig,
+      players,
+      this.seedFor(room.id),
+    );
     room.phase = "in-progress";
     room.startedAt = new Date().toISOString();
     // Fresh game → clear any prior end/grace markers.
@@ -623,6 +637,43 @@ export class RoomHub {
     this.snapshotSoon(room.id); // start persisting for restart-survival
     this.broadcastRoom(room);
     this.broadcastState(room);
+  }
+
+  /**
+   * Host changes the rule variant, bot difficulty or bot seats. Allowed in the
+   * lobby or between games (before a rematch); an in-progress game keeps its
+   * variant for the whole match.
+   */
+  private onConfigure(peer: WsPeer, msg: Extract<ClientMessage, { t: "configure" }>) {
+    const room = this.rooms.get(msg.roomId);
+    if (!room || room.hostClientId !== peer.id) return;
+    if (room.phase === "in-progress") {
+      return this.send(peer, {
+        t: "error",
+        message: "The rule variant can't change during a game",
+      });
+    }
+    const game = requireGame(room.config.gameId);
+    try {
+      const { config, difficulty } = resolveSetup(game, {
+        ...(room.config.gameConfig as Record<string, unknown>),
+        ...(msg.variant !== undefined ? { variant: msg.variant } : {}),
+        difficulty: msg.difficulty ?? room.config.difficulty,
+      });
+      room.config.gameConfig = config;
+      room.config.difficulty = difficulty;
+    } catch (e) {
+      if (e instanceof GameConfigError)
+        return this.send(peer, { t: "error", message: e.message });
+      throw e;
+    }
+    if (typeof msg.botSeats === "number") {
+      room.config.botSeats = Math.max(
+        0,
+        Math.min(Math.floor(msg.botSeats), room.config.maxPlayers - 1),
+      );
+    }
+    this.broadcastRoom(room);
   }
 
   private onEnd(peer: WsPeer, msg: Extract<ClientMessage, { t: "end" }>) {
@@ -815,6 +866,9 @@ export class RoomHub {
     return {
       id: this.roomId(room),
       gameId: room.config.gameId,
+      variant: roomVariant(room.config),
+      difficulty: room.config.difficulty ?? "normal",
+      botSeats: room.config.botSeats ?? 0,
       phase: room.phase,
       hostClientId: room.hostClientId,
       members: [...room.members.values()],
