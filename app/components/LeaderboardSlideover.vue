@@ -6,14 +6,9 @@
  * with the global ranking.
  */
 import type { LeaderboardScope } from "~/composables/useLeaderboard";
+import type { HistoryEntry, Standing } from "#shared/leaderboard";
 
 type Scope = "global" | LeaderboardScope;
-interface Row {
-  playerId: string;
-  playerName: string;
-  played: number;
-  wins: number;
-}
 
 const props = defineProps<{ gameId: string }>();
 const open = defineModel<boolean>("open", { default: false });
@@ -22,7 +17,7 @@ const scope = ref<Scope>("global");
 const localScope = computed<LeaderboardScope>(() =>
   scope.value === "global" ? "all" : scope.value,
 );
-const { rows: localRows } = useLeaderboard(
+const { rows: localRows, history: localHistory } = useLeaderboard(
   () => props.gameId,
   () => localScope.value,
 );
@@ -33,24 +28,30 @@ const { data: globalData } = await useAsyncData(
   () => `lb-${props.gameId}`,
   async () => {
     try {
-      const res = await $fetch<{ rows: Row[]; unavailable?: boolean }>(
-        `/api/leaderboard/${props.gameId}`,
-      );
+      const res = await $fetch<{
+        rows: Standing[];
+        history?: HistoryEntry[];
+        unavailable?: boolean;
+      }>(`/api/leaderboard/${props.gameId}`);
       globalUnavailable.value = !!res.unavailable;
-      return res.rows;
+      return { rows: res.rows, history: res.history ?? [] };
     } catch {
       globalUnavailable.value = true;
-      return [] as Row[];
+      return { rows: [] as Standing[], history: [] as HistoryEntry[] };
     }
   },
   { watch: [() => props.gameId, open], server: false, immediate: false },
 );
 
-const rows = computed<Row[]>(() =>
-  scope.value === "global" ? (globalData.value ?? []) : localRows.value,
+const rows = computed<Standing[]>(() =>
+  scope.value === "global" ? (globalData.value?.rows ?? []) : localRows.value,
+);
+const history = computed<HistoryEntry[]>(() =>
+  scope.value === "global" ? (globalData.value?.history ?? []) : localHistory.value,
 );
 const modalUi = useThemedModalUi();
-const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
+const { $ts } = useI18n();
+const t = (key: string, params?: Record<string, string | number>) => $ts(key, params);
 
 // `labelKey` resolves via $ts in the template so scope labels follow the locale.
 // The two local scopes are labelled "my games" / "my offline games" — calling
@@ -86,7 +87,7 @@ const scopes: { id: Scope; labelKey: string; icon: string }[] = [
           </UButton>
         </UFieldGroup>
 
-        <p class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs" :style="{ color: 'var(--games-text-muted)' }">
           {{
             scope === "global"
               ? $ts("leaderboard.globalCaption")
@@ -97,35 +98,24 @@ const scopes: { id: Scope; labelKey: string; icon: string }[] = [
         <p
           v-if="scope === 'global' && globalUnavailable"
           class="text-sm"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("leaderboard.globalUnavailable") }}
         </p>
         <p
           v-else-if="!rows.length"
           class="text-sm"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           {{ $ts("leaderboard.empty") }}
         </p>
-        <ol v-else class="space-y-0.5">
-          <li
-            v-for="(row, i) in rows"
-            :key="row.playerId"
-            class="flex items-center gap-3 py-2 border-b last:border-b-0"
-            :style="{ borderColor: 'var(--cg-border)' }"
-          >
-            <span class="w-7 text-center text-lg">{{ medal(i) }}</span>
-            <span class="flex-1 truncate font-medium">{{ row.playerName }}</span>
-            <span
-              class="text-sm whitespace-nowrap"
-              :style="{ color: 'var(--cg-text-muted)' }"
-            >
-              {{ $ts("leaderboard.wins", { count: row.wins }) }} ·
-              {{ $ts("leaderboard.played", { count: row.played }) }}
-            </span>
-          </li>
-        </ol>
+        <LeaderboardStandings v-else :game-id="gameId" :rows="rows" :t="t" />
+
+        <LeaderboardHistory
+          v-if="!(scope === 'global' && globalUnavailable)"
+          :entries="history"
+          :t="t"
+        />
       </div>
     </template>
   </USlideover>

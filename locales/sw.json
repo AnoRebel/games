@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "Michezo ya Karata",
-    "tagline": "Cheza michezo ya karata pamoja",
-    "subtitle": "Michezo ya karata inayoweza kubadilishwa, yenye wachezaji wengi mtandaoni na nje ya mtandao. Chagua mchezo ili kuunda au kujiunga na chumba."
+    "title": "Michezo",
+    "tagline": "Cheza michezo pamoja",
+    "subtitle": "Michezo ya karata na ya ubao, mtandaoni kwa wakati halisi na nje ya mtandao. Chagua mchezo ili kuunda au kujiunga na chumba."
   },
   "nav": {
     "games": "Michezo",
@@ -27,7 +27,8 @@
     "public": "Wazi",
     "private": "Faragha",
     "spectating": "Unatazama",
-    "noRules": "Hakuna sheria za mchezo huu bado."
+    "noRules": "Hakuna sheria za mchezo huu bado.",
+    "rulesMissing": "Sheria za mchezo huu bado hazipatikani kwa Kiswahili."
   },
   "daily": {
     "title": "Changamoto ya Kila Siku",
@@ -40,7 +41,7 @@
     "share": "Shiriki",
     "copyLink": "Nakili kiungo",
     "scanToJoin": "Skani ili kujiunga na mchezo",
-    "shareText": "Jiunge na mchezo wangu wa karata!",
+    "shareText": "Jiunge na mchezo wangu!",
     "playerLink": "Kiungo cha mchezaji",
     "spectatorLink": "Kiungo cha mtazamaji",
     "showQr": "Onyesha QR"
@@ -82,7 +83,13 @@
     "spectatorsUnlimited": "Hakuna kikomo",
     "spectatorsNone": "Hakuna",
     "persistRoom": "Weka chumba wazi",
-    "persistRoomHint": "Hubaki hai kikiwa tupu; vinginevyo hufungwa muda mfupi baada ya wote kuondoka."
+    "persistRoomHint": "Hubaki hai kikiwa tupu; vinginevyo hufungwa muda mfupi baada ya wote kuondoka.",
+    "variant": "Sheria",
+    "botSeats": "Viti vya roboti",
+    "botSeatsNone": "Hakuna — binadamu tu",
+    "diffEasyHelp": "Hucheza hatua yoyote halali — nzuri kwa kujifunza.",
+    "diffNormalHelp": "Huangalia hatua mbili mbele na hula pale ilipo salama.",
+    "diffHardHelp": "Hutafuta kwa kina zaidi na huadhibu makosa."
   },
   "room": {
     "aboutLinks": "Kuhusu viungo vya chumba",
@@ -101,7 +108,8 @@
     "endGame": "Maliza mchezo",
     "waitingForHost": "Kumsubiri mwenyeji…",
     "reconnecting": "Inaunganisha upya…",
-    "reconnectingBody": "Muunganisho umekatika — tunajaribu kurudi. Kiti chako kimehifadhiwa."
+    "reconnectingBody": "Muunganisho umekatika — tunajaribu kurudi. Kiti chako kimehifadhiwa.",
+    "botSeats": "Roboti: {count}"
   },
   "lobby": {
     "playOffline": "Cheza nje ya mtandao",
@@ -206,7 +214,9 @@
   "home": {
     "badge": "nje ya mtandao · mtandaoni · wakati halisi",
     "taglineLastCard": "Maliza karata zako kwanza — angalia karata za kitendo, na lie kadi yako ya mwisho!",
-    "taglineAlbastini": "Kuchukua mikono kwa Mchezo, kuotea, na Jike (7) hodari."
+    "taglineAlbastini": "Kuchukua mikono kwa Mchezo, kuotea, na Jike (7) hodari.",
+    "taglineBao": "Panda, endeleza na ule — mchezo mkuu wa ubao wa pwani ya Kiswahili.",
+    "taglineCheckers": "Drafti, ya Kiingereza au ya Kimataifa — ruka, kula mfululizo na upate wafalme."
   },
   "chat": {
     "title": "Gumzo",
@@ -229,7 +239,26 @@
     "scopeMine": "Michezo yangu",
     "scopeMineOffline": "Yangu nje ya mtandao",
     "globalCaption": "Michezo ya mtandaoni yenye viwango, inayoshirikiwa na wote.",
-    "localCaption": "Michezo iliyochezwa kwenye kifaa hiki pekee."
+    "localCaption": "Michezo iliyochezwa kwenye kifaa hiki pekee.",
+    "metricPenalty": "Hupangwa kwa ushindi, kisha adhabu ndogo zaidi",
+    "metricVp": "Hupangwa kwa ushindi, kisha alama za ushindi",
+    "metricWins": "Hupangwa kwa ushindi, kisha kiwango cha ushindi",
+    "wdl": "Ushindi {wins} · Sare {draws} · Kushindwa {losses}",
+    "history": "Michezo ya karibuni",
+    "noHistory": "Hakuna michezo iliyorekodiwa bado.",
+    "unknown": "Haijulikani",
+    "notApplicable": "Haihusiki",
+    "bot": "Roboti",
+    "tier": {
+      "new": "Mgeni",
+      "regular": "Mzoefu",
+      "veteran": "Mkongwe"
+    },
+    "result": {
+      "win": "Ushindi",
+      "draw": "Sare",
+      "loss": "Kushindwa"
+    }
   },
   "tutorial": {
     "offerTitle": "Mgeni hapa?",
@@ -243,13 +272,47 @@
     "upload": "Pakia",
     "uploaded": "Imepakiwa",
     "darkMode": "Hali ya giza",
-    "lightMode": "Hali ya mwanga"
+    "lightMode": "Hali ya mwanga",
+    "sceneHeading": "Mandhari ya michezo",
+    "sceneThemes": "Mandhari",
+    "scope": "Tumia kwa",
+    "allGames": "Michezo yote",
+    "thisGame": "{game} pekee",
+    "active": "Inatumika",
+    "edit": "Hariri {name}",
+    "delete": "Futa {name}",
+    "newTheme": "Mandhari mapya",
+    "name": "Jina la mandhari",
+    "previewMode": "Rangi za",
+    "previewTable": "Onyesho",
+    "save": "Hifadhi mandhari",
+    "unavailable": "Mandhari uliyochagua hayakupakiwa, kwa hiyo ya kawaida yanaonyeshwa.",
+    "roles": {
+      "surface": "Uso wa meza",
+      "boardLight": "Miraba / mashimo meupe",
+      "boardDark": "Miraba / mashimo meusi",
+      "cellBorder": "Ukingo wa ubao",
+      "ownPiece": "Kete zako",
+      "opponentPiece": "Kete za mpinzani",
+      "accent": "Rangi ya msisitizo",
+      "legal": "Hatua halali",
+      "capture": "Kula",
+      "lastMove": "Hatua ya mwisho",
+      "text": "Maandishi"
+    },
+    "errors": {
+      "nameEmpty": "Yape mandhari jina.",
+      "nameTaken": "Mandhari yenye jina hilo tayari yapo.",
+      "limit": "Unaweza kuweka hadi mandhari 20 — futa moja kwanza.",
+      "invalidColor": "{role} ({mode}) si rangi halali.",
+      "contrast": "{fg} juu ya {bg} ({mode}) hafifu mno: {ratio}:1, inahitaji {min}:1."
+    }
   },
   "pwa": {
     "offlineReady": "Tayari kucheza nje ya mtandao",
     "newVersion": "Toleo jipya linapatikana",
     "reload": "Pakia upya",
-    "installPrompt": "Sakinisha Card Games",
+    "installPrompt": "Sakinisha Michezo",
     "install": "Sakinisha"
   },
   "voice": {
@@ -264,5 +327,70 @@
     "micDenied": "Ruhusa ya maikrofoni imekataliwa.",
     "unsupported": "Mazungumzo ya sauti hayatumiki kwenye kivinjari hiki.",
     "inVoice": "{count} kwenye sauti"
+  },
+  "board": {
+    "zoomIn": "Kuza ubao kwa malengo makubwa zaidi",
+    "zoomOut": "Onyesha ubao mzima kwenye skrini",
+    "captureRequired": "Lazima ule — hatua za kula tu ndizo zinaruhusiwa",
+    "pickDirection": "Gusa shimo lenye mshale kuchagua mwelekeo wa kupanda",
+    "pickEntry": "Gusa kichwa kuchagua mahali kete ulizokula zinaingia",
+    "stopOrSafari": "Upandaji wako umeishia kwenye nyumba yako. Usimame hapa au uende safari?",
+    "stop": "Simama",
+    "safari": "Safari",
+    "chooseCapture": "Njia kadhaa za kula zinaishia hapa — chagua moja",
+    "spectating": "Unatazama — kusoma tu",
+    "baoBoard": "Ubao wa Bao",
+    "checkersBoard": "Ubao wa drafti",
+    "reserve": "Akiba {count}",
+    "phaseNamua": "Namua",
+    "phaseMtaji": "Mtaji",
+    "you": "Wewe",
+    "yourPit": "Shimo lako la {row} namba {n}",
+    "opponentPit": "Shimo la mpinzani la {row} namba {n}",
+    "frontRow": "safu ya mbele",
+    "backRow": "safu ya nyuma",
+    "seeds": "kete {count}",
+    "oneSeed": "kete 1",
+    "emptyPit": "tupu",
+    "nyumba": "nyumba",
+    "square": "Mraba {n}",
+    "lightSquare": "Mraba mweupe",
+    "yourMan": "kete yako",
+    "yourKing": "mfalme wako",
+    "opponentMan": "kete ya mpinzani",
+    "opponentKing": "mfalme wa mpinzani",
+    "darkMan": "kete nyeusi",
+    "darkKing": "mfalme mweusi",
+    "lightMan": "kete nyeupe",
+    "lightKing": "mfalme mweupe",
+    "emptySquare": "tupu",
+    "selectable": "inaweza kusogea",
+    "selected": "imechaguliwa",
+    "destination": "mahali halali",
+    "captureDestination": "mahali pa kula",
+    "landing": "njia ya kula",
+    "willCapture": "italiwa",
+    "lastMove": "hatua ya mwisho",
+    "directionTarget": "panda kuelekea huku",
+    "entryTarget": "kete ulizokula zinaingia hapa",
+    "announceSow": "{name} amepanda kutoka shimo {n}.",
+    "announceCapture": "{name} amekula kete {count}.",
+    "announceCaptureOne": "{name} amekula kete 1.",
+    "announceMove": "{name} amesogeza {move}.",
+    "announceJumps": "Kete {count} zimeliwa.",
+    "announcePromote": "Amepata mfalme.",
+    "announceYourTurn": "Zamu yako.",
+    "announceTheirTurn": "Zamu ya {name}.",
+    "draw": "Ni sare",
+    "scoredSeeds": "Kete zilizobaki mwishoni",
+    "scoredPieces": "Kete zilizobaki ubaoni"
+  },
+  "migration": {
+    "title": "Data yako iliyohifadhiwa inahitaji uangalizi",
+    "failed": "Hatukuweza bado kuhamisha matokeo, picha ulizopakia na michezo uliyohifadhi kwenda toleo jipya. Viko salama — jaribu tena.",
+    "quota": "Kivinjari chako kimejaa, kwa hiyo matokeo, picha na michezo iliyohifadhiwa havijahamishwa bado. Futa nafasi kisha ujaribu tena.",
+    "conflict": "Kivinjari hiki tayari kina data mpya ya michezo, kwa hiyo matokeo yako ya zamani hayakuunganishwa nayo. Data yako ya zamani imehifadhiwa salama.",
+    "retry": "Jaribu tena",
+    "keepCurrent": "Baki na data ya sasa"
   }
 }

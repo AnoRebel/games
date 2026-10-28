@@ -37,7 +37,7 @@ const handleRef = ref<HTMLElement | null>(null);
 const panelRef = ref<HTMLElement | null>(null);
 
 // Persisted panel position (bottom-right by default via initialValue).
-const stored = useLocalStorage("cg:chat-pos", { x: -1, y: -1 });
+const stored = useLocalStorage("games:chat-pos", { x: -1, y: -1 });
 const initial =
   import.meta.client && stored.value.x >= 0
     ? { x: stored.value.x, y: stored.value.y }
@@ -100,8 +100,8 @@ function time(iso: string) {
         :style="[
           positioned ? style : {},
           {
-            background: 'var(--cg-surface-solid)',
-            border: '1px solid var(--cg-border)',
+            background: 'var(--games-surface-solid)',
+            border: '1px solid var(--games-border)',
             width: '20rem',
             height: '24rem',
             minWidth: '14rem',
@@ -114,12 +114,12 @@ function time(iso: string) {
         <div
           ref="handleRef"
           class="flex items-center justify-between px-3 py-2 border-b text-sm font-semibold cursor-move select-none"
-          :style="{ borderColor: 'var(--cg-border)' }"
+          :style="{ borderColor: 'var(--games-border)' }"
         >
           <span class="flex items-center gap-1.5">
             <UIcon
               name="i-lucide-grip-horizontal"
-              :style="{ color: 'var(--cg-text-muted)' }"
+              :style="{ color: 'var(--games-text-muted)' }"
             />
             {{ $ts("chat.title") }}
           </span>
@@ -137,7 +137,7 @@ function time(iso: string) {
         <div
           v-if="isOnline"
           class="px-3 py-2 border-b space-y-2"
-          :style="{ borderColor: 'var(--cg-border)' }"
+          :style="{ borderColor: 'var(--games-border)' }"
         >
           <div class="flex items-center gap-1.5">
             <UButton
@@ -174,14 +174,14 @@ function time(iso: string) {
               <span
                 v-if="voice.state.value === 'connecting'"
                 class="text-xs"
-                :style="{ color: 'var(--cg-text-muted)' }"
+                :style="{ color: 'var(--games-text-muted)' }"
               >
                 {{ $ts("voice.connecting") }}
               </span>
               <span
                 v-else
                 class="text-xs ml-auto"
-                :style="{ color: 'var(--cg-text-muted)' }"
+                :style="{ color: 'var(--games-text-muted)' }"
               >
                 {{ $ts("voice.inVoice", { count: voice.peers.value.length + 1 }) }}
               </span>
@@ -206,7 +206,9 @@ function time(iso: string) {
                 class="inline-block w-2 h-2 rounded-full transition-all"
                 :class="p.speaking ? 'voice-pulse' : ''"
                 :style="{
-                  background: p.speaking ? 'var(--cg-accent)' : 'var(--cg-text-muted)',
+                  background: p.speaking
+                    ? 'var(--games-accent)'
+                    : 'var(--games-text-muted)',
                   opacity: p.speaking ? 1 : 0.4,
                 }"
                 :title="p.speaking ? $ts('voice.speaking') : ''"
@@ -214,7 +216,7 @@ function time(iso: string) {
               <UIcon
                 name="i-lucide-volume-2"
                 class="shrink-0"
-                :style="{ color: 'var(--cg-text-muted)' }"
+                :style="{ color: 'var(--games-text-muted)' }"
               />
               <span class="truncate">{{ p.name }}</span>
             </li>
@@ -226,13 +228,16 @@ function time(iso: string) {
           class="flex-1 overflow-y-auto p-3 space-y-1.5 text-sm"
           data-tour="chat"
         >
-          <p v-if="!session.chat.value.length" :style="{ color: 'var(--cg-text-muted)' }">
+          <p
+            v-if="!session.chat.value.length"
+            :style="{ color: 'var(--games-text-muted)' }"
+          >
             {{ $ts("chat.empty") }}
           </p>
           <div v-for="m in session.chat.value" :key="m.id" class="flex gap-2">
             <span
               class="text-xs shrink-0 tabular-nums"
-              :style="{ color: 'var(--cg-text-muted)' }"
+              :style="{ color: 'var(--games-text-muted)' }"
             >
               {{ time(m.at) }}
             </span>
@@ -244,7 +249,7 @@ function time(iso: string) {
 
         <form
           class="flex gap-1.5 p-2 border-t"
-          :style="{ borderColor: 'var(--cg-border)' }"
+          :style="{ borderColor: 'var(--games-border)' }"
           @submit.prevent="send"
         >
           <UInput
@@ -266,7 +271,7 @@ function time(iso: string) {
         <!-- visible resize affordance (the panel itself is CSS-resizable) -->
         <span
           class="pointer-events-none absolute bottom-1 right-1 opacity-50"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
           aria-hidden="true"
         >
           <UIcon name="i-lucide-move-diagonal-2" class="size-3.5" />
@@ -280,8 +285,8 @@ function time(iso: string) {
       type="button"
       class="fixed z-50 grid place-items-center w-12 h-12 rounded-full shadow-xl transition hover:scale-105"
       :style="{
-        background: 'var(--cg-accent)',
-        color: 'var(--cg-accent-contrast)',
+        background: 'var(--games-accent)',
+        color: 'var(--games-accent-contrast)',
         right: 'max(1rem, env(safe-area-inset-right))',
         bottom: 'max(1rem, env(safe-area-inset-bottom))',
       }"
@@ -317,11 +322,11 @@ function time(iso: string) {
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 var(--cg-accent);
+    box-shadow: 0 0 0 0 var(--games-accent);
   }
   50% {
     transform: scale(1.3);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cg-accent) 30%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--games-accent) 30%, transparent);
   }
 }
 </style>

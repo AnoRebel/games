@@ -31,10 +31,10 @@ export function avatarFor(id: string): string {
  * (shared across tabs, survives reload; used for reconnect & leaderboards).
  */
 export function usePlayerIdentity() {
-  const name = useLocalStorage("cg:player-name", "You");
-  const id = useLocalStorage("cg:player-id", "");
+  const name = useLocalStorage("games:player-name", "You");
+  const id = useLocalStorage("games:player-id", "");
   // '' = use the deterministic default from the id; a set value overrides it.
-  const avatarOverride = useLocalStorage("cg:player-avatar", "");
+  const avatarOverride = useLocalStorage("games:player-avatar", "");
   if (import.meta.client && !id.value) {
     // Generate a stable id once (client only; crypto is fine here — not engine).
     id.value =

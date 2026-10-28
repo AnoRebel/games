@@ -45,7 +45,7 @@ async function nativeShare() {
   track("share_link_copied", { kind: `native-${kind.value}` });
   try {
     await share({
-      title: props.title ?? "Card Games",
+      title: props.title ?? $ts("app.title"),
       text: $ts("invite.shareText"),
       url: activeUrl.value,
     });
@@ -85,7 +85,7 @@ async function nativeShare() {
           </UButton>
         </UFieldGroup>
 
-        <p class="text-xs font-medium" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs font-medium" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("invite.scanToJoin") }}
         </p>
         <!-- eslint-disable-next-line vue/no-v-html -- our own generated QR SVG, not user input -->

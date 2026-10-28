@@ -16,7 +16,7 @@ import {
   deckWithout,
   nextSeat,
   shuffle,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import {
   type AlbastiniConfig,
   HAND_SIZE,

@@ -16,7 +16,7 @@ import {
   seatOrder,
   shuffle,
   standardDeck,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { type LastCardConfig, cardPenaltyValue, defaultLastCardConfig } from "./config";
 import type { LastCardMove, LastCardState, PendingActionChain } from "./state";
 

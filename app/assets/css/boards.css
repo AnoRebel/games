@@ -1,0 +1,50 @@
+/*
+ * Shared board-game chrome: status banners and choice buttons used by the
+ * Bao and Checkers boards. Colours come from the scene roles, falling back to
+ * the app theme until a scene theme is applied.
+ */
+/* A board game's scene: the themed table surface behind the board. */
+.games-scene-surface {
+  background: var(--games-scene-felt, var(--games-scene-surface, var(--games-surface)));
+  color: var(--games-scene-text, var(--games-text));
+}
+/* Text placed on a scene surface (card tables and boards). */
+.games-scene-text {
+  color: color-mix(in oklch, var(--games-scene-text, white) 90%, transparent);
+}
+.games-scene-text-muted {
+  color: color-mix(in oklch, var(--games-scene-text, white) 68%, transparent);
+}
+.games-board-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--games-scene-text, var(--games-text));
+  background: var(--games-scene-surface, var(--games-surface));
+  border: 1px solid var(--games-scene-cell-border, var(--games-border));
+}
+.games-board-choices {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  text-align: center;
+  color: var(--games-scene-text, var(--games-text));
+}
+.games-board-choice {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 0.6rem;
+  font-weight: 700;
+  color: var(--games-accent-contrast);
+  background: var(--games-scene-accent, var(--games-accent));
+}
+.games-board-choice:focus-visible {
+  outline: 3px solid var(--games-scene-text, var(--games-text));
+  outline-offset: 2px;
+}

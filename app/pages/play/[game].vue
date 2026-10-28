@@ -3,8 +3,10 @@
  * Game lobby — offline (LocalTransport) and online (WsTransport) play, plus
  * online room creation with spectator visibility (public/locked).
  */
-import { getGame } from "@card-games/engine-core";
-import type { BaseGameState, BaseMove } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
+import type { BaseGameState, BaseMove, Difficulty } from "@games/engine-core";
+import type { OfflineStart, OnlineStart } from "~/utils/setupOptions";
+import { seatResult, type PlayDifficulty } from "#shared/leaderboard";
 import type { GameTransport } from "~/transports/types";
 import { WsTransport } from "~/transports/WsTransport";
 
@@ -60,8 +62,11 @@ const setupOpen = ref(false);
 const { today: daily, markPlayed: markDailyPlayed } = useDailyChallenge();
 const isDaily = ref(false);
 
-// Auto-open the setup modal when arriving with no active game and no shared room.
-onMounted(() => {
+// Auto-open the setup modal when arriving with no active game and no shared room
+// — once any older browser data has been moved over.
+const migration = useDataMigration();
+onMounted(async () => {
+  await migration.ready();
   if (transport.value || route.query.room || !meta.value) return;
   if (route.query.daily === "1" && daily.value.gameId === gameId.value) {
     isDaily.value = true;
@@ -75,11 +80,7 @@ onMounted(() => {
   setupOpen.value = true;
 });
 
-function onSetupOffline(cfg: {
-  totalPlayers: number;
-  humanCount: number;
-  config?: Record<string, unknown> | null;
-}) {
+function onSetupOffline(cfg: OfflineStart) {
   totalPlayers.value = cfg.totalPlayers;
   humanCount.value = cfg.humanCount;
   offlineConfig.value = cfg.config ?? null;
@@ -89,21 +90,17 @@ const onlineConfig = ref<Record<string, unknown> | null>(null);
 const onlineTurnTimeoutMs = ref<number | undefined>(undefined);
 const onlinePersist = ref<boolean | undefined>(undefined);
 const onlineMaxSpectators = ref<number | undefined>(undefined);
-function onSetupOnline(cfg: {
-  totalPlayers: number;
-  visibility: "public" | "locked";
-  customId?: string;
-  config?: Record<string, unknown> | null;
-  turnTimeoutMs?: number;
-  persist?: boolean;
-  maxSpectators?: number;
-}) {
+const onlineDifficulty = ref<Difficulty | undefined>(undefined);
+const onlineBotSeats = ref(0);
+function onSetupOnline(cfg: OnlineStart) {
   totalPlayers.value = cfg.totalPlayers;
   onlineVisibility.value = cfg.visibility;
   onlineConfig.value = cfg.config ?? null;
   onlineTurnTimeoutMs.value = cfg.turnTimeoutMs;
   onlinePersist.value = cfg.persist;
   onlineMaxSpectators.value = cfg.maxSpectators;
+  onlineDifficulty.value = cfg.difficulty;
+  onlineBotSeats.value = cfg.botSeats;
   createOnlineRoom(cfg.customId);
 }
 
@@ -127,34 +124,65 @@ function watchForResults(t: GameTransport) {
     });
     if (isDaily.value) markDailyPlayed(); // advance the daily streak
 
+    // Provenance comes from the match itself: its variant, and the bot
+    // strength if any seat was a bot (online: the room's settings).
+    const variant = (view.state as { variant?: unknown }).variant;
+    const room = wsTransport.value?.getRoomInfo();
+    const hasBots = players.some((p) => p.bot) || (room?.botSeats ?? 0) > 0;
+    const difficulty: PlayDifficulty = !hasBots
+      ? "none"
+      : t.mode === "local"
+        ? (t as unknown as { botDifficulty: PlayDifficulty }).botDifficulty
+        : (room?.difficulty ?? "normal");
     void recordResults(
       // Only record real humans — bots must never appear on the leaderboard.
       players
         .filter((p) => !p.bot)
-        .map((p) => ({
-          gameId: gameId.value,
-          playerId: p.id,
-          playerName: p.name,
-          won: scores.winners.includes(p.seat),
-          score: scores.bySeat[p.seat] ?? 0,
-          // higher-is-better metric: Last Card penalty is lower-better → negate.
-          rankMetric:
-            gameId.value === "last-card"
-              ? -(scores.bySeat[p.seat] ?? 0)
-              : (scores.victoryBySeat?.[p.seat] ?? scores.bySeat[p.seat] ?? 0),
-          playedAt: new Date().toISOString(),
-          matchId: key,
-          visibility:
-            t.mode === "local"
-              ? "offline"
-              : onlineVisibility.value === "locked"
-                ? "private"
-                : "public",
-        })),
+        .map((p) => {
+          const { won, drawn, score, rankMetric } = seatResult(
+            gameId.value,
+            scores,
+            p.seat,
+          );
+          return {
+            gameId: gameId.value,
+            playerId: p.id,
+            playerName: p.name,
+            won,
+            drawn,
+            score,
+            rankMetric,
+            playedAt: new Date().toISOString(),
+            matchId: key,
+            visibility:
+              t.mode === "local"
+                ? ("offline" as const)
+                : onlineVisibility.value === "locked"
+                  ? ("private" as const)
+                  : ("public" as const),
+            variant: typeof variant === "string" ? variant : null,
+            difficulty,
+          };
+        }),
     );
     off();
   });
 }
+
+// This viewer's scene theme (never shared with the room).
+const scene = useSceneTheme(gameId);
+
+// The live game's rule variant drives the rules panel and tutorial content.
+const activeVariant = ref<string | null>(null);
+watch(transport, (t, _old, onCleanup) => {
+  activeVariant.value = null;
+  if (!t) return;
+  const off = t.onChange((view) => {
+    const v = (view.state as { variant?: unknown } | undefined)?.variant;
+    activeVariant.value = typeof v === "string" ? v : null;
+  });
+  onCleanup(off);
+});
 
 // Event toasts: bound once in setup; the composable watches the transport ref
 // internally (so useToast/useI18n resolve in proper setup context).
@@ -245,6 +273,8 @@ async function createOnlineRoom(customId?: string) {
           turnTimeoutMs: onlineTurnTimeoutMs.value,
           persist: onlinePersist.value,
           maxSpectators: onlineMaxSpectators.value,
+          difficulty: onlineDifficulty.value,
+          botSeats: onlineBotSeats.value || undefined,
         },
       },
     );
@@ -403,7 +433,13 @@ const spectatorShareUrl = computed(() => {
         />
         <h1
           class="text-xl font-bold truncate"
-          :class="gameId === 'albastini' ? 'font-albastini italic' : 'font-last-card'"
+          :class="
+            gameId === 'albastini'
+              ? 'font-albastini italic'
+              : gameId === 'last-card'
+                ? 'font-last-card'
+                : 'font-display'
+          "
         >
           {{ title }}
         </h1>
@@ -459,10 +495,16 @@ const spectatorShareUrl = computed(() => {
       @update:open="banner = null"
     />
 
-    <!-- Live game -->
-    <div v-if="transport" class="space-y-3">
+    <!-- Live game, themed by this viewer's scene theme -->
+    <div
+      v-if="transport"
+      class="space-y-3 games-scene"
+      :style="scene.style.value"
+      :data-scene-theme="scene.resolved.value.id"
+    >
       <OnlineRoomBar
         v-if="wsTransport"
+        :game-id="gameId"
         :transport="wsTransport"
         :share-url="shareUrl"
         :spectator-url="spectatorShareUrl"
@@ -472,6 +514,26 @@ const spectatorShareUrl = computed(() => {
       <LastCardTable
         v-if="gameId === 'last-card'"
         :key="`lc-${transportRev}`"
+        :transport="transport as any"
+        :can-rematch="canRematch"
+        :share-url="wsTransport ? shareUrl : null"
+        @restart="restart"
+        @new-game="newGame"
+        @exit="quit"
+      />
+      <BaoTable
+        v-else-if="gameId === 'bao'"
+        :key="`bao-${transportRev}`"
+        :transport="transport as any"
+        :can-rematch="canRematch"
+        :share-url="wsTransport ? shareUrl : null"
+        @restart="restart"
+        @new-game="newGame"
+        @exit="quit"
+      />
+      <CheckersTable
+        v-else-if="gameId === 'checkers'"
+        :key="`ck-${transportRev}`"
         :transport="transport as any"
         :can-rematch="canRematch"
         :share-url="wsTransport ? shareUrl : null"
@@ -492,26 +554,28 @@ const spectatorShareUrl = computed(() => {
 
       <!-- Floating chat (renders fixed) -->
       <GameChat :transport="transport as any" :name="playerName" />
-      <GameTutorial ref="tutorialRef" :game-id="gameId" />
+      <GameTutorial ref="tutorialRef" :game-id="gameId" :variant="activeVariant" />
     </div>
 
     <!-- Idle: leaderboard preview + a prompt to set up (modal auto-opens) -->
     <div v-else-if="meta" class="space-y-3">
       <button
         type="button"
-        class="w-full cg-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
+        class="w-full games-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
         @click="setupOpen = true"
       >
-        <p class="text-3xl mb-1">🃏</p>
+        <p class="text-3xl mb-1">
+          {{ gameId === "bao" || gameId === "checkers" ? "🎲" : "🃏" }}
+        </p>
         <p class="font-display font-bold text-lg">{{ $ts("common.play") }} {{ title }}</p>
-        <p class="text-xs mt-1" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-xs mt-1" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("lobby.tapToSetUp") }}
         </p>
       </button>
       <!-- Join an existing online game by link, or room id + code -->
-      <div class="cg-surface rounded-2xl p-4 space-y-3">
+      <div class="games-surface rounded-2xl p-4 space-y-3">
         <p class="text-sm font-semibold flex items-center gap-1.5">
-          <UIcon name="i-lucide-link" :style="{ color: 'var(--cg-accent)' }" />
+          <UIcon name="i-lucide-link" :style="{ color: 'var(--games-accent)' }" />
           {{ $ts("lobby.joinExisting") }}
         </p>
         <UFormField :label="$ts('lobby.joinByLink')" size="sm">
@@ -525,11 +589,11 @@ const spectatorShareUrl = computed(() => {
         </UFormField>
         <div
           class="flex items-center gap-2 text-xs"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
-          <span class="flex-1 border-t" :style="{ borderColor: 'var(--cg-border)' }" />
+          <span class="flex-1 border-t" :style="{ borderColor: 'var(--games-border)' }" />
           {{ $ts("common.or") }}
-          <span class="flex-1 border-t" :style="{ borderColor: 'var(--cg-border)' }" />
+          <span class="flex-1 border-t" :style="{ borderColor: 'var(--games-border)' }" />
         </div>
         <div class="grid grid-cols-2 gap-2">
           <UFormField :label="$ts('lobby.roomId')" size="sm">
@@ -600,7 +664,12 @@ const spectatorShareUrl = computed(() => {
       @start-offline="onSetupOffline"
       @start-online="onSetupOnline"
     />
-    <GameRulesPanel v-if="meta" v-model:open="showRules" :game-id="gameId" />
+    <GameRulesPanel
+      v-if="meta"
+      v-model:open="showRules"
+      :game-id="gameId"
+      :variant="activeVariant"
+    />
     <LeaderboardSlideover v-if="meta" v-model:open="showLeaderboard" :game-id="gameId" />
 
     <!-- Passcode prompt for a private (locked) room -->
@@ -616,7 +685,7 @@ const spectatorShareUrl = computed(() => {
     >
       <template #body>
         <form class="space-y-3" @submit.prevent="submitCode">
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{
               codePrompt?.spectate
                 ? $ts("lobby.privateRoomWatch")

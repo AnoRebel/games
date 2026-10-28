@@ -1,5 +1,5 @@
 /**
- * Offline bot opponent. Deterministic (no Math.random — the app forbids ambient
+ * Card-game bot opponents (Last Card, Albastini). Deterministic (no Math.random — the app forbids ambient
  * RNG); any tie-break derives from state.version. Three difficulty levels drive
  * how much value-aware strategy is applied:
  *
@@ -16,11 +16,10 @@ import type {
   BaseGameState,
   BaseMove,
   Card,
+  Difficulty as BotDifficulty,
   GameModule,
   Seat,
-} from "@card-games/engine-core";
-
-export type BotDifficulty = "easy" | "normal" | "hard";
+} from "@games/engine-core";
 
 // ---- shared helpers --------------------------------------------------------
 
@@ -53,7 +52,7 @@ const abPoints = (c: Card) => AB_POINTS[c.rank] ?? 0;
 
 // ---- main ------------------------------------------------------------------
 
-export function chooseBotMove<S extends BaseGameState, M extends BaseMove, C>(
+export function chooseCardBotMove<S extends BaseGameState, M extends BaseMove, C>(
   game: GameModule<S, M, C>,
   state: S,
   seat: Seat,

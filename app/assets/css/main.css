@@ -3,6 +3,7 @@
 @import "@nuxt/ui";
 @import "./fonts.css";
 @import "./themes.css";
+@import "./boards.css";
 
 /* Tailwind v4 font theme tokens. Family names are written literally (not via
    indirection) so BOTH Tailwind and the @nuxt/fonts scanner detect them and

@@ -11,9 +11,13 @@
 import { TourGuideManager } from "v-tour-guide";
 import "v-tour-guide/style.css";
 
-const props = defineProps<{ gameId: string }>();
+const props = defineProps<{ gameId: string; variant?: string | null }>();
 
-const { tutorial } = useGameContent(props.gameId);
+// Follows the current variant, so a variant switch restarts with its own steps.
+const { tutorial } = useGameContent(
+  () => props.gameId,
+  () => props.variant,
+);
 
 // Only include steps whose target element is actually present, so v-tour-guide
 // never stalls on a missing anchor. Recomputed when the tour is launched.
@@ -31,7 +35,7 @@ const steps = computed(() =>
   tutorial.value
     .filter((s) => presentTargets.value.has(s.target))
     .map((s, i) => ({
-      id: `${props.gameId}-${i}`,
+      id: `${props.gameId}-${props.variant ?? "default"}-${i}`,
       title: s.title,
       content: s.content,
       target: s.target,
@@ -43,7 +47,7 @@ const manager = ref<{
   skipTourGuide: () => void;
 } | null>(null);
 
-const seen = useLocalStorage(`cg:tutorial-seen:${props.gameId}`, false);
+const seen = useLocalStorage(`games:tutorial-seen:${props.gameId}`, false);
 const showOffer = ref(false);
 
 onMounted(() => {

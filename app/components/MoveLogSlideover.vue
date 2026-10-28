@@ -34,8 +34,8 @@ watch(open, (o) => {
       type="button"
       class="fixed bottom-4 left-4 z-40 flex items-center gap-2 rounded-full pl-3 pr-4 py-2 shadow-xl transition hover:scale-105 max-w-[60vw]"
       :style="{
-        background: 'var(--cg-surface-solid)',
-        border: '1px solid var(--cg-border)',
+        background: 'var(--games-surface-solid)',
+        border: '1px solid var(--games-border)',
       }"
       :title="$ts('game.moves')"
       data-tour="moves"
@@ -45,7 +45,7 @@ watch(open, (o) => {
         <UIcon
           name="i-lucide-scroll-text"
           class="text-lg"
-          :style="{ color: 'var(--cg-accent)' }"
+          :style="{ color: 'var(--games-accent)' }"
         />
         <span
           v-if="unread"
@@ -56,7 +56,7 @@ watch(open, (o) => {
       </span>
       <span
         class="text-xs font-medium truncate"
-        :style="{ color: 'var(--cg-text-muted)' }"
+        :style="{ color: 'var(--games-text-muted)' }"
       >
         <template v-if="entries.length">
           {{ entries[0]?.who }} {{ entries[0]?.action }}
@@ -75,9 +75,9 @@ watch(open, (o) => {
           <UIcon
             name="i-lucide-scroll-text"
             class="text-3xl"
-            :style="{ color: 'var(--cg-text-muted)' }"
+            :style="{ color: 'var(--games-text-muted)' }"
           />
-          <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+          <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
             {{ $ts("game.noMoves") }}
           </p>
         </div>
@@ -89,23 +89,23 @@ watch(open, (o) => {
             :style="{
               background:
                 i === 0
-                  ? 'color-mix(in oklch, var(--cg-accent) 12%, transparent)'
-                  : 'var(--cg-surface)',
-              border: '1px solid var(--cg-border)',
+                  ? 'color-mix(in oklch, var(--games-accent) 12%, transparent)'
+                  : 'var(--games-surface)',
+              border: '1px solid var(--games-border)',
             }"
           >
             <span
               class="grid place-items-center size-8 shrink-0 rounded-full"
               :style="{
-                background: 'var(--cg-surface-solid)',
-                color: 'var(--cg-accent)',
+                background: 'var(--games-surface-solid)',
+                color: 'var(--games-accent)',
               }"
             >
               <UIcon :name="e.icon" class="size-4" />
             </span>
             <span class="flex-1 min-w-0 leading-tight">
               <span class="font-semibold block truncate">{{ e.who }}</span>
-              <span class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">{{
+              <span class="text-xs" :style="{ color: 'var(--games-text-muted)' }">{{
                 e.action
               }}</span>
             </span>
@@ -114,8 +114,8 @@ watch(open, (o) => {
               class="shrink-0 rounded-md px-2 py-1 text-sm font-bold tabular-nums"
               :class="suitColor(e.card)"
               :style="{
-                background: 'var(--cg-surface-solid)',
-                border: '1px solid var(--cg-border)',
+                background: 'var(--games-surface-solid)',
+                border: '1px solid var(--games-border)',
               }"
             >
               {{ e.card }}

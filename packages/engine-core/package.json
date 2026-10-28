@@ -1,5 +1,5 @@
 {
-  "name": "@card-games/engine-core",
+  "name": "@games/engine-core",
   "version": "0.1.0",
   "type": "module",
   "main": "./src/index.ts",

@@ -6,16 +6,11 @@
  * config MERGE that a bare `config ?? defaults` used to break.
  */
 import { describe, it, expect } from "vitest";
-import type {
-  BaseGameState,
-  BaseMove,
-  GameModule,
-  Player,
-} from "@card-games/engine-core";
-import { lastCardGame } from "@card-games/game-last-card";
-import { albastiniGame } from "@card-games/game-albastini";
+import type { BaseGameState, BaseMove, GameModule, Player } from "@games/engine-core";
+import { lastCardGame } from "@games/game-last-card";
+import { albastiniGame } from "@games/game-albastini";
 import { LocalTransport } from "../app/transports/LocalTransport";
-import type { BotDifficulty } from "../app/transports/bot";
+import type { BotDifficulty } from "@games/game-ai";
 
 function players(n: number, humanIds: string[] = []): Player[] {
   return Array.from({ length: n }, (_, i) => ({

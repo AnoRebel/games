@@ -1,4 +1,4 @@
-// @card-games/engine-core — public surface.
+// @games/engine-core — public surface.
 //
 // Pure, deterministic, framework-free. Imports no network, DOM, or UI code:
 // the whole package type-checks against packages/tsconfig.base.json, whose
@@ -48,6 +48,23 @@ export type {
 
 // Move application / validation / replay
 export { applyMove, replay, hasLegalMove } from "./apply";
+
+// Rule variants & difficulty tiers
+export {
+  type Difficulty,
+  type VariantMeta,
+  type ResolvedSetup,
+  DIFFICULTIES,
+  DEFAULT_DIFFICULTY,
+  GameConfigError,
+  supportedDifficulties,
+  defaultDifficulty,
+  defaultVariant,
+  resolveDifficulty,
+  resolveVariant,
+  resolveSetup,
+  variantName,
+} from "./variants";
 
 // Registry
 export { registerGame, getGame, requireGame, listGames, clearGames } from "./registry";

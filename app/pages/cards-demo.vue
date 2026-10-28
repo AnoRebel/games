@@ -3,7 +3,7 @@
  * Dev-only sanity page: renders all 52 faces, the themed back, hand and pile
  * layouts. Used to verify the presentation layer (task 3.6).
  */
-import { standardDeck, type Card } from "@card-games/engine-core";
+import { standardDeck, type Card } from "@games/engine-core";
 
 const deck = standardDeck();
 const sampleHand = deck.slice(0, 7);

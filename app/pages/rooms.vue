@@ -4,7 +4,7 @@
  * take a seat if the lobby still has room). Locked rooms never appear here.
  * Polls the room list so newly created rooms show up without a manual refresh.
  */
-import { getGame } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
 
 interface PublicRoomInfo {
   id: string;
@@ -69,7 +69,7 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
           square
         />
         <h1 class="text-xl font-bold flex items-center gap-2">
-          <UIcon name="i-lucide-radio" :style="{ color: 'var(--cg-accent)' }" />
+          <UIcon name="i-lucide-radio" :style="{ color: 'var(--games-accent)' }" />
           {{ $ts("lobby.browseRooms") }}
         </h1>
       </div>
@@ -85,13 +85,16 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
       />
     </div>
 
-    <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+    <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("lobby.browseRoomsHint") }}
     </p>
 
-    <div v-if="!rooms.length" class="cg-surface rounded-2xl p-10 text-center space-y-3">
+    <div
+      v-if="!rooms.length"
+      class="games-surface rounded-2xl p-10 text-center space-y-3"
+    >
       <p class="text-3xl">🪑</p>
-      <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+      <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
         {{ $ts("lobby.noPublicRooms") }}
       </p>
       <div class="flex flex-wrap justify-center gap-2 pt-1">
@@ -119,13 +122,13 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
       <li
         v-for="r in rooms"
         :key="r.id"
-        class="cg-surface rounded-xl p-3 flex items-center gap-3 flex-wrap"
+        class="games-surface rounded-xl p-3 flex items-center gap-3 flex-wrap"
       >
         <div class="min-w-0 flex-1">
           <p class="font-semibold truncate">{{ gameName(r.gameId) }}</p>
           <p
             class="text-xs flex flex-wrap items-center gap-x-3 gap-y-0.5"
-            :style="{ color: 'var(--cg-text-muted)' }"
+            :style="{ color: 'var(--games-text-muted)' }"
           >
             <span class="inline-flex items-center gap-1">
               <UIcon name="i-lucide-hash" /> {{ r.id }}
@@ -138,7 +141,7 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
             </span>
             <span
               class="inline-flex items-center gap-1 rounded-full px-2 py-0.5"
-              :style="{ background: 'var(--cg-surface-solid)' }"
+              :style="{ background: 'var(--games-surface-solid)' }"
             >
               {{ phaseLabel(r.phase) }}
             </span>

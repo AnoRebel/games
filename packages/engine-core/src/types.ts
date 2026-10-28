@@ -7,6 +7,7 @@
  */
 
 import type { RngState } from "./rng";
+import type { Difficulty, VariantMeta } from "./variants";
 
 /** A seat index at the table (0-based). */
 export type Seat = number;
@@ -64,8 +65,10 @@ export interface ScoreResult {
   bySeat: Record<Seat, number>;
   /** Optional victory points per seat (e.g. Albastini VP). */
   victoryBySeat?: Record<Seat, number>;
-  /** Seats that won (may be multiple on a tie; empty if undecided). */
+  /** Seats that won (may be multiple on a tie; empty if undecided or drawn). */
   winners: Seat[];
+  /** True when the game ended in a draw for every seat. */
+  drawn?: boolean;
 }
 
 /** Static, serializable metadata describing a game for the UI/registry. */
@@ -78,6 +81,17 @@ export interface GameMeta {
   maxPlayers: number;
   /** Player counts that are actually valid (e.g. Albastini: 2,3,4,6). */
   supportedPlayerCounts: number[];
+  /**
+   * Selectable rule variants. Omitted for games with a single ruleset; when
+   * present, config carries the chosen id as `variant`.
+   */
+  variants?: VariantMeta[];
+  /** Variant used when none is chosen (defaults to the first declared). */
+  defaultVariant?: string;
+  /** Bot difficulty tiers this game supports (all tiers when omitted). */
+  difficulties?: Difficulty[];
+  /** Tier used when none is chosen (`normal` when omitted). */
+  defaultDifficulty?: Difficulty;
 }
 
 /**

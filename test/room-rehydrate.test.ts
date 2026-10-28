@@ -16,8 +16,7 @@ vi.mock("../server/utils/db", () => ({
 }));
 
 const { RoomHub } = await import("../server/utils/roomHub");
-const { defaultLastCardConfig, lastCardGame } =
-  await import("@card-games/game-last-card");
+const { defaultLastCardConfig, lastCardGame } = await import("@games/game-last-card");
 
 function inProgressSnapshot(id: string, persist = false) {
   const gameConfig = defaultLastCardConfig();

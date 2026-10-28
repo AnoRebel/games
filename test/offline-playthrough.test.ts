@@ -1,12 +1,7 @@
 import { describe, it, expect } from "vitest";
-import type {
-  BaseGameState,
-  BaseMove,
-  GameModule,
-  Player,
-} from "@card-games/engine-core";
-import { lastCardGame, defaultLastCardConfig } from "@card-games/game-last-card";
-import { albastiniGame, defaultAlbastiniConfig } from "@card-games/game-albastini";
+import type { BaseGameState, BaseMove, GameModule, Player } from "@games/engine-core";
+import { lastCardGame, defaultLastCardConfig } from "@games/game-last-card";
+import { albastiniGame, defaultAlbastiniConfig } from "@games/game-albastini";
 import { LocalTransport } from "../app/transports/LocalTransport";
 
 // Drive an all-bot game to completion to prove offline play reaches terminal.

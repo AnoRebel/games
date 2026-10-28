@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "Card Games",
-    "tagline": "Play card games together",
-    "subtitle": "Modular, themeable card games with realtime online and local offline multiplayer. Pick a game to create or join a room."
+    "title": "Games",
+    "tagline": "Play games together",
+    "subtitle": "Card and board games with realtime online play and local offline multiplayer. Pick a game to create or join a room."
   },
   "nav": {
     "games": "Games",
@@ -27,7 +27,8 @@
     "public": "Public",
     "private": "Private",
     "spectating": "Spectating",
-    "noRules": "No rules available for this game yet."
+    "noRules": "No rules available for this game yet.",
+    "rulesMissing": "Rules for this game are not available in English yet."
   },
   "daily": {
     "title": "Daily Challenge",
@@ -40,7 +41,7 @@
     "share": "Share",
     "copyLink": "Copy link",
     "scanToJoin": "Scan to join the game",
-    "shareText": "Join my card game!",
+    "shareText": "Join my game!",
     "playerLink": "Player link",
     "spectatorLink": "Spectator link",
     "showQr": "Show QR"
@@ -82,7 +83,13 @@
     "spectatorsUnlimited": "No limit",
     "spectatorsNone": "None",
     "persistRoom": "Keep room open",
-    "persistRoomHint": "Stays alive when empty; otherwise it's closed shortly after everyone leaves."
+    "persistRoomHint": "Stays alive when empty; otherwise it's closed shortly after everyone leaves.",
+    "variant": "Rules",
+    "botSeats": "Bot seats",
+    "botSeatsNone": "None — humans only",
+    "diffEasyHelp": "Plays any legal move — good for learning.",
+    "diffNormalHelp": "Looks a couple of moves ahead and takes safe captures.",
+    "diffHardHelp": "Searches deeper and punishes mistakes."
   },
   "room": {
     "aboutLinks": "About room links",
@@ -101,7 +108,8 @@
     "endGame": "End the game",
     "waitingForHost": "Waiting for host…",
     "reconnecting": "Reconnecting…",
-    "reconnectingBody": "Connection lost — trying to rejoin. Your seat is held."
+    "reconnectingBody": "Connection lost — trying to rejoin. Your seat is held.",
+    "botSeats": "Bots: {count}"
   },
   "lobby": {
     "playOffline": "Play offline",
@@ -206,7 +214,9 @@
   "home": {
     "badge": "offline · online · realtime",
     "taglineLastCard": "Shed your hand first — mind the action cards, and call your last!",
-    "taglineAlbastini": "Trick-taking with trumps, otea bidding and the mighty Jike (7)."
+    "taglineAlbastini": "Trick-taking with trumps, otea bidding and the mighty Jike (7).",
+    "taglineBao": "Sow, relay and capture — the great board game of the Swahili coast.",
+    "taglineCheckers": "Drafti, English or International — jump, chain captures and crown your kings."
   },
   "chat": {
     "title": "Chat",
@@ -229,7 +239,26 @@
     "scopeMine": "My games",
     "scopeMineOffline": "My offline",
     "globalCaption": "Ranked online matches, shared by everyone.",
-    "localCaption": "Games played on this device only."
+    "localCaption": "Games played on this device only.",
+    "metricPenalty": "Ranked by wins, then lowest penalty",
+    "metricVp": "Ranked by wins, then victory points",
+    "metricWins": "Ranked by wins, then win rate",
+    "wdl": "{wins} W · {draws} D · {losses} L",
+    "history": "Recent plays",
+    "noHistory": "No plays recorded yet.",
+    "unknown": "Unknown",
+    "notApplicable": "N/A",
+    "bot": "Bot",
+    "tier": {
+      "new": "New",
+      "regular": "Regular",
+      "veteran": "Veteran"
+    },
+    "result": {
+      "win": "Win",
+      "draw": "Draw",
+      "loss": "Loss"
+    }
   },
   "tutorial": {
     "offerTitle": "New here?",
@@ -243,13 +272,47 @@
     "upload": "Upload",
     "uploaded": "Uploaded",
     "darkMode": "Dark mode",
-    "lightMode": "Light mode"
+    "lightMode": "Light mode",
+    "sceneHeading": "Game scenes",
+    "sceneThemes": "Scene themes",
+    "scope": "Apply to",
+    "allGames": "All games",
+    "thisGame": "{game} only",
+    "active": "In use",
+    "edit": "Edit {name}",
+    "delete": "Delete {name}",
+    "newTheme": "New scene theme",
+    "name": "Theme name",
+    "previewMode": "Colours for",
+    "previewTable": "Preview",
+    "save": "Save theme",
+    "unavailable": "Your chosen scene theme couldn't be loaded, so the default is showing.",
+    "roles": {
+      "surface": "Table surface",
+      "boardLight": "Light squares / pits",
+      "boardDark": "Dark squares / pits",
+      "cellBorder": "Board edge",
+      "ownPiece": "Your pieces / seeds",
+      "opponentPiece": "Opponent's pieces / seeds",
+      "accent": "Accent",
+      "legal": "Legal moves",
+      "capture": "Captures",
+      "lastMove": "Last move",
+      "text": "Text"
+    },
+    "errors": {
+      "nameEmpty": "Give the theme a name.",
+      "nameTaken": "A theme with that name already exists.",
+      "limit": "You can keep up to 20 scene themes — delete one first.",
+      "invalidColor": "{role} ({mode}) isn't a valid colour.",
+      "contrast": "{fg} on {bg} ({mode}) is too faint: {ratio}:1, needs {min}:1."
+    }
   },
   "pwa": {
     "offlineReady": "Ready to play offline",
     "newVersion": "A new version is available",
     "reload": "Reload",
-    "installPrompt": "Install Card Games",
+    "installPrompt": "Install Games",
     "install": "Install"
   },
   "voice": {
@@ -264,5 +327,70 @@
     "micDenied": "Microphone access was denied.",
     "unsupported": "Voice chat is not supported on this browser.",
     "inVoice": "{count} in voice"
+  },
+  "board": {
+    "zoomIn": "Zoom the board for bigger targets",
+    "zoomOut": "Fit the whole board on screen",
+    "captureRequired": "Capture required — only capturing moves are allowed",
+    "pickDirection": "Tap an arrow pit to choose the sowing direction",
+    "pickEntry": "Tap a kichwa to choose where the captured seeds enter",
+    "stopOrSafari": "Your sowing ended in your nyumba. Stop here or go on safari?",
+    "stop": "Stop",
+    "safari": "Safari",
+    "chooseCapture": "Several capture paths end here — choose one",
+    "spectating": "Spectating — read only",
+    "baoBoard": "Bao board",
+    "checkersBoard": "Checkers board",
+    "reserve": "Reserve {count}",
+    "phaseNamua": "Namua",
+    "phaseMtaji": "Mtaji",
+    "you": "You",
+    "yourPit": "Your {row} pit {n}",
+    "opponentPit": "Opponent's {row} pit {n}",
+    "frontRow": "front row",
+    "backRow": "back row",
+    "seeds": "{count} seeds",
+    "oneSeed": "1 seed",
+    "emptyPit": "empty",
+    "nyumba": "nyumba",
+    "square": "Square {n}",
+    "lightSquare": "Light square",
+    "yourMan": "your man",
+    "yourKing": "your king",
+    "opponentMan": "opponent's man",
+    "opponentKing": "opponent's king",
+    "darkMan": "dark man",
+    "darkKing": "dark king",
+    "lightMan": "light man",
+    "lightKing": "light king",
+    "emptySquare": "empty",
+    "selectable": "can move",
+    "selected": "selected",
+    "destination": "legal destination",
+    "captureDestination": "capture destination",
+    "landing": "capture path",
+    "willCapture": "will be captured",
+    "lastMove": "last move",
+    "directionTarget": "sow this way",
+    "entryTarget": "captured seeds enter here",
+    "announceSow": "{name} sowed from pit {n}.",
+    "announceCapture": "{name} captured {count} seeds.",
+    "announceCaptureOne": "{name} captured 1 seed.",
+    "announceMove": "{name} moved {move}.",
+    "announceJumps": "{count} pieces captured.",
+    "announcePromote": "Crowned a king.",
+    "announceYourTurn": "Your turn.",
+    "announceTheirTurn": "{name}'s turn.",
+    "draw": "It's a draw",
+    "scoredSeeds": "Seeds held at the end",
+    "scoredPieces": "Pieces left on the board"
+  },
+  "migration": {
+    "title": "Your saved data needs attention",
+    "failed": "We couldn't move your results, uploads and saved games to the new version yet. They are safe — try again.",
+    "quota": "Your browser is out of storage space, so your results, uploads and saved games couldn't be moved yet. Free some space and try again.",
+    "conflict": "This browser already has newer game data, so your older results weren't merged into it. Your older data is kept safely.",
+    "retry": "Try again",
+    "keepCurrent": "Keep current data"
   }
 }

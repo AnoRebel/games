@@ -5,7 +5,7 @@
  * Uses Nuxt's `useState` (SSR-safe shared state) rather than a module-level ref.
  */
 export function useSettingsPanel() {
-  const open = useState("cg:settings-open", () => false);
+  const open = useState("games:settings-open", () => false);
   return {
     open,
     show: () => (open.value = true),

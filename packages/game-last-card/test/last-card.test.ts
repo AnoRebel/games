@@ -7,7 +7,7 @@ import {
   type Card,
   type Player,
   type Seat,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import {
   lastCardGame,
   defaultLastCardConfig,

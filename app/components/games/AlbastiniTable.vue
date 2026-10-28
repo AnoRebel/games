@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
  * Albastini table — themed felt, gesture hand, trump + trick display, move log,
- * restart, anime.js. Trick-taking with otea bidding.
+ * restart, GSAP-driven motion. Trick-taking with otea bidding.
  */
-import { cardId, cardShort, type Card } from "@card-games/engine-core";
-import type { AlbastiniMove, AlbastiniState } from "@card-games/game-albastini";
+import { cardId, cardShort, type Card } from "@games/engine-core";
+import type { AlbastiniMove, AlbastiniState } from "@games/game-albastini";
 import type { GameTransport } from "~/transports/types";
 
 const props = defineProps<{
@@ -286,9 +286,9 @@ async function passBid() {
 </script>
 
 <template>
-  <div v-if="!hasState" class="cg-surface rounded-2xl p-10 text-center space-y-2">
+  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
-    <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+    <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
     </p>
   </div>
@@ -306,9 +306,9 @@ async function passBid() {
         :aria-current="ab.activeSeat === opp.seat ? 'true' : undefined"
         class="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition"
         :style="{
-          background: 'var(--cg-surface)',
-          border: '1px solid var(--cg-border)',
-          outline: ab.activeSeat === opp.seat ? '2px solid var(--cg-accent)' : 'none',
+          background: 'var(--games-surface)',
+          border: '1px solid var(--games-border)',
+          outline: ab.activeSeat === opp.seat ? '2px solid var(--games-accent)' : 'none',
         }"
         @click="showEaten = opp.seat"
       >
@@ -323,14 +323,14 @@ async function passBid() {
         </span>
         <span
           class="inline-flex items-center gap-0.5"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
           :title="$ts('game.cardsInHand', { count: handSize(opp.seat) })"
         >
           <UIcon name="i-lucide-layers" /> {{ handSize(opp.seat) }}
         </span>
         <span
           class="inline-flex items-center gap-0.5"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
           :title="$ts('game.cardsEaten', { count: eaten(opp.seat).length })"
         >
           <UIcon name="i-lucide-utensils" /> {{ eaten(opp.seat).length }}
@@ -341,12 +341,12 @@ async function passBid() {
     <!-- Felt table -->
     <div
       ref="tableRef"
-      class="relative rounded-2xl p-6 sm:p-10 cg-felt flex flex-col items-center gap-5 overflow-hidden min-h-[340px]"
+      class="relative rounded-2xl p-6 sm:p-10 games-felt flex flex-col items-center gap-5 overflow-hidden min-h-[340px]"
     >
       <div class="flex items-center justify-center gap-6 flex-wrap">
         <div
           ref="trumpRef"
-          class="flex items-center gap-2 text-white/90"
+          class="flex items-center gap-2 games-scene-text"
           data-tour="trump"
         >
           <span class="text-xs font-semibold uppercase tracking-wide">{{
@@ -359,7 +359,7 @@ async function passBid() {
         <div ref="stockRef" class="flex flex-col items-center gap-1" data-tour="stock">
           <CardPile :face-down="true" :count="stockCount" :width="48" />
           <span
-            class="text-[11px] font-medium text-white/80 inline-flex items-center gap-1"
+            class="text-[11px] font-medium games-scene-text inline-flex items-center gap-1"
           >
             <UIcon name="i-lucide-layers" />
             {{ $ts("game.deckCount", { count: stockCount }) }}
@@ -376,11 +376,14 @@ async function passBid() {
           class="flex flex-col items-center gap-1"
         >
           <PlayingCard :card="tp.card" :width="78" />
-          <span class="text-[11px] text-white/80">{{
+          <span class="text-[11px] games-scene-text">{{
             players.find((p) => p.seat === tp.seat)?.name
           }}</span>
         </div>
-        <p v-if="!ab.currentTrick.length" class="text-white/60 text-sm self-center">
+        <p
+          v-if="!ab.currentTrick.length"
+          class="games-scene-text-muted text-sm self-center"
+        >
           {{ $ts("game.noCardsYet") }}
         </p>
       </div>
@@ -390,11 +393,11 @@ async function passBid() {
     <div class="flex flex-col items-center gap-2">
       <span
         class="text-sm font-semibold rounded-full px-4 py-1.5"
-        :class="isMyTurn ? 'cg-turn-active' : ''"
+        :class="isMyTurn ? 'games-turn-active' : ''"
         :style="
           isMyTurn
-            ? { background: 'var(--cg-accent)', color: 'var(--cg-accent-contrast)' }
-            : { color: 'var(--cg-text-muted)' }
+            ? { background: 'var(--games-accent)', color: 'var(--games-accent-contrast)' }
+            : { color: 'var(--games-text-muted)' }
         "
       >
         <template v-if="ab.phase === 'bidding'">{{ $ts("game.bidding") }}</template>
@@ -415,7 +418,7 @@ async function passBid() {
     <!-- Your hand, with a live card count -->
     <div
       class="flex items-center justify-center gap-1.5 text-xs font-medium"
-      :style="{ color: 'var(--cg-text-muted)' }"
+      :style="{ color: 'var(--games-text-muted)' }"
     >
       <UIcon name="i-lucide-layers" />
       {{ $ts("game.cardsInHand", { count: myHand.length }) }}
@@ -434,7 +437,7 @@ async function passBid() {
       v-if="viewerSeat !== null && eaten(viewerSeat).length"
       type="button"
       data-tour="taken"
-      class="w-full cg-surface rounded-xl px-3 py-2 flex items-center justify-between text-sm"
+      class="w-full games-surface rounded-xl px-3 py-2 flex items-center justify-between text-sm"
       :title="`View the ${eaten(viewerSeat).length} cards you've eaten`"
       @click="showEaten = viewerSeat"
     >
@@ -451,7 +454,7 @@ async function passBid() {
         <span
           v-if="eaten(viewerSeat).length > 6"
           class="text-xs self-center ms-5"
-          :style="{ color: 'var(--cg-text-muted)' }"
+          :style="{ color: 'var(--games-text-muted)' }"
         >
           +{{ eaten(viewerSeat).length - 6 }}
         </span>
@@ -477,7 +480,7 @@ async function passBid() {
           <p
             v-if="!eaten(showEaten).length"
             class="text-sm"
-            :style="{ color: 'var(--cg-text-muted)' }"
+            :style="{ color: 'var(--games-text-muted)' }"
           >
             {{ $ts("game.noCardsEaten") }}
           </p>
@@ -505,20 +508,20 @@ async function passBid() {
 
 <style scoped>
 /* "Your turn" pill breathes with an accent halo so it reads as ACTIVE. */
-.cg-turn-active {
-  animation: cg-turn-pulse 1.8s ease-in-out infinite;
+.games-turn-active {
+  animation: games-turn-pulse 1.8s ease-in-out infinite;
 }
-@keyframes cg-turn-pulse {
+@keyframes games-turn-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--cg-accent) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--games-accent) 45%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 7px color-mix(in oklch, var(--cg-accent) 0%, transparent);
+    box-shadow: 0 0 0 7px color-mix(in oklch, var(--games-accent) 0%, transparent);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cg-turn-active {
+  .games-turn-active {
     animation: none;
   }
 }

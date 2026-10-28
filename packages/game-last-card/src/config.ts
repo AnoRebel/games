@@ -11,8 +11,8 @@
  * entry targets them.
  */
 
-import type { Card, Rank } from "@card-games/engine-core";
-import { isJoker } from "@card-games/engine-core";
+import type { Card, Rank } from "@games/engine-core";
+import { isJoker } from "@games/engine-core";
 
 export interface LastCardConfig {
   /** Cards dealt to each player at the start of a round. */

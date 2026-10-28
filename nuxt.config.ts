@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { siteConfig } from "./site.config.ts";
 
 /**
  * Automated version string, resolved ONCE at build time:
@@ -82,10 +83,9 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate",
     manifest: {
-      name: "Card Games — Last Card & Albastini",
-      short_name: "Card Games",
-      description:
-        "Play Last Card and Albastini — offline, on your local network, or online with friends.",
+      name: siteConfig.name,
+      short_name: siteConfig.shortName,
+      description: siteConfig.description,
       lang: "en",
       theme_color: "#1b3a2c",
       background_color: "#0f2419",
@@ -153,7 +153,8 @@ export default defineNuxtConfig({
         { name: "theme-color", content: "#1b3a2c" },
         { name: "apple-mobile-web-app-capable", content: "yes" },
         { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-        { name: "apple-mobile-web-app-title", content: "Card Games" },
+        { name: "apple-mobile-web-app-title", content: siteConfig.shortName },
+        { name: "description", content: siteConfig.description },
       ],
       link: [{ rel: "apple-touch-icon", href: "/apple-touch-icon-180x180.png" }],
       script: process.env.NUXT_RYBBIT_SITE_ID
@@ -179,7 +180,7 @@ export default defineNuxtConfig({
     translationDir: "locales",
     meta: true,
     // Remember the chosen locale across reloads.
-    localeCookie: "cg-locale",
+    localeCookie: "games-locale",
   },
 
   // Prettier owns formatting; keep ESLint focused on code-quality rules only.
@@ -240,9 +241,12 @@ export default defineNuxtConfig({
   // Transpile the workspace engine/game packages (shipped as TS source).
   build: {
     transpile: [
-      "@card-games/engine-core",
-      "@card-games/game-last-card",
-      "@card-games/game-albastini",
+      "@games/engine-core",
+      "@games/game-last-card",
+      "@games/game-albastini",
+      "@games/game-bao",
+      "@games/game-checkers",
+      "@games/game-ai",
     ],
   },
 

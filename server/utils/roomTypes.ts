@@ -5,7 +5,7 @@
  * it validates every move through the engine reducer and broadcasts redacted
  * state per recipient (no hidden-hand leaks).
  */
-import type { Seat } from "@card-games/engine-core";
+import type { Difficulty, Seat } from "@games/engine-core";
 
 export type SpectatorVisibility = "public" | "locked";
 
@@ -48,6 +48,13 @@ export interface RoomConfig {
    * A spectator joining past the cap is denied.
    */
   maxSpectators?: number;
+  /**
+   * Seats the server fills with bots when the game starts (after the seated
+   * humans). 0/undefined = humans only.
+   */
+  botSeats?: number;
+  /** Strength of bot-filled seats; never affects human seats. */
+  difficulty?: Difficulty;
 }
 
 /** Client → server messages. */
@@ -64,6 +71,14 @@ export type ClientMessage =
   | { t: "take-seat"; roomId: string; seat: Seat }
   | { t: "start"; roomId: string }
   | { t: "end"; roomId: string }
+  | {
+      /** Host changes rule variant / bot settings — lobby or after a game only. */
+      t: "configure";
+      roomId: string;
+      variant?: string;
+      difficulty?: Difficulty;
+      botSeats?: number;
+    }
   | { t: "move"; roomId: string; move: unknown }
   | { t: "chat"; roomId: string; body: string }
   | {
@@ -91,6 +106,8 @@ export type ServerMessage =
 export interface PublicRoomInfo {
   id: string;
   gameId: string;
+  /** Rule variant id, for games that have variants. */
+  variant: string | null;
   phase: RoomPhase;
   seated: number;
   spectators: number;
@@ -110,6 +127,12 @@ export interface ChatMessage {
 export interface RoomSnapshot {
   id: string;
   gameId: string;
+  /** Rule variant id, for games that have variants. */
+  variant: string | null;
+  /** Strength of bot-filled seats (only meaningful when botSeats > 0). */
+  difficulty: Difficulty;
+  /** Seats the server fills with bots at start. */
+  botSeats: number;
   phase: RoomPhase;
   hostClientId: string | null;
   members: RoomMember[];

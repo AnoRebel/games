@@ -9,13 +9,13 @@ const locales = computed(() => $getLocales());
 <template>
   <div
     class="min-h-dvh flex flex-col"
-    :style="{ background: 'var(--cg-bg)', color: 'var(--cg-text)' }"
+    :style="{ background: 'var(--games-bg)', color: 'var(--games-text)' }"
   >
     <header
       class="sticky top-0 z-40 border-b"
       :style="{
-        borderColor: 'var(--cg-border)',
-        background: 'color-mix(in oklch, var(--cg-bg) 82%, transparent)',
+        borderColor: 'var(--games-border)',
+        background: 'color-mix(in oklch, var(--games-bg) 82%, transparent)',
         backdropFilter: 'blur(10px)',
       }"
     >
@@ -25,7 +25,7 @@ const locales = computed(() => $getLocales());
           class="font-display font-bold tracking-tight inline-flex items-center gap-1.5"
         >
           <span class="text-lg leading-none">🂡</span>
-          <span class="hidden xs:inline">Card Games</span>
+          <span class="hidden xs:inline">{{ $ts("app.title") }}</span>
         </NuxtLink>
 
         <div class="flex items-center gap-0.5">
@@ -83,6 +83,7 @@ const locales = computed(() => $getLocales());
         paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
       }"
     >
+      <ClientOnly><DataMigrationNotice /></ClientOnly>
       <slot />
     </main>
 

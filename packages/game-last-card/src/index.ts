@@ -1,4 +1,4 @@
-// @card-games/game-last-card — Last Card game module.
+// @games/game-last-card — Last Card game module.
 
 import {
   type Card,
@@ -7,7 +7,7 @@ import {
   type ScoreResult,
   type Seat,
   registerGame,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { type LastCardConfig, defaultLastCardConfig } from "./config";
 import type { LastCardMove, LastCardState } from "./state";
 import { createInitialState, getLegalMoves, reducer } from "./rules";
@@ -59,6 +59,8 @@ export const lastCardGame: GameModule<LastCardState, LastCardMove, LastCardConfi
     minPlayers: 2,
     maxPlayers: 6,
     supportedPlayerCounts: [2, 3, 4, 5, 6],
+    difficulties: ["easy", "normal", "hard"],
+    defaultDifficulty: "normal",
   },
   defaultConfig: defaultLastCardConfig,
   createInitialState(config: LastCardConfig, players: Player[], seed) {

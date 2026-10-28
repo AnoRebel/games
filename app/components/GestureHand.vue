@@ -5,8 +5,8 @@
  * desktop. Built on @vueuse/gesture's useDrag.
  */
 import { useDrag } from "@vueuse/gesture";
-import type { Card } from "@card-games/engine-core";
-import { cardId, cardName } from "@card-games/engine-core";
+import type { Card } from "@games/engine-core";
+import { cardId, cardName } from "@games/engine-core";
 
 const props = withDefaults(
   defineProps<{
@@ -27,7 +27,7 @@ const emit = defineEmits<{ play: [card: Card] }>();
 const el = ref<HTMLElement | null>(null);
 const { width: containerW } = useElementSize(el);
 
-// Deal-in with anime.js: stagger every card on first render, and animate only
+// Deal-in via the shared animation helpers: stagger every card on first render, and animate only
 // the newly-arrived cards when the hand grows (a draw). cardId keys make this
 // stable across reorders.
 function dealCards(ids: string[]) {
@@ -159,7 +159,7 @@ defineExpose({ cardEl, rootEl });
         :ref="(n) => setCardRef(n as Element | null, card)"
         :data-card-id="cardId(card)"
         class="absolute bottom-0 touch-none transition-[filter,transform]"
-        :class="enabled && isPlayable(card) ? 'cg-playable' : ''"
+        :class="enabled && isPlayable(card) ? 'games-playable' : ''"
         :style="{
           left: `${i * step}px`,
           zIndex: getDrag(cardId(card)) ? 100 : i,
@@ -170,7 +170,7 @@ defineExpose({ cardEl, rootEl });
             ? 'none'
             : 'transform 0.25s cubic-bezier(0.22,1,0.36,1)',
           filter: getDrag(cardId(card))?.lifting
-            ? 'drop-shadow(0 0 0 2px var(--cg-accent))'
+            ? 'drop-shadow(0 0 0 2px var(--games-accent))'
             : undefined,
         }"
       >
@@ -189,7 +189,7 @@ defineExpose({ cardEl, rootEl });
     <span
       v-if="enabled"
       class="absolute -bottom-1 text-[10px] uppercase tracking-wider sm:hidden"
-      :style="{ color: 'var(--cg-text-muted)' }"
+      :style="{ color: 'var(--games-text-muted)' }"
     >
       {{ $ts("game.swipeHint") }}
     </span>
@@ -200,17 +200,17 @@ defineExpose({ cardEl, rootEl });
 /* On your turn, playable cards lift slightly and gain an accent underglow so
    the eye goes straight to legal moves (unplayable cards are dimmed by
    PlayingCard). */
-.cg-playable {
+.games-playable {
   transform: translateY(-6px);
 }
-.cg-playable :deep(.cg-card) {
+.games-playable :deep(.games-card) {
   box-shadow:
-    0 0 0 2px color-mix(in oklch, var(--cg-accent) 60%, transparent),
-    0 6px 14px -4px color-mix(in oklch, var(--cg-accent) 40%, transparent);
+    0 0 0 2px color-mix(in oklch, var(--games-accent) 60%, transparent),
+    0 6px 14px -4px color-mix(in oklch, var(--games-accent) 40%, transparent);
   border-radius: 7%;
 }
 @media (prefers-reduced-motion: reduce) {
-  .cg-playable {
+  .games-playable {
     transform: none;
   }
 }

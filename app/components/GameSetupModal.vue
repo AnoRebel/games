@@ -1,27 +1,27 @@
 <script setup lang="ts">
 /**
- * Game setup modal — pick offline vs online, players, spectator visibility.
- * Emits `start` with the chosen config. Used from the home cards and the play
- * route so there's no dedicated setup page.
+ * Game setup modal — pick offline vs online, players, rule variant, bot
+ * difficulty and spectator visibility. Variants and difficulty tiers come from
+ * the game's declared metadata, identically for offline and online play.
+ * Used from the home cards and the play route so there's no dedicated setup page.
  */
-import { getGame } from "@card-games/engine-core";
+import { getGame } from "@games/engine-core";
+import {
+  type OfflineStart,
+  type OnlineStart,
+  type SetupSelection,
+  hasBots,
+  offlineStart,
+  onlineStart,
+  setupDefaults,
+} from "~/utils/setupOptions";
 
 const props = defineProps<{ gameId: string }>();
 const open = defineModel<boolean>("open", { default: false });
 type SetupConfig = Record<string, unknown> | null;
 const emit = defineEmits<{
-  startOffline: [{ totalPlayers: number; humanCount: number; config?: SetupConfig }];
-  startOnline: [
-    {
-      totalPlayers: number;
-      visibility: "public" | "locked";
-      customId?: string;
-      config?: SetupConfig;
-      turnTimeoutMs?: number;
-      persist?: boolean;
-      maxSpectators?: number;
-    },
-  ];
+  startOffline: [OfflineStart];
+  startOnline: [OnlineStart];
 }>();
 
 const { $ts } = useI18n();
@@ -42,9 +42,20 @@ const persist = ref(false);
 // Cap on concurrent spectators. -1 = none allowed, 0 = unlimited, n>0 = cap.
 const maxSpectators = ref(0);
 
-// --- Rule-variant options (per game). These map straight onto the engine
-// config; unset knobs fall back to the game's defaultConfig(). ------------
-const difficulty = ref<"easy" | "normal" | "hard">("normal");
+// Declared rule variant + bot difficulty (defaults from the game's metadata).
+const selection = ref<SetupSelection>(setupDefaults(null));
+// Seats the server fills with bots in an online room.
+const botSeats = ref(0);
+const withBots = computed(() =>
+  hasBots(mode.value, {
+    totalPlayers: totalPlayers.value,
+    humanCount: humanCount.value,
+    botSeats: botSeats.value,
+  }),
+);
+
+// --- Per-game options. These map straight onto the engine config; unset
+// knobs fall back to the game's defaultConfig(). ---------------------------
 // Last Card
 const lcRounds = ref(1);
 const lcHandSize = ref(7);
@@ -100,40 +111,56 @@ watch(
   meta,
   (m) => {
     if (m) totalPlayers.value = m.supportedPlayerCounts[0] ?? 2;
+    selection.value = setupDefaults(m);
   },
   { immediate: true },
 );
 watch(totalPlayers, (n) => {
   if (humanCount.value > n) humanCount.value = n;
+  if (botSeats.value > n - 1) botSeats.value = Math.max(0, n - 1);
 });
 
 const title = computed(() => meta.value?.name ?? "Game");
+// Online rooms always have options; offline only games with extra knobs do.
+const hasOptions = computed(
+  () =>
+    mode.value === "online" ||
+    props.gameId === "last-card" ||
+    props.gameId === "albastini",
+);
 const modalUi = useThemedModalUi();
 
 function start() {
   open.value = false;
   const config = buildConfig();
-  // Difficulty rides on the config for offline bot policy (ignored online).
-  const withDifficulty = config
-    ? { ...config, difficulty: difficulty.value }
-    : { difficulty: difficulty.value };
   if (mode.value === "offline") {
-    emit("startOffline", {
-      totalPlayers: totalPlayers.value,
-      humanCount: humanCount.value,
-      config: withDifficulty,
-    });
+    emit(
+      "startOffline",
+      offlineStart(
+        { totalPlayers: totalPlayers.value, humanCount: humanCount.value },
+        config,
+        selection.value,
+      ),
+    );
   } else {
-    emit("startOnline", {
-      totalPlayers: totalPlayers.value,
-      visibility: visibility.value,
-      customId: customId.value.trim() || undefined,
-      config,
-      turnTimeoutMs: turnTimeoutSec.value > 0 ? turnTimeoutSec.value * 1000 : undefined,
-      persist: persist.value || undefined,
-      // 0 = unlimited (omit); -1 = none; n>0 = cap.
-      maxSpectators: maxSpectators.value !== 0 ? maxSpectators.value : undefined,
-    });
+    emit(
+      "startOnline",
+      onlineStart(
+        {
+          totalPlayers: totalPlayers.value,
+          visibility: visibility.value,
+          customId: customId.value.trim() || undefined,
+          botSeats: botSeats.value,
+          turnTimeoutMs:
+            turnTimeoutSec.value > 0 ? turnTimeoutSec.value * 1000 : undefined,
+          persist: persist.value || undefined,
+          // 0 = unlimited (omit); -1 = none; n>0 = cap.
+          maxSpectators: maxSpectators.value !== 0 ? maxSpectators.value : undefined,
+        },
+        config,
+        selection.value,
+      ),
+    );
   }
 }
 </script>
@@ -192,6 +219,7 @@ function start() {
             <USelect
               v-model="visibility"
               size="sm"
+              class="w-full min-w-0"
               :items="[
                 { label: $ts('lobby.spectatorPublic'), value: 'public' },
                 { label: $ts('lobby.spectatorLocked'), value: 'locked' },
@@ -199,6 +227,35 @@ function start() {
             />
           </UFormField>
         </div>
+
+        <UFormField
+          v-if="mode === 'online' && totalPlayers > 1"
+          :label="$ts('setup.botSeats')"
+          :hint="$ts('common.optional')"
+          size="sm"
+        >
+          <USelect
+            v-model="botSeats"
+            size="sm"
+            class="w-full"
+            data-testid="bot-seats-select"
+            :items="
+              Array.from({ length: totalPlayers }, (_, i) => ({
+                label: i === 0 ? $ts('setup.botSeatsNone') : `${i}`,
+                value: i,
+              }))
+            "
+          />
+        </UFormField>
+
+        <!-- Rule variant + bot difficulty, read from the game's declaration -->
+        <GameVariantFields
+          v-model:variant="selection.variant"
+          v-model:difficulty="selection.difficulty"
+          :game-id="gameId"
+          :with-bots="withBots"
+          :t="$ts"
+        />
 
         <UFormField
           v-if="mode === 'online'"
@@ -215,8 +272,12 @@ function start() {
           />
         </UFormField>
 
-        <!-- Game options (rule variants) — collapsible to keep the modal calm -->
-        <div class="rounded-lg" :style="{ border: '1px solid var(--cg-border)' }">
+        <!-- Game options — collapsible to keep the modal calm -->
+        <div
+          v-if="hasOptions"
+          class="rounded-lg"
+          :style="{ border: '1px solid var(--games-border)' }"
+        >
           <button
             type="button"
             class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium"
@@ -233,30 +294,12 @@ function start() {
           </button>
           <div
             v-if="showOptions"
-            class="px-3 pb-3 space-y-3 border-t"
-            :style="{ borderColor: 'var(--cg-border)' }"
+            class="px-3 pt-3 pb-3 space-y-3 border-t"
+            :style="{ borderColor: 'var(--games-border)' }"
           >
-            <!-- Difficulty (offline only) -->
-            <UFormField
-              v-if="mode === 'offline'"
-              :label="$ts('setup.difficulty')"
-              size="sm"
-              class="pt-3"
-            >
-              <USelect
-                v-model="difficulty"
-                size="sm"
-                :items="[
-                  { label: $ts('setup.diffEasy'), value: 'easy' },
-                  { label: $ts('setup.diffNormal'), value: 'normal' },
-                  { label: $ts('setup.diffHard'), value: 'hard' },
-                ]"
-              />
-            </UFormField>
-
             <!-- Online-only room options -->
             <template v-if="mode === 'online'">
-              <div class="grid grid-cols-2 gap-3 pt-3">
+              <div class="grid grid-cols-2 gap-3">
                 <UFormField :label="$ts('setup.turnTimer')" size="sm">
                   <USelect
                     v-model="turnTimeoutSec"
@@ -286,7 +329,10 @@ function start() {
                 <USwitch v-model="persist" size="sm" class="mt-0.5" />
                 <span class="text-sm">
                   {{ $ts("setup.persistRoom") }}
-                  <span class="block text-xs" :style="{ color: 'var(--cg-text-muted)' }">
+                  <span
+                    class="block text-xs"
+                    :style="{ color: 'var(--games-text-muted)' }"
+                  >
                     {{ $ts("setup.persistRoomHint") }}
                   </span>
                 </span>
@@ -336,7 +382,7 @@ function start() {
 
             <!-- Albastini options -->
             <template v-else-if="gameId === 'albastini'">
-              <UFormField :label="$ts('setup.teamMode')" size="sm" class="pt-1">
+              <UFormField :label="$ts('setup.teamMode')" size="sm">
                 <USelect v-model="abTeamMode" size="sm" :items="teamModeItems" />
               </UFormField>
               <div class="grid grid-cols-2 gap-3">

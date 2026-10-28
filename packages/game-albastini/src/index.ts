@@ -1,11 +1,11 @@
-// @card-games/game-albastini — Albastini game module.
+// @games/game-albastini — Albastini game module.
 
 import {
   type GameModule,
   type Player,
   type Seat,
   registerGame,
-} from "@card-games/engine-core";
+} from "@games/engine-core";
 import { type AlbastiniConfig, SUPPORTED_COUNTS, defaultAlbastiniConfig } from "./config";
 import type { AlbastiniMove, AlbastiniState } from "./state";
 import { createInitialState, getLegalMoves, getScores, reducer } from "./rules";
@@ -43,6 +43,8 @@ export const albastiniGame: GameModule<AlbastiniState, AlbastiniMove, AlbastiniC
     minPlayers: 2,
     maxPlayers: 6,
     supportedPlayerCounts: SUPPORTED_COUNTS,
+    difficulties: ["easy", "normal", "hard"],
+    defaultDifficulty: "normal",
   },
   defaultConfig: defaultAlbastiniConfig,
   createInitialState(config: AlbastiniConfig, players: Player[], seed) {

@@ -5,8 +5,8 @@
  * Backs render the active themed image. Compositor-friendly hover/selected
  * transforms only (transform/opacity), honouring reduced motion.
  */
-import type { Card, Suit } from "@card-games/engine-core";
-import { isJoker } from "@card-games/engine-core";
+import type { Card, Suit } from "@games/engine-core";
+import { isJoker } from "@games/engine-core";
 
 const props = withDefaults(
   defineProps<{
@@ -80,12 +80,12 @@ function onActivate() {
 <template>
   <component
     :is="selectable ? 'button' : 'div'"
-    class="cg-card relative shrink-0 rounded-[7%] select-none"
+    class="games-card relative shrink-0 rounded-[7%] select-none"
     :class="[
       selectable && !disabled ? 'cursor-pointer' : '',
-      selected ? 'cg-card--selected' : '',
-      disabled ? 'cg-card--disabled' : '',
-      reduced === 'reduce' ? 'cg-card--no-motion' : '',
+      selected ? 'games-card--selected' : '',
+      disabled ? 'games-card--disabled' : '',
+      reduced === 'reduce' ? 'games-card--no-motion' : '',
     ]"
     :style="{ width: `${width}px`, height: `${height}px` }"
     :type="selectable ? 'button' : undefined"
@@ -146,20 +146,20 @@ function onActivate() {
 </template>
 
 <style scoped>
-.cg-card {
+.games-card {
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
   will-change: transform;
 }
-.cg-card:not(.cg-card--no-motion):hover {
+.games-card:not(.games-card--no-motion):hover {
   transform: translateY(-8px);
 }
-.cg-card--selected {
+.games-card--selected {
   transform: translateY(-14px);
   box-shadow: 0 0 0 3px var(--ui-primary, #3b82f6);
 }
-.cg-card--no-motion {
+.games-card--no-motion {
   transition: none;
 }
 
@@ -176,11 +176,11 @@ function onActivate() {
  * red suit stops drawing the eye. Hover-lift is suppressed too — a card that
  * cannot be played should not feel interactive.
  */
-.cg-card--disabled {
+.games-card--disabled {
   filter: grayscale(0.85) brightness(0.62) contrast(0.9);
   opacity: 0.85;
 }
-.cg-card--disabled:hover {
+.games-card--disabled:hover {
   transform: none;
 }
 </style>

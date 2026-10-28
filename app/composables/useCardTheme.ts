@@ -45,8 +45,8 @@ export const BUILTIN_BACKGROUNDS: TableBackground[] = [
 
 export function useCardTheme() {
   // Selected ids persist in localStorage (small scalar prefs, shared across tabs).
-  const cardBackId = useLocalStorage("cg:card-back", "classic");
-  const backgroundId = useLocalStorage("cg:background", "felt-green");
+  const cardBackId = useLocalStorage("games:card-back", "classic");
+  const backgroundId = useLocalStorage("games:background", "felt-green");
 
   // Uploaded assets live in Dexie (blobs); merged in client-side only.
   const uploads = import.meta.client ? useThemeUploads() : null;

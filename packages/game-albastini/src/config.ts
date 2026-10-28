@@ -5,7 +5,7 @@
  * Ace > 7 > King > Jack > Queen > 6 > 5 > 4 > 3. Point values total 120.
  */
 
-import type { Rank } from "@card-games/engine-core";
+import type { Rank } from "@games/engine-core";
 
 export type TeamMode = "individual" | "teams-of-two" | "teams-of-three";
 

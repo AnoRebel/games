@@ -6,7 +6,7 @@
  * Both offer rematch / new game / exit. Rematch keeps the same room/setup; new
  * game returns to setup; exit leaves to the lobby.
  */
-import type { Player, ScoreResult, Seat } from "@card-games/engine-core";
+import type { Player, ScoreResult, Seat } from "@games/engine-core";
 
 const props = defineProps<{
   scores: ScoreResult | null;
@@ -26,8 +26,21 @@ const emit = defineEmits<{ rematch: []; newGame: []; exit: [] }>();
 const modalUi = useThemedModalUi();
 
 // Albastini ranks by victory points (higher better); Last Card by penalty
-// (lower better). Use victoryBySeat when present, else raw score.
+// (lower better); the board games show seeds / pieces left (higher better).
+// Use victoryBySeat when present, else raw score.
 const useVp = computed(() => !!props.scores?.victoryBySeat);
+const boardGame = computed(() => props.gameId === "bao" || props.gameId === "checkers");
+const higherBetter = computed(() => useVp.value || boardGame.value);
+const scoredLabel = computed(() =>
+  useVp.value
+    ? "game.scoredVp"
+    : props.gameId === "bao"
+      ? "board.scoredSeeds"
+      : props.gameId === "checkers"
+        ? "board.scoredPieces"
+        : "game.scoredPenalty",
+);
+const drawn = computed(() => !!props.scores?.drawn);
 const rows = computed(() => {
   const s = props.scores;
   if (!s) return [];
@@ -40,7 +53,7 @@ const rows = computed(() => {
       won: s.winners.includes(p.seat),
       you: p.seat === props.viewerSeat,
     }))
-    .sort((a, b) => (useVp.value ? b.score - a.score : a.score - b.score));
+    .sort((a, b) => (higherBetter.value ? b.score - a.score : a.score - b.score));
 });
 const medal = (i: number) => ["🥇", "🥈", "🥉"][i] ?? `${i + 1}`;
 const youWon = computed(
@@ -66,7 +79,7 @@ const winnerNames = computed(() =>
         <p class="font-display text-lg font-bold">
           {{ $ts("game.endedByHost", { name: endedBy || $ts("game.theHost") }) }}
         </p>
-        <p class="text-sm" :style="{ color: 'var(--cg-text-muted)' }">
+        <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
           {{ $ts("game.endedByHostBody") }}
         </p>
       </div>
@@ -75,14 +88,20 @@ const winnerNames = computed(() =>
       <div v-else class="space-y-4">
         <!-- Headline -->
         <div class="text-center space-y-1">
-          <p class="text-4xl">{{ youWon ? "🏆" : "🎴" }}</p>
+          <p class="text-4xl">
+            {{ youWon ? "🏆" : drawn ? "🤝" : boardGame ? "🏁" : "🎴" }}
+          </p>
           <p class="font-display text-lg font-bold">
             {{
-              youWon ? $ts("game.youWin") : $ts("game.wins", { name: winnerNames || "—" })
+              drawn
+                ? $ts("board.draw")
+                : youWon
+                  ? $ts("game.youWin")
+                  : $ts("game.wins", { name: winnerNames || "—" })
             }}
           </p>
-          <p class="text-xs" :style="{ color: 'var(--cg-text-muted)' }">
-            {{ useVp ? $ts("game.scoredVp") : $ts("game.scoredPenalty") }}
+          <p class="text-xs" :style="{ color: 'var(--games-text-muted)' }">
+            {{ $ts(scoredLabel) }}
           </p>
         </div>
 
@@ -94,11 +113,11 @@ const winnerNames = computed(() =>
             class="flex items-center gap-3 rounded-lg px-3 py-2"
             :style="{
               background: row.won
-                ? 'color-mix(in oklch, var(--cg-accent) 16%, transparent)'
-                : 'var(--cg-surface)',
+                ? 'color-mix(in oklch, var(--games-accent) 16%, transparent)'
+                : 'var(--games-surface)',
               border: row.won
-                ? '1px solid var(--cg-accent)'
-                : '1px solid var(--cg-border)',
+                ? '1px solid var(--games-accent)'
+                : '1px solid var(--games-border)',
             }"
           >
             <span class="w-7 text-center text-lg">{{ medal(i) }}</span>
@@ -107,14 +126,14 @@ const winnerNames = computed(() =>
               <span
                 v-if="row.you"
                 class="text-xs"
-                :style="{ color: 'var(--cg-text-muted)' }"
+                :style="{ color: 'var(--games-text-muted)' }"
               >
                 ({{ $ts("game.you") }})
               </span>
             </span>
             <span
               class="text-lg font-bold tabular-nums"
-              :style="{ color: row.won ? 'var(--cg-accent)' : 'var(--cg-text)' }"
+              :style="{ color: row.won ? 'var(--games-accent)' : 'var(--games-text)' }"
             >
               {{ row.score }}
             </span>

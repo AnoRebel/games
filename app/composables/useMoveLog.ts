@@ -2,7 +2,7 @@
  * Derives a structured move log from successive game states. The engine doesn't
  * emit events, so we diff key fields between renders and append entries.
  */
-import type { BaseGameState } from "@card-games/engine-core";
+import type { BaseGameState } from "@games/engine-core";
 
 export interface LogEntry {
   id: number;
