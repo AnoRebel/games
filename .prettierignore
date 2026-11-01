@@ -1,4 +1,6 @@
 # Generated / vendored
+app/vendor
+app/assets/css/vendor
 .nuxt
 .output
 .data
