@@ -1,14 +1,12 @@
 /**
- * `:ui` overrides so @nuxt/ui overlays (UModal / USlideover) adopt the active
- * app theme (--games-* tokens) instead of the default neutral surface.
+ * `:ui` overrides for @nuxt/ui overlays (UModal / USlideover). The material
+ * look itself comes from app.config.ts; this keeps header and footer rules on
+ * the material's subtle divider and the title in its display face.
  */
 export function useThemedModalUi() {
   return {
-    content:
-      "bg-[var(--games-surface-solid)] text-[var(--games-text)] ring-1 ring-[var(--games-border)] divide-[var(--games-border)]",
-    header: "border-b border-[var(--games-border)]",
-    footer: "border-t border-[var(--games-border)]",
-    title: "text-[var(--games-text)] font-display",
-    overlay: "bg-black/60",
+    header: "border-b border-[var(--border-subtle)]",
+    footer: "border-t border-[var(--border-subtle)]",
+    title: "text-[var(--content-primary)] font-display",
   };
 }

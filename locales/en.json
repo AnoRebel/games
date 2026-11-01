@@ -6,7 +6,8 @@
   },
   "nav": {
     "games": "Games",
-    "allGames": "All games"
+    "allGames": "All games",
+    "primary": "Main"
   },
   "common": {
     "play": "Play",
@@ -392,5 +393,87 @@
     "conflict": "This browser already has newer game data, so your older results weren't merged into it. Your older data is kept safely.",
     "retry": "Try again",
     "keepCurrent": "Keep current data"
+  },
+  "appearance": {
+    "customize": "Customize",
+    "customizeHint": "Material, layout, contrast and glass",
+    "intro": "Choose how the interface looks and feels. Game tables keep their own scene theme.",
+    "material": "Material",
+    "materials": {
+      "refraction": {
+        "name": "Refraction",
+        "hint": "Frosted glass chrome"
+      },
+      "tactile": {
+        "name": "Tactile",
+        "hint": "Ink borders, keys that press"
+      },
+      "signal": {
+        "name": "Signal",
+        "hint": "Machined, mono figures"
+      },
+      "folio": {
+        "name": "Folio",
+        "hint": "Flat and dense"
+      },
+      "bloom": {
+        "name": "Bloom",
+        "hint": "Soft, round, tonal"
+      },
+      "hybrid": {
+        "name": "Hybrid",
+        "hint": "Glass with ink controls"
+      }
+    },
+    "layout": "Layout",
+    "platform": "Platform style",
+    "platformHint": "Changes type, control size, corners and focus rings. Layout and colours stay the same.",
+    "platforms": {
+      "web": "Web",
+      "ios": "iOS",
+      "android": "Android",
+      "windows": "Windows",
+      "macos": "macOS"
+    },
+    "matchDevice": "Match this device",
+    "matched": "Matched this device: {platform}.",
+    "density": "Density",
+    "densities": {
+      "compact": "Compact",
+      "comfortable": "Comfortable",
+      "spacious": "Spacious"
+    },
+    "colour": "Colour",
+    "mode": "Mode",
+    "modes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "highContrast": "High contrast",
+    "highContrastHint": "Strongest text and borders, no translucency",
+    "glass": "Glass",
+    "frost": "Frost",
+    "frostHint": "Blur what the glass covers",
+    "rim": "Rim light",
+    "rimHint": "A bright top edge on glass",
+    "refraction": "Refraction",
+    "refractionHint": "Bend light at the glass rim",
+    "refractionUnavailable": "Live refraction needs a Chromium browser. Glass stays frosted here.",
+    "reduceTransparency": "Reduce transparency",
+    "reduceTransparencyHint": "Opaque surfaces, no blur or refraction",
+    "noGlass": "{material} has no translucent glass, so there is nothing to tune here.",
+    "reset": "Reset",
+    "done": "Done"
+  },
+  "settings": {
+    "motion": "Motion",
+    "rich": "Rich",
+    "subtle": "Subtle",
+    "cardsTable": "Cards & table",
+    "notifications": "Notifications",
+    "sound": "Sound",
+    "tableStyle": "Table style",
+    "tableStyleHint": "The felt behind card games and the default board colours."
   }
 }

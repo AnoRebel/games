@@ -41,7 +41,7 @@ async function onUpload(e: Event, kind: "card-back" | "background") {
           v-for="b in allBacks"
           :key="b.id"
           type="button"
-          class="rounded-lg overflow-hidden ring-2 transition w-14 h-20"
+          class="rounded-[var(--radius-md)] overflow-hidden ring-2 transition w-14 h-20"
           :class="
             cardBackId === b.id ? 'ring-primary' : 'ring-transparent hover:ring-default'
           "
@@ -72,7 +72,7 @@ async function onUpload(e: Event, kind: "card-back" | "background") {
           v-for="bg in backgrounds"
           :key="bg.id"
           type="button"
-          class="rounded-lg ring-2 transition w-20 h-14"
+          class="rounded-[var(--radius-md)] ring-2 transition w-20 h-14"
           :class="
             backgroundId === bg.id
               ? 'ring-primary'

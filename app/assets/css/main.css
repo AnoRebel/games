@@ -1,31 +1,26 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@nuxt/ui";
+@import "./vendor/crystal-neuo/tokens.css";
+@import "./vendor/crystal-neuo/components.css" layer(components);
+@import "./crystal-neuo.css";
 @import "./fonts.css";
 @import "./themes.css";
 @import "./boards.css";
 
-/* Tailwind v4 font theme tokens. Family names are written literally (not via
-   indirection) so BOTH Tailwind and the @nuxt/fonts scanner detect them and
-   the module generates local @font-face rules from /public/fonts.
-     font-sans → Inter · font-display → Bricolage Grotesque
+/* Tailwind v4 theme tokens. font-sans and font-display follow the Crystal
+   Neuo material (crystal-neuo.css re-points them); the game faces are fixed.
      font-last-card → Outfit · font-albastini → Fraunces */
 @theme {
   --breakpoint-xs: 24rem;
-  --font-sans:
-    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-last-card: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-display: ui-sans-serif, system-ui, sans-serif;
+  --font-last-card: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-albastini: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
 }
 
 :root {
   --card-aspect: 0.715; /* standard playing-card width/height ratio */
-}
-
-/* Base typography: Inter for body. */
-body {
-  font-family: var(--font-sans);
 }
 
 /* Pointer cursor on every interactive surface (Tailwind/Reka reset some to

@@ -286,7 +286,10 @@ async function passBid() {
 </script>
 
 <template>
-  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
+  <div
+    v-if="!hasState"
+    class="games-surface rounded-[var(--radius-xl)] p-10 text-center space-y-2"
+  >
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
     <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
@@ -341,7 +344,7 @@ async function passBid() {
     <!-- Felt table -->
     <div
       ref="tableRef"
-      class="relative rounded-2xl p-6 sm:p-10 games-felt flex flex-col items-center gap-5 overflow-hidden min-h-[340px]"
+      class="relative rounded-[var(--radius-xl)] p-6 sm:p-10 games-felt flex flex-col items-center gap-5 overflow-hidden min-h-[340px]"
     >
       <div class="flex items-center justify-center gap-6 flex-wrap">
         <div
@@ -437,7 +440,7 @@ async function passBid() {
       v-if="viewerSeat !== null && eaten(viewerSeat).length"
       type="button"
       data-tour="taken"
-      class="w-full games-surface rounded-xl px-3 py-2 flex items-center justify-between text-sm"
+      class="w-full games-surface rounded-[var(--radius-lg)] px-3 py-2 flex items-center justify-between text-sm"
       :title="`View the ${eaten(viewerSeat).length} cards you've eaten`"
       @click="showEaten = viewerSeat"
     >

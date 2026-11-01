@@ -221,20 +221,22 @@ defineExpose({ cellSize, zoomed, toggleZoom, focusCell: moveFocus, cellEl });
 </template>
 
 <style scoped>
+/* An interface control floating on the scene: material surface and ink. */
 .games-board-zoom {
   min-width: 44px;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.6rem;
-  color: var(--games-scene-text, var(--games-text));
-  background: var(--games-surface);
-  border: 1px solid var(--games-border);
+  border-radius: var(--radius-md);
+  color: var(--content-primary);
+  background: var(--surface-raised-1);
+  border: var(--border-width-default) solid var(--border-default);
+  box-shadow: var(--shadow-sm);
 }
 .games-board-zoom:focus-visible {
-  outline: 2px solid var(--games-accent);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 .games-board-frame {
   max-width: 100%;

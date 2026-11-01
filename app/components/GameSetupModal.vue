@@ -275,7 +275,7 @@ function start() {
         <!-- Game options — collapsible to keep the modal calm -->
         <div
           v-if="hasOptions"
-          class="rounded-lg"
+          class="rounded-[var(--radius-md)]"
           :style="{ border: '1px solid var(--games-border)' }"
         >
           <button

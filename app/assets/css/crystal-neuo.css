@@ -1,0 +1,176 @@
+/*
+ * Crystal Neuo in the app.
+ *
+ * The design system (assets/css/vendor/crystal-neuo, see scripts/
+ * sync-crystal-neuo.ts) owns the interface: palette, type, corners, borders,
+ * shadows, glass, motion, control sizes and spacing. Players choose a
+ * material, platform style, density, contrast and glass settings in
+ * Customize; each is an attribute on <html> and every token below follows it.
+ *
+ * This file connects the rest of the app to those tokens:
+ *  - Nuxt UI's --ui-* variables, so every UButton, UModal, UInput… takes the
+ *    material's colours, corners and type;
+ *  - the app's own chrome tokens (--games-bg, --games-text, --games-accent…);
+ *  - Tailwind's spacing step, so density reaches every gap and padding.
+ *
+ * Game scenes (card tables and boards) keep their own scene palettes
+ * (--games-scene-*, see themes.css): those are the game's look, not the UI's.
+ *
+ * Re-declared on every axis attribute so a scoped subtree (a Folio panel on
+ * a Bloom page) recomputes them from its own tokens.
+ */
+:root,
+[data-material],
+[data-platform],
+[data-theme],
+[data-density] {
+  /* Nuxt UI — neutrals and text. */
+  --ui-bg: var(--surface-app);
+  --ui-bg-muted: var(--surface-raised-2);
+  --ui-bg-elevated: var(--surface-raised);
+  --ui-bg-accented: var(--surface-raised-3);
+  --ui-bg-inverted: var(--content-primary);
+  --ui-text-dimmed: var(--content-tertiary);
+  --ui-text-muted: var(--content-secondary);
+  --ui-text-toned: var(--content-secondary);
+  --ui-text: var(--content-primary);
+  --ui-text-highlighted: var(--content-primary);
+  --ui-text-inverted: var(--surface-app);
+  --ui-border: var(--border-default);
+  --ui-border-muted: var(--border-subtle);
+  --ui-border-accented: var(--border-strong);
+  --ui-border-inverted: var(--content-primary);
+
+  /* Nuxt UI — colours. */
+  --ui-primary: var(--accent-primary-base);
+  --ui-secondary: var(--accent-secondary-base);
+  --ui-success: var(--state-success-base);
+  --ui-info: var(--accent-primary-subtle);
+  --ui-warning: var(--state-warning-base);
+  --ui-error: var(--state-danger-base);
+
+  /* Nuxt UI derives every corner from --ui-radius (rounded-md = 1.5×), so
+     anchoring it to the material's medium radius scales all of them. */
+  --ui-radius: calc(var(--radius-md) / 1.5);
+
+  /* Density scales every Tailwind gap and padding (comfortable = 1). */
+  --spacing: calc(0.25rem * var(--density-scale));
+
+  /* Interface faces. */
+  --font-sans: var(--font-family-ui);
+  --font-display: var(--font-family-display);
+  --font-mono: var(--font-family-mono);
+
+  /* App chrome tokens, used across pages and panels. */
+  --games-bg: var(--surface-app);
+  --games-bg-2: var(--surface-raised-2);
+  --games-surface: var(--surface-raised-1);
+  --games-surface-solid: var(--surface-overlay);
+  --games-border: var(--border-default);
+  --games-text: var(--content-primary);
+  --games-text-muted: var(--content-secondary);
+  --games-accent: var(--accent-primary-base);
+  --games-accent-contrast: var(--content-on-accent);
+  --games-radius: var(--radius-lg);
+}
+
+body {
+  background: var(--surface-app);
+  color: var(--content-primary);
+  font-family: var(--font-family-ui);
+  font-size: var(--type-body-base);
+  line-height: var(--leading-normal);
+  transition:
+    background-color var(--motion-duration-base) var(--motion-easing-standard),
+    color var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+/* A subtree that changes an axis takes its own ink and interface face. */
+:where(body [data-theme], body [data-material], body [data-platform]) {
+  color: var(--content-primary);
+  font-family: var(--font-family-ui);
+}
+
+/* Headings use the material's display face and tracking; sizes and spacing
+   stay with the page's utility classes. */
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-family-display);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+/* One focus indicator everywhere, sized by the platform style. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+::selection {
+  background: var(--accent-primary-soft);
+  color: var(--content-primary);
+}
+
+/* Figures (scores, counts, timers): the material's numeric face. */
+.cn-num {
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+}
+
+/* Micro-label: uppercase and tracked in materials that use that voice. */
+.cn-label {
+  font-size: var(--type-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: var(--type-label-transform);
+  color: var(--content-secondary);
+}
+
+/* Material surfaces for app content. */
+.games-panel {
+  background: var(--surface-raised-1);
+  color: var(--content-primary);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.games-panel--interactive {
+  transition:
+    transform var(--motion-duration-base) var(--motion-easing-spring),
+    box-shadow var(--motion-duration-base) var(--motion-easing-standard),
+    border-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+@media (hover: hover) {
+  .games-panel--interactive:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+.games-panel--interactive:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Control heights from the platform style and density, never below the
+   platform's touch target. */
+.games-control {
+  min-height: max(var(--size-control-md), var(--platform-touch-min));
+}
+.games-control-sm {
+  min-height: max(var(--size-control-sm), var(--platform-touch-min));
+}
+.games-control-lg {
+  min-height: max(var(--size-control-lg), var(--platform-touch-min));
+}
+
+/* Overlays: dialogs and slideovers sit on the opaque overlay surface. */
+.games-overlay {
+  background: var(--surface-overlay);
+  color: var(--content-primary);
+  border: var(--border-width-default) solid var(--border-glass-rim);
+  box-shadow: var(--shadow-lg);
+}
+.games-scrim {
+  background: var(--surface-scrim);
+}

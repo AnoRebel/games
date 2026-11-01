@@ -91,7 +91,7 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
 
     <div
       v-if="!rooms.length"
-      class="games-surface rounded-2xl p-10 text-center space-y-3"
+      class="games-surface rounded-[var(--radius-xl)] p-10 text-center space-y-3"
     >
       <p class="text-3xl">🪑</p>
       <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
@@ -122,7 +122,7 @@ const hasSeat = (r: PublicRoomInfo) => r.phase === "lobby" && r.seated < r.maxPl
       <li
         v-for="r in rooms"
         :key="r.id"
-        class="games-surface rounded-xl p-3 flex items-center gap-3 flex-wrap"
+        class="games-surface rounded-[var(--radius-lg)] p-3 flex items-center gap-3 flex-wrap"
       >
         <div class="min-w-0 flex-1">
           <p class="font-semibold truncate">{{ gameName(r.gameId) }}</p>

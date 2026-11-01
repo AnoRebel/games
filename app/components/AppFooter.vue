@@ -22,12 +22,7 @@ onMounted(() => {
 <template>
   <footer class="mt-6 mb-4 flex justify-center px-3">
     <div
-      class="games-credit group relative inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm select-none"
-      :style="{
-        background: 'var(--games-surface)',
-        border: '1px solid var(--games-border)',
-        backdropFilter: 'blur(8px)',
-      }"
+      class="games-credit cn-glass group relative inline-flex items-center gap-2.5 px-4 py-2 text-sm select-none"
     >
       <!-- floating suit pips -->
       <span ref="pipsRef" class="flex items-center gap-1 text-[13px]" aria-hidden="true">
@@ -36,7 +31,9 @@ onMounted(() => {
           :key="s"
           data-pip
           class="inline-block"
-          :style="{ color: i % 2 ? 'oklch(0.7 0.2 25)' : 'var(--games-text-muted)' }"
+          :style="{
+            color: i % 2 ? 'var(--state-danger-content)' : 'var(--content-secondary)',
+          }"
           >{{ s }}</span
         >
       </span>
@@ -47,10 +44,10 @@ onMounted(() => {
 
       <!-- shimmering name → links to the source -->
       <a
-        href="https://github.com/AnoRebel/card_games"
+        href="https://github.com/AnoRebel/games"
         target="_blank"
         rel="noopener noreferrer"
-        class="games-name font-display font-bold tracking-tight transition-transform group-hover:scale-105"
+        class="games-name font-display font-bold tracking-tight no-underline transition-transform group-hover:scale-105"
       >
         Ano Rebel
       </a>
@@ -74,22 +71,23 @@ onMounted(() => {
 
 <style scoped>
 .games-credit {
+  border-radius: var(--radius-round);
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.25s;
+    transform var(--motion-duration-base) var(--motion-easing-spring),
+    box-shadow var(--motion-duration-base) var(--motion-easing-standard);
 }
 .games-credit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--games-accent) 50%, transparent);
+  box-shadow: var(--shadow-md);
 }
 
 /* Animated accent-gradient shimmer on the name. */
 .games-name {
   background-image: linear-gradient(
     100deg,
-    var(--games-accent) 0%,
-    color-mix(in oklch, var(--games-accent) 55%, white) 45%,
-    var(--games-accent) 90%
+    var(--accent-primary-subtle) 0%,
+    color-mix(in oklch, var(--accent-primary-subtle) 55%, var(--surface-app)) 45%,
+    var(--accent-primary-subtle) 90%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
