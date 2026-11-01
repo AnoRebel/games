@@ -205,7 +205,10 @@ watch(
       .filter((r): r is DOMRect => !!r);
     void popCapture(ghosts);
     await slidePiece(pieceEl(to), from, via);
-    if (move.promotes) promotePiece(pieceEl(to)?.querySelector(".crown"));
+    if (move.promotes) {
+      const piece = pieceEl(to);
+      promotePiece(piece?.querySelector(".crown"), piece);
+    }
   },
   { flush: "post" },
 );
@@ -358,17 +361,43 @@ defineExpose({ selected });
     0 2px 4px rgb(0 0 0 / 0.35);
 }
 .checkers-piece.is-own {
-  background: var(--games-scene-own-piece, oklch(0.95 0.02 90));
+  --piece-face: var(--games-scene-own-piece, oklch(0.95 0.02 90));
+  background: var(--piece-face);
   color: var(--games-scene-opponent-piece, oklch(0.25 0.02 30));
 }
 .checkers-piece.is-opponent {
-  background: var(--games-scene-opponent-piece, oklch(0.32 0.08 30));
+  --piece-face: var(--games-scene-opponent-piece, oklch(0.32 0.08 30));
+  background: var(--piece-face);
   color: var(--games-scene-own-piece, oklch(0.95 0.02 90));
 }
+/* A king is a stacked pair: a second disc shows beneath it, a gold rim
+   rings it and a large crown sits on top, so it reads at a glance and
+   without relying on colour. */
+.checkers-piece.is-king {
+  box-shadow:
+    inset 0 -3px 0 rgb(0 0 0 / 0.25),
+    0 3px 0 -1px color-mix(in oklch, currentColor 35%, var(--piece-face)),
+    0 6px 0 -1px var(--piece-face),
+    0 7px 6px rgb(0 0 0 / 0.4);
+}
+.checkers-piece.is-king::before {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border-radius: inherit;
+  border: 2px solid var(--games-scene-accent, oklch(0.8 0.14 85));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+}
 .crown {
-  width: 58%;
-  height: 58%;
+  position: relative;
+  width: 66%;
+  height: 66%;
   fill: currentColor;
+  stroke: var(--games-scene-accent, oklch(0.8 0.14 85));
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.3));
 }
 .games-board-cell[aria-disabled] .checkers-square {
   cursor: default;

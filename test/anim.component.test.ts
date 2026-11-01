@@ -137,10 +137,29 @@ describe("board helpers", () => {
     expect(ghost.isConnected).toBe(false); // capture copies are cleaned up
   });
 
+  it("crown a promoted piece: it lifts, a ring spreads and is cleaned up", () => {
+    setMotion({ reduced: false, pref: "rich" });
+    const piece = el();
+    piece.getBoundingClientRect = () => new DOMRect(10, 10, 40, 40);
+    const crown = el();
+    anim.promotePiece(crown, piece);
+    const targets = vi.mocked(gsap.to).mock.calls.map((c) => c[0]);
+    expect(targets).toContain(piece);
+    expect(targets).toContain(crown);
+    const ring = vi.mocked(gsap.fromTo).mock.calls.at(-1)![0] as HTMLElement;
+    expect(ring.isConnected).toBe(true);
+    (
+      vi.mocked(gsap.fromTo).mock.calls.at(-1)![2] as { onComplete: () => void }
+    ).onComplete();
+    expect(ring.isConnected).toBe(false);
+  });
+
   it("animate captures and promotions, using transform and opacity only", async () => {
     setMotion({ reduced: false, pref: "rich" });
     const crown = el();
-    anim.promotePiece(crown);
+    const piece = el();
+    piece.getBoundingClientRect = () => new DOMRect(0, 0, 40, 40);
+    anim.promotePiece(crown, piece);
     void anim.popCapture([el()]);
     const animated = [
       ...vi.mocked(gsap.to).mock.calls,
