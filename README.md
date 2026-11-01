@@ -27,6 +27,11 @@ tutorials.
   starts.
 - **Spectators** with access control — public rooms or **locked** rooms that
   require a passcode (distinct player vs spectator links).
+- **Customize the interface** with the [Crystal Neuo](https://crystal-neuo.anorebel.net)
+  design system: six materials (Refraction, Tactile, Signal, Folio, Bloom,
+  Hybrid), a layout choice of platform style (Web, iOS, Android, Windows,
+  macOS) and density, high contrast, and glass settings — all from
+  **Customize** in the header. See [Appearance](#appearance).
 - **Themes**: built-in + user-uploaded card backs and table backgrounds, and
   scene themes (Felt, Arcade, Neon, or your own colours) that restyle boards
   and tables with contrast checked against WCAG AA.
@@ -136,7 +141,8 @@ crowned only when its move stops on the far row.
 ## Stack
 
 - **Nuxt 4** (`future.compatibilityVersion: 5`) + Nitro
-- **@nuxt/ui** (Tailwind v4) for UI
+- **@nuxt/ui** (Tailwind v4) for UI, styled by the **Crystal Neuo** design
+  system (see [Appearance](#appearance) and `docs/decisions/design-system.md`)
 - **VueUse** (`@vueuse/core`, `@vueuse/nuxt`) + **@vueuse/motion** + **GSAP**
   for animation (see `docs/decisions/animation-library.md`)
 - **date-fns** + **@date-fns/tz** for all date/time + timezone handling
@@ -163,6 +169,8 @@ app/                # Nuxt app (pages, components, composables, transports, UI)
 server/             # Nitro: rooms, server bots, leaderboard, Conduit signaling/relay
 shared/             # rules shared by app and server (leaderboard ranking and tiers)
 site.config.ts      # product name and site identity
+app/vendor/crystal-neuo/          # Crystal Neuo runtime (copied; see Appearance)
+app/assets/css/vendor/crystal-neuo/  # Crystal Neuo tokens and component classes (copied)
 docs/               # bots, design decisions, operations
 scripts/smoke/      # browser smoke checks against a running build
 ```
@@ -194,6 +202,35 @@ bun run dev        # Nuxt dev server (offline + online both work)
 bun run build      # production build
 bun run preview    # preview the production build
 ```
+
+## Appearance
+
+The interface is built on [Crystal Neuo](https://github.com/AnoRebel/crystal-neuo).
+**Customize** (the sliders button in the header, also linked from Settings)
+sets:
+
+| Setting        | Choices                                                      | What it changes                                         |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
+| Material       | Refraction (default), Tactile, Signal, Folio, Bloom, Hybrid  | palette, type, corners, borders, shadows, glass, motion |
+| Platform style | Web, iOS, Android, Windows, macOS, or match this device      | control height, touch target, corners, focus ring, font |
+| Density        | Compact, Comfortable, Spacious                               | spacing and control size                                |
+| Colour         | Light, Dark, System; High contrast                           | the material's palette for that mode                    |
+| Glass          | Frost, Rim light, Refraction (Chromium), Reduce transparency | glass surfaces in Refraction, Bloom and Hybrid          |
+
+Choices apply at once, are remembered in the browser, and are applied before
+the first paint. Game tables and boards keep their own scene themes.
+
+Crystal Neuo is not published to a package registry, so the app keeps a copy
+of its built tokens, component classes and runtime. To update it, build a
+checkout of the design system and sync:
+
+```bash
+cd ../crystal-neuo && bun install && bun run build:tokens
+cd ../games && bun run scripts/sync-crystal-neuo.ts ../crystal-neuo
+```
+
+`app/assets/css/crystal-neuo.css` connects the tokens to Nuxt UI and the app;
+the copied files are never edited by hand.
 
 ## Data and the rename
 
@@ -239,6 +276,7 @@ SMOKE_BASE=http://localhost:3000 bun run smoke:integration  # offline + online p
 bun run smoke:boards        # board layout, zoom, keyboard and hints
 bun run smoke:themes        # scene themes and contrast
 bun run smoke:leaderboard   # standings and history
+bun run smoke:appearance    # Customize: materials, layout, contrast, persistence
 ```
 
 ## Architecture notes
