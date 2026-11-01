@@ -156,6 +156,18 @@ describe("BaoBoard", () => {
     );
   });
 
+  it("shows each pit's seeds as pebbles, capping large piles with the exact count", () => {
+    const state = baoState("bao-la-kujifunza");
+    state.pits[0]![3] = 0;
+    state.pits[0]![5] = 23;
+    const w = mountBao(state);
+    expect(pit(w, 0, 0).findAll("[data-pebble]")).toHaveLength(2);
+    expect(pit(w, 0, 3).findAll("[data-pebble]")).toHaveLength(0);
+    expect(pit(w, 0, 3).find('[data-testid="seed-count"]').exists()).toBe(false);
+    expect(pit(w, 0, 5).findAll("[data-pebble]")).toHaveLength(16);
+    expect(pit(w, 0, 5).get('[data-testid="seed-count"]').text()).toBe("23");
+  });
+
   it("marks each nyumba while it has house status, and none in the learner game", () => {
     expect(mountBao(baoState()).findAll('[data-testid="nyumba"]')).toHaveLength(2);
     expect(

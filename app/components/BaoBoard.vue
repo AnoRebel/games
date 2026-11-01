@@ -1,7 +1,8 @@
 <script setup lang="ts">
 /**
  * Bao board (4 rows × 8 pits). Each player's two rows are grouped on their
- * side, with the viewer's rows at the bottom. Every pit shows its seed count;
+ * side, with the viewer's rows at the bottom. Every pit shows its seeds as
+ * pebbles (up to a pile of PEBBLE_CAP) with the exact count beside them;
  * the nyumba carries a house marker while it keeps house status. A turn is
  * chosen by narrowing the engine's legal turns: tap a starting pit, then a
  * highlighted direction pit or kichwa entry, then stop/safari if offered.
@@ -97,6 +98,41 @@ function pickSafari(safari: boolean) {
 }
 
 // ---- per-pit presentation ----------------------------------------------------
+
+/** Pebbles drawn per pit; larger piles keep the count as the exact figure. */
+const PEBBLE_CAP = 16;
+/**
+ * Where pebble i sits in a pit, as a spiral (golden angle) so a growing pile
+ * never moves the pebbles already there. Size and shade vary a little per
+ * pebble so the pile reads as natural stones.
+ */
+const PEBBLES = Array.from({ length: PEBBLE_CAP }, (_, i) => {
+  const r = 0.1 * Math.sqrt(i + 0.5);
+  const a = i * 2.39996;
+  return {
+    left: `${50 + r * 100 * Math.cos(a)}%`,
+    top: `${50 + r * 100 * Math.sin(a)}%`,
+    size: `${25 + ((i * 7) % 5)}%`,
+    shade: `${88 + ((i * 5) % 12)}%`,
+    turn: `${(i * 53) % 360}deg`,
+  };
+});
+const pebbleCount = (seat: number, ring: number) =>
+  Math.min(seeds(seat, ring), PEBBLE_CAP);
+
+/**
+ * In the turn just played, when each sown pit received its last seed (ms
+ * from the start), so its new pebbles drop in step with the travelling seed.
+ */
+const dropDelay = computed(() => {
+  const m = props.state.lastMove;
+  const out = new Map<string, number>();
+  if (!m) return out;
+  const pits = m.path.flatMap((leg) => leg.pits);
+  const hop = Math.max(35, Math.min(90, 1400 / Math.max(1, pits.length)));
+  pits.forEach((ring, i) => out.set(`${m.seat}:${ring}`, Math.round((i + 1) * hop)));
+  return out;
+});
 
 const seeds = (seat: number, ring: number) => props.state.pits[seat]?.[ring] ?? 0;
 const isNyumba = (seat: number, ring: number) =>
@@ -272,10 +308,34 @@ defineExpose({ selection });
             :data-ring="pitAt(row, col).ring"
             :data-state="pitState(pitAt(row, col).seat, pitAt(row, col).ring).join(' ')"
           >
-            <span class="bao-pit">
-              <span class="bao-count" data-testid="seed-count">{{
-                seeds(pitAt(row, col).seat, pitAt(row, col).ring) || ""
-              }}</span>
+            <span
+              class="bao-pit"
+              :style="{
+                '--drop-delay': `${dropDelay.get(`${pitAt(row, col).seat}:${pitAt(row, col).ring}`) ?? 0}ms`,
+              }"
+            >
+              <span class="bao-pebbles" aria-hidden="true">
+                <span
+                  v-for="i in pebbleCount(pitAt(row, col).seat, pitAt(row, col).ring)"
+                  :key="i"
+                  class="bao-pebble"
+                  data-pebble
+                  :style="{
+                    left: PEBBLES[i - 1]!.left,
+                    top: PEBBLES[i - 1]!.top,
+                    width: PEBBLES[i - 1]!.size,
+                    height: PEBBLES[i - 1]!.size,
+                    '--pebble-shade': PEBBLES[i - 1]!.shade,
+                    '--pebble-turn': PEBBLES[i - 1]!.turn,
+                  }"
+                />
+              </span>
+              <span
+                v-if="seeds(pitAt(row, col).seat, pitAt(row, col).ring)"
+                class="bao-count"
+                data-testid="seed-count"
+                >{{ seeds(pitAt(row, col).seat, pitAt(row, col).ring) }}</span
+              >
               <svg
                 v-if="isNyumba(pitAt(row, col).seat, pitAt(row, col).ring)"
                 class="bao-nyumba"
@@ -412,11 +472,63 @@ defineExpose({ selection });
 .is-opponent .bao-pit {
   color: var(--games-scene-opponent-piece, oklch(0.9 0.05 60));
 }
+/* Pebbles: a small pile in the pit, coloured by the side that owns the pit. */
+.bao-pebbles {
+  position: absolute;
+  inset: 8%;
+}
+.bao-pebble {
+  --pebble: var(--games-scene-own-piece, oklch(0.93 0.02 85));
+  position: absolute;
+  translate: -50% -50%;
+  rotate: var(--pebble-turn);
+  border-radius: 46% 54% 50% 50% / 52% 48% 52% 48%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in oklch, var(--pebble) 70%, white),
+    color-mix(in oklch, var(--pebble) var(--pebble-shade), black) 60%,
+    color-mix(in oklch, var(--pebble) 65%, black)
+  );
+  box-shadow: 0 1px 1.5px rgb(0 0 0 / 0.45);
+  /* New pebbles drop into the pit as the sowing passes it. */
+  animation: bao-pebble-drop 260ms var(--drop-delay, 0ms) cubic-bezier(0.34, 1.4, 0.64, 1)
+    backwards;
+}
+.is-opponent .bao-pebble {
+  --pebble: var(--games-scene-opponent-piece, oklch(0.78 0.06 60));
+}
+@keyframes bao-pebble-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-60%) scale(0.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bao-pebble {
+    animation: none;
+  }
+}
+/* The exact count, as a badge so the pile stays visible. */
 .bao-count {
+  position: absolute;
+  right: -6%;
+  bottom: -6%;
+  min-width: 42%;
+  padding: 0 0.2em;
+  border-radius: 9999px;
   font-weight: 800;
-  font-size: calc(var(--games-cell) * 0.36);
+  font-size: calc(var(--games-cell) * 0.24);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--games-scene-text, oklch(0.97 0.01 90));
+  background: color-mix(
+    in oklch,
+    var(--games-scene-board-dark, oklch(0.4 0.06 55)) 80%,
+    black
+  );
+  box-shadow: 0 0 0 1.5px var(--games-scene-cell-border, oklch(0.3 0.04 60));
+  z-index: 1;
 }
 .bao-nyumba {
   position: absolute;
