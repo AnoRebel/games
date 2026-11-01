@@ -110,7 +110,7 @@ const winnerNames = computed(() =>
           <li
             v-for="(row, i) in rows"
             :key="row.seat"
-            class="flex items-center gap-3 rounded-lg px-3 py-2"
+            class="flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2"
             :style="{
               background: row.won
                 ? 'color-mix(in oklch, var(--games-accent) 16%, transparent)'

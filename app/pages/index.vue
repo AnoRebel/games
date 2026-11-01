@@ -74,21 +74,13 @@ void standardDeck;
     <CardSprite />
 
     <section data-reveal class="pt-6 pb-2 text-center sm:text-left">
-      <p
-        class="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
-        :style="{ color: 'var(--games-accent)' }"
-      >
+      <p class="cn-label games-eyebrow mb-3">
         {{ $ts("home.badge") }}
       </p>
-      <h1
-        class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight leading-[0.95]"
-      >
+      <h1 class="games-hero font-display">
         {{ $ts("app.tagline") }}
       </h1>
-      <p
-        class="mt-3 max-w-xl text-sm sm:text-base"
-        :style="{ color: 'var(--games-text-muted)' }"
-      >
+      <p class="mt-4 max-w-xl text-base sm:text-lg text-[var(--content-secondary)]">
         {{ $ts("app.subtitle") }}
       </p>
     </section>
@@ -97,9 +89,9 @@ void standardDeck;
     <NuxtLink
       data-reveal
       :to="$localePath(`/play/${daily.gameId}?daily=1`)"
-      class="block rounded-2xl p-4 games-surface transition hover:-translate-y-0.5 flex items-center gap-3"
+      class="games-panel games-panel--interactive no-underline p-4 flex items-center gap-4"
     >
-      <span class="text-3xl">📅</span>
+      <span class="games-daily-icon" aria-hidden="true">📅</span>
       <div class="min-w-0 flex-1">
         <p class="font-display font-bold flex items-center gap-2">
           {{ $ts("daily.title") }}
@@ -107,16 +99,13 @@ void standardDeck;
             $ts("daily.doneToday")
           }}</UBadge>
         </p>
-        <p class="text-xs" :style="{ color: 'var(--games-text-muted)' }">
+        <p class="text-sm text-[var(--content-secondary)]">
           {{ $ts("daily.subtitle", { game: dailyGameName }) }}
         </p>
       </div>
       <div v-if="daily.streak > 0" class="text-right shrink-0">
-        <p class="font-display font-bold text-lg leading-none">{{ daily.streak }}🔥</p>
-        <p
-          class="text-[10px] uppercase tracking-wide"
-          :style="{ color: 'var(--games-text-muted)' }"
-        >
+        <p class="cn-num text-xl leading-none">{{ daily.streak }}🔥</p>
+        <p class="cn-label mt-1">
           {{ $ts("daily.streak") }}
         </p>
       </div>
@@ -128,7 +117,7 @@ void standardDeck;
         :key="game.id"
         :to="$localePath(game.to)"
         data-reveal
-        class="games-game-card group relative overflow-hidden rounded-2xl p-5 games-surface transition-transform"
+        class="games-game-card games-panel games-panel--interactive group relative overflow-hidden no-underline p-5 flex flex-col"
       >
         <!-- board games: a small board preview -->
         <div
@@ -152,27 +141,18 @@ void standardDeck;
           />
         </div>
 
-        <div class="relative z-10 mt-16 sm:mt-20">
+        <div class="relative z-10 mt-auto pt-16 sm:pt-20">
           <div class="flex items-baseline gap-2">
             <h2 :class="['text-2xl font-bold', game.font]">{{ game.name }}</h2>
-            <span
-              class="text-[11px] font-semibold px-1.5 py-0.5 rounded-full"
-              :style="{
-                background: 'color-mix(in oklch, var(--games-accent) 18%, transparent)',
-                color: 'var(--games-accent)',
-              }"
-            >
+            <span class="games-chip cn-num" :title="$ts('common.players')">
               {{ game.players }}
             </span>
           </div>
-          <p
-            class="mt-1.5 text-sm min-h-10"
-            :style="{ color: 'var(--games-text-muted)' }"
-          >
+          <p class="mt-1.5 text-sm min-h-10 text-[var(--content-secondary)]">
             {{ game.tagline }}
           </p>
           <div
-            class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold games-accent-text"
+            class="games-play mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
           >
             {{ $ts("common.play") }}
             <UIcon
@@ -187,7 +167,7 @@ void standardDeck;
     <section data-reveal class="flex justify-center pb-4">
       <UButton
         :to="$localePath('/rooms')"
-        variant="soft"
+        variant="outline"
         color="neutral"
         size="lg"
         icon="i-lucide-radio"
@@ -199,10 +179,37 @@ void standardDeck;
 </template>
 
 <style scoped>
-.games-game-card:hover {
-  transform: translateY(-3px);
+.games-eyebrow {
+  color: var(--accent-primary-subtle);
 }
-.games-game-card:active {
-  transform: translateY(0) scale(0.99);
+.games-hero {
+  font-size: clamp(2.25rem, 7vw, var(--type-display));
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.games-daily-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  flex: none;
+  font-size: 1.6rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-primary-soft);
+}
+.games-game-card {
+  min-height: 13rem;
+  color: var(--content-primary);
+}
+.games-chip {
+  font-size: var(--type-caption);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-round);
+  background: var(--accent-primary-soft);
+  color: var(--content-primary);
+}
+.games-play {
+  color: var(--accent-primary-subtle);
 }
 </style>

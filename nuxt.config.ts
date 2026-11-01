@@ -87,8 +87,8 @@ export default defineNuxtConfig({
       short_name: siteConfig.shortName,
       description: siteConfig.description,
       lang: "en",
-      theme_color: "#1b3a2c",
-      background_color: "#0f2419",
+      theme_color: "#eef0f5",
+      background_color: "#eef0f5",
       display: "standalone",
       orientation: "any",
       categories: ["games", "entertainment"],
@@ -148,9 +148,6 @@ export default defineNuxtConfig({
       // viewport-fit=cover so env(safe-area-inset-*) resolves on notched phones.
       viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
       meta: [
-        // Matches the PWA manifest theme_color so the browser/OS chrome tints
-        // to the felt-green brand when installed.
-        { name: "theme-color", content: "#1b3a2c" },
         { name: "apple-mobile-web-app-capable", content: "yes" },
         { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
         { name: "apple-mobile-web-app-title", content: siteConfig.shortName },
@@ -205,11 +202,13 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
 
-  // Self-hosted fonts only. Files live in /public/fonts using the @nuxt/fonts
-  // auto-discovery pattern (<family>-<weight>-<style>.woff2); the module
-  // generates @font-face + fallback metrics. No remote provider is fetched.
-  //   Bricolage Grotesque → brand/display   Inter → UI/body
-  //   Outfit → Last Card accent             Fraunces → Albastini accent
+  // Self-hosted fonts only, from /public/fonts. Interface faces come from the
+  // Crystal Neuo material and are declared in assets/css/fonts.css (variable
+  // fonts, one file per family). @nuxt/fonts generates @font-face + fallback
+  // metrics for the single-weight files (<family>-<weight>-<style>.woff2) and
+  // skips the variable families. No remote provider is fetched.
+  //   Bricolage Grotesque → Tactile/Hybrid display   IBM Plex Mono → Folio figures
+  //   Outfit → Last Card accent                      Fraunces → Albastini accent
   fonts: {
     defaults: {
       weights: ["400", "500", "600", "700"],
@@ -218,15 +217,11 @@ export default defineNuxtConfig({
     },
     families: [
       {
-        name: "Inter",
-        provider: "local",
-        weights: ["400", "500", "600", "700"],
-      },
-      {
         name: "Bricolage Grotesque",
         provider: "local",
-        weights: ["600", "700", "800"],
+        weights: ["500", "600", "700", "800"],
       },
+      { name: "IBM Plex Mono", provider: "local", weights: ["400", "600"] },
       { name: "Outfit", provider: "local", weights: ["500", "600", "700"] },
       {
         // Fraunces ships expressive italics — kept for Albastini's heritage feel.
@@ -235,6 +230,12 @@ export default defineNuxtConfig({
         weights: ["500", "600", "700"],
         styles: ["normal", "italic"],
       },
+      // Declared in assets/css/fonts.css.
+      { name: "Geist", provider: "none" },
+      { name: "Figtree", provider: "none" },
+      { name: "IBM Plex Sans", provider: "none" },
+      { name: "JetBrains Mono", provider: "none" },
+      { name: "Doto", provider: "none" },
     ],
   },
 

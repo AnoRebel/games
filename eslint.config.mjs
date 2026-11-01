@@ -35,6 +35,8 @@ const NON_DETERMINISTIC = [
 ];
 
 export default withNuxt(
+  // Copied from the Crystal Neuo design system (scripts/sync-crystal-neuo.ts).
+  { ignores: ["app/vendor/**"] },
   {
     files: ["packages/engine-core/**/*.ts", "packages/game-*/**/*.ts"],
     rules: {

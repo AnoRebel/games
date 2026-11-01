@@ -11,7 +11,7 @@ const t = (key: string, params?: Record<string, string | number>) => $ts(key, pa
 </script>
 
 <template>
-  <div class="games-surface rounded-xl overflow-hidden">
+  <div class="games-surface rounded-[var(--radius-lg)] overflow-hidden">
     <button
       type="button"
       class="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold"

@@ -250,7 +250,7 @@ function errorText(e: SceneThemeError): string {
 
     <form
       v-else
-      class="space-y-3 rounded-lg p-3 scene-form"
+      class="space-y-3 rounded-[var(--radius-md)] p-3 scene-form"
       data-testid="theme-form"
       @submit.prevent="save"
     >

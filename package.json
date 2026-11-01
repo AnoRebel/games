@@ -24,7 +24,8 @@
     "smoke:boards": "cd scripts/smoke && bun run boards.ts",
     "smoke:themes": "cd scripts/smoke && bun run themes.ts",
     "smoke:leaderboard": "cd scripts/smoke && bun run leaderboard.ts",
-    "smoke:integration": "cd scripts/smoke && bun run integration.ts"
+    "smoke:integration": "cd scripts/smoke && bun run integration.ts",
+    "smoke:appearance": "cd scripts/smoke && bun run appearance.ts"
   },
   "dependencies": {
     "@games/engine-core": "workspace:*",

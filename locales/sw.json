@@ -6,7 +6,8 @@
   },
   "nav": {
     "games": "Michezo",
-    "allGames": "Michezo yote"
+    "allGames": "Michezo yote",
+    "primary": "Kuu"
   },
   "common": {
     "play": "Cheza",
@@ -392,5 +393,87 @@
     "conflict": "Kivinjari hiki tayari kina data mpya ya michezo, kwa hiyo matokeo yako ya zamani hayakuunganishwa nayo. Data yako ya zamani imehifadhiwa salama.",
     "retry": "Jaribu tena",
     "keepCurrent": "Baki na data ya sasa"
+  },
+  "appearance": {
+    "customize": "Mwonekano",
+    "customizeHint": "Mtindo, mpangilio, utofauti na kioo",
+    "intro": "Chagua jinsi kiolesura kinavyoonekana. Meza za michezo zinabaki na mandhari yake.",
+    "material": "Mtindo",
+    "materials": {
+      "refraction": {
+        "name": "Refraction",
+        "hint": "Kioo chenye ukungu"
+      },
+      "tactile": {
+        "name": "Tactile",
+        "hint": "Mipaka ya wino, vitufe vinavyobonyezeka"
+      },
+      "signal": {
+        "name": "Signal",
+        "hint": "Mtindo wa mashine, tarakimu za mono"
+      },
+      "folio": {
+        "name": "Folio",
+        "hint": "Bapa na wa kubana"
+      },
+      "bloom": {
+        "name": "Bloom",
+        "hint": "Laini, mviringo, rangi tulivu"
+      },
+      "hybrid": {
+        "name": "Hybrid",
+        "hint": "Kioo na vitufe vya wino"
+      }
+    },
+    "layout": "Mpangilio",
+    "platform": "Mtindo wa jukwaa",
+    "platformHint": "Hubadilisha herufi, ukubwa wa vitufe, pembe na alama ya kulenga. Mpangilio na rangi havibadiliki.",
+    "platforms": {
+      "web": "Wavuti",
+      "ios": "iOS",
+      "android": "Android",
+      "windows": "Windows",
+      "macos": "macOS"
+    },
+    "matchDevice": "Fuata kifaa hiki",
+    "matched": "Imefuata kifaa hiki: {platform}.",
+    "density": "Nafasi",
+    "densities": {
+      "compact": "Iliyobanwa",
+      "comfortable": "Ya kawaida",
+      "spacious": "Pana"
+    },
+    "colour": "Rangi",
+    "mode": "Hali",
+    "modes": {
+      "light": "Mwanga",
+      "dark": "Giza",
+      "system": "Ya mfumo"
+    },
+    "highContrast": "Utofauti mkubwa",
+    "highContrastHint": "Maandishi na mipaka iliyo wazi zaidi, bila uangavu",
+    "glass": "Kioo",
+    "frost": "Ukungu",
+    "frostHint": "Fifisha kilicho nyuma ya kioo",
+    "rim": "Mwanga wa ukingo",
+    "rimHint": "Ukingo wa juu unaong'aa kwenye kioo",
+    "refraction": "Mpindo wa mwanga",
+    "refractionHint": "Pinda mwanga kwenye ukingo wa kioo",
+    "refractionUnavailable": "Mpindo wa mwanga unahitaji kivinjari cha Chromium. Hapa kioo kinabaki na ukungu.",
+    "reduceTransparency": "Punguza uangavu",
+    "reduceTransparencyHint": "Nyuso zisizopenyeka, bila ukungu wala mpindo",
+    "noGlass": "{material} haina kioo kinachopenyeka, kwa hiyo hakuna cha kurekebisha hapa.",
+    "reset": "Rejesha",
+    "done": "Tayari"
+  },
+  "settings": {
+    "motion": "Mwendo",
+    "rich": "Mwingi",
+    "subtle": "Kidogo",
+    "cardsTable": "Karata na meza",
+    "notifications": "Arifa",
+    "sound": "Sauti",
+    "tableStyle": "Mtindo wa meza",
+    "tableStyleHint": "Kitambaa cha meza ya karata na rangi za ubao za kawaida."
   }
 }

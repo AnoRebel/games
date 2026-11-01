@@ -1,0 +1,1577 @@
+/* Crystal Neuo component classes. Semantic tokens ONLY — no literal colors,
+   no magic pixels for tokened properties. Class names match the contract
+   variant/size enums verbatim (cn-<name>, cn-<name>--<variant>, cn-<name>--size-<size>).
+
+   No rule here branches on material or platform: every difference between
+   materials (palette, corners, borders, shadows, blur, type, motion) and
+   platforms (type family, control height, corner scale, primary shape, focus)
+   arrives through tokens. */
+
+/* ============================================================ Glass
+   Floating chrome (bars, sheets, menus, glass cards). In materials without
+   translucency the glass tokens are opaque and blur is 0, so the same rule
+   renders a flat surface.
+
+   Three controls, each settable on any ancestor:
+     data-glass-frost="off"   no backdrop blur (handled by the tokens)
+     data-glass-rim="off"     no specular rim light
+     data-refraction="on"     live refraction where the engine renders it
+   The refraction filter itself is supplied per element by the runtime
+   (`startRefraction()`), as `--cn-refraction`.
+
+   data-refraction is resolved by inheritance, so the nearest ancestor wins
+   and a section can opt in or out against the page setting. Two inverse
+   space toggles carry it: when on, var(--_cn-rf-on, X) yields X and
+   var(--_cn-rf-off, Y) yields nothing; when off, the reverse. */
+:root,
+[data-refraction="off"] {
+  --_cn-rf-on: ;
+  --_cn-rf-off: initial;
+}
+[data-refraction="on"] {
+  --_cn-rf-on: initial;
+  --_cn-rf-off: ;
+}
+/* A full frost would blur the bend away; where the engine runs, refracting
+   glass keeps a quarter of it so text on the glass stays legible. */
+[data-refraction-engine] {
+  --cn-refraction-frost: 0.25;
+}
+.cn-glass,
+.cn-nav--glass,
+.cn-card--glass,
+.cn-card--feature,
+.cn-tabbar,
+.cn-sheet,
+.cn-menu {
+  --cn-glass-refraction: var(--_cn-rf-on, var(--cn-refraction,)) var(--_cn-rf-off,);
+  --cn-glass-blur: calc(
+    var(--blur-glass) * (var(--_cn-rf-on, var(--cn-refraction-frost, 1)) var(--_cn-rf-off, 1))
+  );
+  background: var(--surface-glass-base);
+  border: var(--border-width-hairline) solid var(--border-glass-rim);
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-sm);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(var(--glass-saturation));
+  backdrop-filter: var(--cn-glass-refraction) blur(var(--cn-glass-blur)) saturate(var(--glass-saturation));
+}
+[data-glass-rim="off"] {
+  --cn-rim-light: transparent;
+}
+/* Refraction yields to every accessibility preference, wherever it was enabled.
+   (Prettier pads an empty !important value on every run, hence the ignores.) */
+/* prettier-ignore */
+:is([data-theme="high-contrast"], [data-transparency="reduced"])
+  :is(.cn-glass, .cn-nav--glass, .cn-card--glass, .cn-card--feature, .cn-tabbar, .cn-sheet, .cn-menu) {
+  --_cn-rf-on: !important;
+  --_cn-rf-off: initial !important;
+}
+@media (prefers-reduced-motion: reduce), (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  /* prettier-ignore */
+  :is(.cn-glass, .cn-nav--glass, .cn-card--glass, .cn-card--feature, .cn-tabbar, .cn-sheet, .cn-menu) {
+    --_cn-rf-on: !important;
+    --_cn-rf-off: initial !important;
+  }
+}
+/* High contrast drops backdrop filtering entirely: a blur(0) saturate() still
+   composites and shifts the backdrop color. */
+:is([data-theme="high-contrast"], [data-transparency="reduced"])
+  :is(.cn-glass, .cn-nav--glass, .cn-card--glass, .cn-card--feature, .cn-tabbar, .cn-sheet, .cn-menu) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :is(.cn-glass, .cn-nav--glass, .cn-card--glass, .cn-card--feature, .cn-tabbar, .cn-sheet, .cn-menu) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ============================================================ Button */
+.cn-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--size-control-md);
+  padding: 0 var(--space-4);
+  border: var(--border-width-default) solid transparent;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  isolation: isolate;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    border-radius var(--motion-duration-spring) var(--motion-easing-spring),
+    box-shadow var(--motion-duration-fast) var(--motion-easing-standard),
+    translate var(--motion-duration-fast) var(--motion-easing-standard);
+}
+/* State layer: a content-coloured overlay that reads on any fill. */
+.cn-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: currentcolor;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .cn-button:hover:not(:disabled)::before {
+    opacity: 0.08;
+  }
+}
+/* Press: the state layer deepens (the real cue), the control travels toward
+   its own offset shadow (ink materials), sinks into a well (signal), or its
+   corners tighten (bloom). */
+.cn-button:active:not(:disabled) {
+  translate: var(--shadow-offset-travel);
+  border-radius: calc(var(--radius-md) * var(--radius-press-scale));
+}
+.cn-button:active:not(:disabled)::before {
+  opacity: 0.14;
+}
+.cn-button:disabled,
+.cn-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  box-shadow: none;
+  background: var(--surface-raised);
+  color: var(--content-disabled);
+  border-color: var(--border-subtle);
+}
+.cn-button[aria-busy="true"]:not(:disabled) {
+  opacity: 0.85;
+}
+.cn-button--size-sm {
+  min-height: var(--size-control-sm);
+  font-size: var(--type-caption);
+  padding: 0 var(--space-3);
+}
+.cn-button--size-md {
+  min-height: var(--size-control-md);
+}
+.cn-button--size-lg {
+  min-height: var(--size-control-lg);
+  font-size: var(--type-body-base);
+  padding: 0 var(--space-6);
+}
+
+.cn-button--primary {
+  background: var(--accent-primary-base);
+  color: var(--content-on-accent);
+  border-color: var(--accent-primary-strong);
+  border-radius: var(--radius-primary);
+  box-shadow: var(--shadow-offset-sm), var(--shadow-xs);
+}
+.cn-button--primary:active:not(:disabled) {
+  border-radius: calc(var(--radius-primary) * var(--radius-press-scale));
+  box-shadow: var(--shadow-offset-pressed), var(--shadow-inset-pressed);
+}
+
+.cn-button--secondary {
+  background: var(--surface-raised-1);
+  color: var(--content-primary);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-offset-sm), var(--shadow-xs);
+}
+@media (hover: hover) {
+  .cn-button--secondary:hover:not(:disabled) {
+    border-color: var(--border-strong);
+  }
+}
+.cn-button--secondary:active:not(:disabled) {
+  box-shadow: var(--shadow-offset-pressed), var(--shadow-inset-pressed);
+}
+
+.cn-button--ghost {
+  background: transparent;
+  color: var(--content-primary);
+  border-color: var(--border-default);
+}
+.cn-button--ghost:active:not(:disabled) {
+  translate: none;
+}
+
+.cn-button--danger {
+  background: var(--state-danger-strong);
+  color: var(--state-danger-on);
+  border-color: var(--state-danger-strong);
+  border-radius: var(--radius-primary);
+  box-shadow: var(--shadow-offset-sm), var(--shadow-xs);
+}
+.cn-button--danger:active:not(:disabled) {
+  border-radius: calc(var(--radius-primary) * var(--radius-press-scale));
+  box-shadow: var(--shadow-offset-pressed), var(--shadow-inset-pressed);
+}
+
+/* Loading: a leading spinner; the label stays visible. */
+.cn-button[aria-busy="true"] {
+  cursor: progress;
+}
+.cn-button[aria-busy="true"]::after {
+  content: "";
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  border: var(--border-width-strong) solid currentcolor;
+  border-top-color: transparent;
+  border-radius: var(--radius-round);
+  animation: cn-spin var(--motion-duration-slower) linear infinite;
+  flex: none;
+}
+@keyframes cn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Slowed, not stopped: a busy indicator is an essential activity indicator
+     (WCAG 2.2 SC 2.2.2 exempts it); freezing it would misrepresent state. */
+  .cn-button[aria-busy="true"]::after {
+    animation-duration: 1.2s;
+  }
+}
+
+/* ============================================================ Card */
+.cn-card {
+  display: block;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+  background: var(--surface-raised-1);
+  box-shadow: var(--shadow-offset-md), var(--shadow-md);
+}
+.cn-card--size-sm {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+}
+.cn-card--size-lg {
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+}
+.cn-card--raised {
+  background: var(--surface-raised-1);
+}
+.cn-card--glass {
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-offset-md),
+    var(--shadow-md);
+}
+.cn-card--feature {
+  background: var(--surface-glass-strong);
+  -webkit-backdrop-filter: blur(var(--blur-glass-strong)) saturate(var(--glass-saturation));
+  backdrop-filter: var(--cn-glass-refraction,) blur(var(--cn-glass-blur, var(--blur-glass-strong)))
+    saturate(var(--glass-saturation));
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-offset-md),
+    var(--shadow-lg);
+}
+
+/* ============================================================ Field shell (input/select/textarea/date) */
+.cn-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.cn-field__label {
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--content-primary);
+}
+.cn-field__hint {
+  font-size: var(--type-caption);
+  color: var(--content-secondary);
+}
+.cn-field__message {
+  font-size: var(--type-caption);
+  font-weight: var(--weight-medium);
+  color: var(--state-danger-content);
+}
+
+.cn-input,
+.cn-textarea,
+.cn-select__native {
+  inline-size: 100%;
+  min-height: var(--size-control-md);
+  padding: 0 var(--space-3);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised-1);
+  color: var(--content-primary);
+  font: inherit;
+  font-size: var(--type-body-base);
+  box-shadow: var(--shadow-neu-pressed);
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-easing-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.cn-textarea {
+  min-height: calc(var(--size-control-lg) * 2);
+  padding-block: var(--space-2);
+  resize: vertical;
+  line-height: var(--leading-normal);
+  field-sizing: content;
+}
+.cn-input::placeholder,
+.cn-textarea::placeholder {
+  color: var(--content-tertiary);
+}
+@media (hover: hover) {
+  .cn-input:hover:not(:disabled),
+  .cn-textarea:hover:not(:disabled),
+  .cn-select__native:hover:not(:disabled) {
+    border-color: var(--border-strong);
+  }
+}
+.cn-input:focus-visible,
+.cn-textarea:focus-visible,
+.cn-select__native:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-color: var(--border-strong);
+}
+.cn-input:disabled,
+.cn-textarea:disabled,
+.cn-select__native:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.cn-input--size-sm {
+  min-height: var(--size-control-sm);
+  font-size: var(--type-body-sm);
+}
+.cn-input--size-lg {
+  min-height: var(--size-control-lg);
+  font-size: var(--type-body-lg);
+}
+.cn-input--error,
+.cn-textarea--error,
+.cn-select__native--error {
+  border-color: var(--state-danger-content);
+}
+
+/* ============================================================ Select */
+.cn-select {
+  position: relative;
+  display: flex;
+}
+.cn-select__native {
+  appearance: none;
+  padding-inline-end: var(--space-8);
+}
+.cn-select__chevron {
+  position: absolute;
+  inset-inline-end: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--content-secondary);
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+/* ============================================================ Toggle (switch) */
+.cn-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  min-height: var(--size-touch-min);
+}
+.cn-toggle__track {
+  --cn-track-w: 2.75rem;
+  --cn-track-h: 1.625rem;
+  --cn-thumb: 1.125rem;
+  --cn-gap: 0.1875rem;
+  position: relative;
+  inline-size: var(--cn-track-w);
+  block-size: var(--cn-track-h);
+  border-radius: min(var(--radius-xl), calc(var(--cn-track-h) / 2));
+  background: var(--surface-raised);
+  /* The border is the real ≥3:1 boundary; the inset well is decorative. */
+  border: var(--border-width-default) solid var(--border-default);
+  box-shadow: var(--shadow-neu-pressed);
+  transition:
+    background-color var(--motion-duration-base) var(--motion-easing-standard),
+    border-color var(--motion-duration-base) var(--motion-easing-standard);
+  flex: none;
+}
+.cn-toggle__thumb {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--cn-gap);
+  inline-size: var(--cn-thumb);
+  block-size: var(--cn-thumb);
+  border-radius: inherit;
+  background: var(--surface-overlay);
+  border: var(--border-width-hairline) solid var(--border-default);
+  box-shadow: var(--shadow-neu-raised);
+  translate: 0 -50%;
+  transition: inset-inline-start var(--motion-duration-spring) var(--motion-easing-spring);
+}
+.cn-toggle__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.cn-toggle__track:has(.cn-toggle__input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.cn-toggle__track:has(.cn-toggle__input:checked) {
+  background: var(--accent-primary-base);
+  border-color: var(--accent-primary-base);
+}
+.cn-toggle__input:checked ~ .cn-toggle__thumb {
+  inset-inline-start: calc(100% - var(--cn-thumb) - var(--cn-gap));
+  border-color: transparent;
+}
+.cn-toggle__track:has(.cn-toggle__input:disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.cn-toggle__label {
+  color: var(--content-primary);
+}
+.cn-toggle--size-sm .cn-toggle__track {
+  --cn-track-w: 2.25rem;
+  --cn-track-h: 1.375rem;
+  --cn-thumb: 0.875rem;
+}
+
+/* ============================================================ Checkbox & Radio */
+.cn-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  min-height: var(--size-touch-min);
+}
+.cn-choice__input {
+  inline-size: var(--size-icon-md);
+  block-size: var(--size-icon-md);
+  margin: 0;
+  accent-color: var(--accent-primary-base);
+  flex: none;
+}
+.cn-choice__label {
+  font-size: var(--type-body-base);
+  color: var(--content-primary);
+}
+.cn-choice--error .cn-choice__label {
+  color: var(--state-danger-content);
+}
+.cn-choice__input:disabled ~ .cn-choice__label {
+  opacity: 0.6;
+}
+.cn-choice--size-sm .cn-choice__input {
+  inline-size: var(--size-icon-sm);
+  block-size: var(--size-icon-sm);
+}
+.cn-choice--size-sm .cn-choice__label {
+  font-size: var(--type-body-sm);
+}
+.cn-choice--size-lg .cn-choice__input {
+  inline-size: var(--size-icon-lg);
+  block-size: var(--size-icon-lg);
+}
+.cn-choice--size-lg .cn-choice__label {
+  font-size: var(--type-body-lg);
+}
+.cn-radiogroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.cn-radiogroup--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+/* ============================================================ Slider */
+.cn-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  inline-size: 100%;
+}
+.cn-slider__input {
+  inline-size: 100%;
+  accent-color: var(--accent-primary-base);
+  block-size: var(--size-touch-min);
+  margin: 0;
+  cursor: pointer;
+}
+.cn-slider--size-sm .cn-slider__input {
+  block-size: var(--size-control-sm);
+}
+
+/* ============================================================ File upload */
+.cn-tabs,
+.cn-fileupload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.cn-fileupload__zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border: var(--border-width-dashed) dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  color: var(--content-secondary);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  min-height: var(--size-touch-min);
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-easing-standard),
+    background-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+@media (hover: hover) {
+  .cn-fileupload__zone:hover:not(:disabled) {
+    border-color: var(--border-strong);
+  }
+}
+.cn-fileupload__zone[data-dragover="true"] {
+  border-color: var(--accent-primary-base);
+  border-style: solid;
+  background: var(--accent-primary-soft);
+}
+.cn-fileupload__zone:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.cn-fileupload__input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.cn-fileupload--size-lg .cn-fileupload__zone {
+  padding: var(--space-10);
+}
+.cn-fileupload--error .cn-fileupload__zone {
+  border-color: var(--state-danger-content);
+}
+
+/* ============================================================ Nav */
+.cn-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-lg);
+}
+.cn-nav--solid {
+  background: var(--surface-raised-1);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+}
+.cn-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--size-control-md);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--content-secondary);
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  border: var(--border-width-hairline) solid transparent;
+}
+@media (hover: hover) {
+  .cn-nav__link:hover {
+    color: var(--content-primary);
+    background: var(--state-layer-hover);
+  }
+}
+.cn-nav__link[aria-current="page"] {
+  color: var(--content-primary);
+  font-weight: var(--weight-semibold);
+  background: var(--accent-primary-soft);
+  /* Not colour alone: the current item also gets a visible edge. */
+  border-color: var(--border-default);
+}
+
+/* ============================================================ Tabs */
+.cn-tabs__list {
+  display: flex;
+  gap: var(--space-1);
+  border-block-end: var(--border-width-hairline) solid var(--border-subtle);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cn-tabs__tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-block-end: var(--border-width-strong) solid transparent;
+  padding: 0 var(--space-4);
+  min-height: var(--size-control-md);
+  color: var(--content-secondary);
+  font: inherit;
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--motion-duration-fast) var(--motion-easing-standard),
+    border-color var(--motion-duration-base) var(--motion-easing-emphasized);
+}
+@media (hover: hover) {
+  .cn-tabs__tab:hover:not(:disabled) {
+    color: var(--content-primary);
+  }
+}
+.cn-tabs__tab[aria-selected="true"] {
+  color: var(--content-primary);
+  font-weight: var(--weight-semibold);
+  border-block-end-color: var(--accent-primary-base);
+}
+.cn-tabs__tab:disabled {
+  color: var(--content-disabled);
+  cursor: not-allowed;
+}
+.cn-tabs--enclosed .cn-tabs__list {
+  border: none;
+  padding: var(--space-1);
+  gap: var(--space-1);
+  border-radius: calc(var(--radius-md) + var(--space-1));
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-neu-pressed);
+}
+.cn-tabs--enclosed .cn-tabs__tab {
+  border: var(--border-width-hairline) solid transparent;
+  border-radius: var(--radius-md);
+  min-height: calc(var(--size-control-md) - var(--space-2));
+}
+.cn-tabs--enclosed .cn-tabs__tab[aria-selected="true"] {
+  background: var(--surface-raised-1);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-offset-sm), var(--shadow-xs);
+}
+.cn-tabs__panel {
+  padding: var(--space-4) 0;
+}
+.cn-tabs--size-sm .cn-tabs__tab {
+  padding: 0 var(--space-3);
+  min-height: var(--size-control-sm);
+  font-size: var(--type-caption);
+}
+
+/* ============================================================ Segmented control */
+.cn-segmented {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 3px;
+  margin: 0;
+  border-radius: calc(var(--radius-md) + 3px);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-neu-pressed);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  min-width: 0;
+}
+.cn-segmented > legend {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.cn-segmented__item {
+  position: relative;
+  display: grid;
+}
+.cn-segmented__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.cn-segmented__label {
+  display: grid;
+  place-items: center;
+  min-height: calc(var(--size-control-md) - 8px);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  border: var(--border-width-hairline) solid transparent;
+  color: var(--content-secondary);
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  pointer-events: none;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-easing-spring),
+    color var(--motion-duration-fast) var(--motion-easing-standard),
+    box-shadow var(--motion-duration-base) var(--motion-easing-spring);
+}
+@media (hover: hover) {
+  .cn-segmented__input:hover:not(:checked):not(:disabled) + .cn-segmented__label {
+    color: var(--content-primary);
+  }
+}
+.cn-segmented__input:checked + .cn-segmented__label {
+  background: var(--surface-raised-1);
+  color: var(--content-primary);
+  /* The selected segment must read without its shadow, including on light
+     glass, so it takes the strong border. */
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-offset-sm), var(--shadow-xs);
+}
+.cn-segmented__input:focus-visible + .cn-segmented__label {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.cn-segmented__input:disabled + .cn-segmented__label {
+  color: var(--content-disabled);
+}
+.cn-segmented--size-sm .cn-segmented__label {
+  min-height: calc(var(--size-control-sm) - 8px);
+  font-size: var(--type-caption);
+}
+.cn-segmented--block {
+  display: grid;
+}
+
+/* ============================================================ Tooltip */
+.cn-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+.cn-tooltip__bubble {
+  position: absolute;
+  inset-block-end: calc(100% + var(--space-2));
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--content-primary);
+  color: var(--surface-app);
+  font-size: var(--type-caption);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  z-index: 30;
+  pointer-events: none;
+  animation: cn-fade-in var(--motion-duration-fast) var(--motion-easing-decelerated);
+}
+.cn-tooltip__bubble:dir(rtl) {
+  translate: 50% 0;
+}
+
+/* ============================================================ Badge */
+.cn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  min-block-size: 1.375rem;
+  border-radius: var(--radius-round);
+  font-size: var(--type-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: var(--type-label-transform);
+  border: var(--border-width-hairline) solid transparent;
+  white-space: nowrap;
+}
+.cn-badge--size-sm {
+  min-block-size: 1.125rem;
+  padding: 0 var(--space-1);
+  font-size: 0.6875rem;
+}
+.cn-badge--neutral {
+  background: var(--surface-raised);
+  color: var(--content-primary);
+  border-color: var(--border-default);
+}
+.cn-badge--primary {
+  background: var(--accent-primary-base);
+  color: var(--content-on-accent);
+}
+.cn-badge--success {
+  background: var(--state-success-base);
+  color: var(--state-on);
+}
+.cn-badge--warning {
+  background: var(--state-warning-base);
+  color: var(--state-on);
+}
+.cn-badge--danger {
+  background: var(--state-danger-base);
+  color: var(--state-on);
+}
+
+/* ============================================================ Scrim / overlay shell (modal, dialog, drawer, sheet) */
+.cn-scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--surface-scrim);
+  display: grid;
+  place-items: center;
+  padding: max(var(--space-4), env(safe-area-inset-top)) max(var(--space-4), env(safe-area-inset-right))
+    max(var(--space-4), env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left));
+  z-index: 50;
+  animation: cn-fade-in var(--motion-duration-slow) var(--motion-easing-decelerated);
+}
+/* Adapters render the scrim as a native <dialog> opened with showModal():
+   the page behind becomes inert and the overlay sits in the top layer. Reset
+   the UA dialog box so it fills the viewport. */
+dialog.cn-scrim {
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  max-block-size: none;
+  margin: 0;
+  border: 0;
+  color: inherit;
+}
+dialog.cn-scrim:not([open]) {
+  display: none;
+}
+dialog.cn-scrim::backdrop {
+  background: transparent;
+}
+html:has(dialog.cn-scrim[open]) {
+  overflow: hidden;
+}
+.cn-modal,
+.cn-dialog {
+  background: var(--surface-overlay);
+  color: var(--content-primary);
+  border-radius: var(--radius-xl);
+  border: var(--border-width-hairline) solid var(--border-glass-rim);
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-offset-md),
+    var(--shadow-lg);
+  padding: var(--space-6);
+  inline-size: min(100%, 32rem);
+  max-block-size: 90dvh;
+  overflow: auto;
+  animation: cn-pop-in var(--motion-duration-slow) var(--motion-easing-spring);
+}
+@keyframes cn-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes cn-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3)) scale(0.97);
+  }
+}
+.cn-modal--size-sm,
+.cn-dialog--size-sm {
+  inline-size: min(100%, 24rem);
+}
+.cn-dialog--size-md {
+  inline-size: min(100%, 32rem);
+}
+.cn-modal--size-lg {
+  inline-size: min(100%, 48rem);
+}
+.cn-modal__title,
+.cn-dialog__title,
+.cn-drawer__title,
+.cn-sheet__title {
+  margin-block-end: var(--space-3);
+  font-size: var(--type-h4);
+}
+.cn-modal__actions,
+.cn-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-block-start: var(--space-5);
+}
+
+/* ============================================================ Drawer */
+.cn-scrim--drawer {
+  padding: 0;
+}
+.cn-drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: min(100%, 22rem);
+  background: var(--surface-overlay);
+  color: var(--content-primary);
+  border-inline-end: var(--border-width-hairline) solid var(--border-glass-rim);
+  box-shadow: var(--shadow-lg);
+  padding: max(var(--space-6), env(safe-area-inset-top)) var(--space-6) var(--space-6);
+  overflow: auto;
+  animation: cn-slide-in-start var(--motion-duration-slower) var(--motion-easing-emphasized);
+}
+.cn-drawer--size-sm {
+  inline-size: min(100%, 16rem);
+}
+.cn-drawer--size-lg {
+  inline-size: min(100%, 30rem);
+}
+.cn-drawer--end {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  border-inline-end: none;
+  border-inline-start: var(--border-width-hairline) solid var(--border-glass-rim);
+  animation-name: cn-slide-in-end;
+}
+@keyframes cn-slide-in-start {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes cn-slide-in-end {
+  from {
+    transform: translateX(100%);
+  }
+}
+.cn-drawer:dir(rtl) {
+  animation-name: cn-slide-in-end;
+}
+.cn-drawer--end:dir(rtl) {
+  animation-name: cn-slide-in-start;
+}
+
+/* ============================================================ Sheet (bottom sheet) */
+.cn-scrim--sheet {
+  place-items: end center;
+  padding: 0;
+}
+.cn-sheet {
+  inline-size: min(100%, 40rem);
+  max-block-size: 92dvh;
+  overflow: auto;
+  padding: var(--space-3) var(--space-5) max(var(--space-6), env(safe-area-inset-bottom));
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  border-block-end: none;
+  color: var(--content-primary);
+  background: var(--surface-glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-lg);
+  animation: cn-sheet-in var(--motion-duration-slower) var(--motion-easing-spring);
+}
+.cn-sheet__grabber {
+  display: block;
+  inline-size: 2.5rem;
+  block-size: 0.3125rem;
+  margin: 0 auto var(--space-3);
+  border-radius: var(--radius-round);
+  background: var(--border-default);
+}
+@keyframes cn-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+/* ============================================================ Menu */
+.cn-menu-root {
+  display: inline-block;
+}
+.cn-menu {
+  min-inline-size: 12rem;
+  max-inline-size: min(20rem, 100vw - 2 * var(--space-4));
+  padding: var(--space-1);
+  margin: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface-glass-strong);
+  color: var(--content-primary);
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-offset-md),
+    var(--shadow-lg);
+  /* Positioned under its trigger by anchor positioning; the adapters fall back
+     to coordinates where anchor positioning is unavailable. */
+  position-area: block-end span-inline-end;
+  position-try-fallbacks: flip-block, flip-inline;
+  margin-block: var(--space-1);
+}
+.cn-menu:popover-open {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  animation: cn-pop-in var(--motion-duration-base) var(--motion-easing-spring);
+}
+.cn-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--size-control-md);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--content-primary);
+  font: inherit;
+  font-size: var(--type-body-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.cn-menu__item:focus-visible,
+.cn-menu__item[data-active="true"] {
+  outline: none;
+  background: var(--accent-primary-soft);
+}
+@media (hover: hover) {
+  .cn-menu__item:hover:not(:disabled) {
+    background: var(--state-layer-hover);
+  }
+}
+.cn-menu__item--danger {
+  color: var(--state-danger-content);
+}
+.cn-menu__item:disabled {
+  color: var(--content-disabled);
+  cursor: not-allowed;
+}
+.cn-menu__separator {
+  block-size: var(--border-width-hairline);
+  margin: var(--space-1) var(--space-2);
+  background: var(--border-subtle);
+}
+
+/* ============================================================ Tab bar (mobile navigation) */
+.cn-tabbar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-1) max(var(--space-1), env(safe-area-inset-bottom));
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    inset 0 1px 0 var(--cn-rim-light, var(--surface-glass-highlight)),
+    var(--shadow-offset-md),
+    var(--shadow-lg);
+}
+.cn-tabbar__item {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  min-block-size: max(var(--size-touch-min), 3.25rem);
+  padding: var(--space-1);
+  border-radius: var(--radius-xl);
+  color: var(--content-secondary);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  border: var(--border-width-hairline) solid transparent;
+}
+.cn-tabbar__icon {
+  inline-size: var(--size-icon-lg);
+  block-size: var(--size-icon-lg);
+}
+.cn-tabbar__item[aria-current="page"] {
+  color: var(--content-primary);
+  background: var(--accent-primary-soft);
+  border-color: var(--border-default);
+}
+@media (hover: hover) {
+  .cn-tabbar__item:hover:not([aria-current="page"]) {
+    color: var(--content-primary);
+  }
+}
+
+/* ============================================================ Toast & Alert */
+.cn-toast,
+.cn-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+  background: var(--surface-overlay);
+  color: var(--content-primary);
+  box-shadow: var(--shadow-offset-sm);
+}
+.cn-toast {
+  inline-size: min(100%, 24rem);
+  border-color: var(--border-glass-rim);
+  box-shadow: var(--shadow-offset-md), var(--shadow-lg);
+  animation: cn-pop-in var(--motion-duration-base) var(--motion-easing-spring);
+}
+.cn-toast__body {
+  flex: 1;
+  align-self: center;
+}
+.cn-toast__close {
+  flex: none;
+  margin-inline-start: auto;
+}
+.cn-alert__icon,
+.cn-toast__icon {
+  flex: none;
+  inline-size: var(--size-icon-md);
+  block-size: var(--size-icon-md);
+}
+.cn-alert--info .cn-alert__icon,
+.cn-toast--neutral .cn-toast__icon {
+  color: var(--accent-primary-subtle);
+}
+.cn-alert--success .cn-alert__icon,
+.cn-toast--success .cn-toast__icon {
+  color: var(--state-success-content);
+}
+.cn-alert--warning .cn-alert__icon,
+.cn-toast--warning .cn-toast__icon {
+  color: var(--state-warning-content);
+}
+.cn-alert--danger .cn-alert__icon,
+.cn-toast--danger .cn-toast__icon {
+  color: var(--state-danger-content);
+}
+.cn-alert--info {
+  border-inline-start: var(--border-width-accent) solid var(--accent-primary-base);
+}
+.cn-alert--success {
+  border-inline-start: var(--border-width-accent) solid var(--state-success-base);
+}
+.cn-alert--warning {
+  border-inline-start: var(--border-width-accent) solid var(--state-warning-base);
+}
+.cn-alert--danger {
+  border-inline-start: var(--border-width-accent) solid var(--state-danger-base);
+}
+
+/* ============================================================ Table */
+.cn-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-body-sm);
+}
+.cn-table caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: var(--space-2);
+  font-weight: var(--weight-semibold);
+  color: var(--content-primary);
+}
+.cn-table th {
+  text-align: start;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--type-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: var(--type-label-transform);
+  color: var(--content-secondary);
+  border-block-end: var(--border-width-hairline) solid var(--border-default);
+}
+.cn-table td {
+  padding: var(--space-3);
+  border-block-end: var(--border-width-hairline) solid var(--border-subtle);
+  color: var(--content-primary);
+}
+.cn-table :is(td, th)[data-numeric],
+.cn-table td.cn-num {
+  text-align: end;
+  font-family: var(--font-family-numeric);
+  font-variant-numeric: tabular-nums;
+}
+@media (hover: hover) {
+  .cn-table tbody tr:hover {
+    background: var(--state-layer-hover);
+  }
+}
+.cn-table--striped tbody tr:nth-child(even) {
+  background: var(--surface-raised);
+}
+.cn-table--size-sm :is(td, th) {
+  padding: var(--space-1) var(--space-2);
+}
+
+/* ============================================================ List */
+.cn-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cn-list__item {
+  padding: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--size-touch-min);
+  border-radius: var(--radius-sm);
+}
+.cn-list--bordered .cn-list__item {
+  border-radius: 0;
+  border-block-end: var(--border-width-hairline) solid var(--border-subtle);
+}
+.cn-list--bordered .cn-list__item:last-child {
+  border-block-end: none;
+}
+.cn-list__item[role="option"] {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .cn-list__item[role="option"]:hover {
+    background: var(--state-layer-hover);
+  }
+}
+.cn-list__item[aria-selected="true"] {
+  background: var(--accent-primary-soft);
+}
+.cn-list--size-sm .cn-list__item {
+  padding: var(--space-2);
+  font-size: var(--type-body-sm);
+}
+
+/* ============================================================ Avatar */
+.cn-avatar {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-round);
+  background: var(--accent-primary-soft);
+  color: var(--content-primary);
+  font-size: var(--type-body-sm);
+  font-weight: var(--weight-bold);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+}
+.cn-avatar img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.cn-avatar--rounded {
+  border-radius: var(--radius-md);
+}
+.cn-avatar--size-sm {
+  inline-size: 2rem;
+  block-size: 2rem;
+  font-size: var(--type-caption);
+}
+.cn-avatar--size-lg {
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  font-size: var(--type-body-lg);
+}
+
+/* ============================================================ Progress */
+.cn-progress {
+  position: relative;
+  inline-size: 100%;
+  block-size: 0.5rem;
+  border-radius: var(--radius-round);
+  background: var(--surface-raised);
+  border: var(--border-width-hairline) solid var(--border-default);
+  overflow: hidden;
+}
+.cn-progress--size-sm {
+  block-size: 0.25rem;
+}
+.cn-progress__fill {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--accent-primary-base);
+  transition: inline-size var(--motion-duration-slow) var(--motion-easing-emphasized);
+}
+.cn-progress--indeterminate .cn-progress__fill {
+  inline-size: 40%;
+  animation: cn-indeterminate 1.4s var(--motion-easing-standard) infinite;
+}
+@keyframes cn-indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cn-progress--indeterminate .cn-progress__fill {
+    animation-duration: 3s;
+  }
+}
+
+/* ============================================================ Skeleton */
+.cn-skeleton {
+  background: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+.cn-skeleton--text {
+  block-size: var(--type-body-base);
+  border-radius: var(--radius-xs);
+}
+.cn-skeleton--circle {
+  border-radius: var(--radius-round);
+  inline-size: var(--space-10);
+  block-size: var(--space-10);
+}
+.cn-skeleton--block {
+  block-size: var(--space-16);
+  border-radius: var(--radius-md);
+}
+.cn-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--state-layer-pressed), transparent);
+  transform: translateX(-100%);
+  animation: cn-shimmer 1.6s infinite;
+}
+@keyframes cn-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cn-skeleton::after {
+    animation: none;
+  }
+}
+.cn-skeleton--text.cn-skeleton--size-sm {
+  block-size: var(--type-caption);
+}
+.cn-skeleton--text.cn-skeleton--size-lg {
+  block-size: var(--type-h5);
+}
+.cn-skeleton--circle.cn-skeleton--size-sm {
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+}
+.cn-skeleton--circle.cn-skeleton--size-lg {
+  inline-size: var(--space-16);
+  block-size: var(--space-16);
+}
+.cn-skeleton--block.cn-skeleton--size-sm {
+  block-size: var(--space-10);
+}
+.cn-skeleton--block.cn-skeleton--size-lg {
+  block-size: calc(var(--space-16) * 2);
+}
+
+/* ============================================================ Breadcrumb */
+.cn-breadcrumb {
+  font-size: var(--type-body-sm);
+}
+.cn-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cn-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.cn-breadcrumb__link {
+  color: var(--content-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+}
+@media (hover: hover) {
+  .cn-breadcrumb__link:hover {
+    color: var(--content-primary);
+    text-decoration: underline;
+  }
+}
+.cn-breadcrumb__current {
+  color: var(--content-primary);
+  font-weight: var(--weight-semibold);
+}
+.cn-breadcrumb__text {
+  color: var(--content-secondary);
+}
+.cn-breadcrumb__sep {
+  color: var(--content-tertiary);
+}
+.cn-breadcrumb__sep:dir(rtl) {
+  transform: scaleX(-1);
+}
+.cn-breadcrumb--size-sm {
+  font-size: var(--type-caption);
+}
+
+/* ============================================================ Pagination */
+.cn-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+.cn-pagination__btn {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: var(--size-control-md);
+  min-block-size: var(--size-control-md);
+  padding: 0 var(--space-2);
+  border: var(--border-width-hairline) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised-1);
+  color: var(--content-primary);
+  font: inherit;
+  font-size: var(--type-body-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .cn-pagination__btn:hover:not(:disabled) {
+    border-color: var(--border-strong);
+  }
+}
+.cn-pagination__btn[aria-current="page"] {
+  background: var(--accent-primary-base);
+  color: var(--content-on-accent);
+  border-color: var(--accent-primary-strong);
+  font-weight: var(--weight-bold);
+}
+.cn-pagination__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cn-pagination__btn:dir(rtl) svg {
+  transform: scaleX(-1);
+}
+.cn-pagination__gap {
+  min-inline-size: var(--space-6);
+  text-align: center;
+  color: var(--content-tertiary);
+}
+.cn-pagination--size-sm .cn-pagination__btn {
+  min-inline-size: var(--size-control-sm);
+  min-block-size: var(--size-control-sm);
+  font-size: var(--type-caption);
+}
+
+/* ============================================================ Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cn-scrim,
+  .cn-modal,
+  .cn-dialog,
+  .cn-drawer,
+  .cn-sheet,
+  .cn-toast,
+  .cn-tooltip__bubble,
+  .cn-menu:popover-open {
+    animation: none;
+  }
+}
+
+/* ============================================================ Touch targets
+   WCAG 2.5.8 needs 24px; platform guidance for fingers is 44pt (Apple) and
+   48dp (Material). Compact density and pointer-first platforms stay compact
+   for a mouse but grow wherever the primary pointer is coarse. */
+@media (pointer: coarse) {
+  .cn-button,
+  .cn-input,
+  .cn-select__native,
+  .cn-pagination__btn,
+  .cn-tabs__tab,
+  .cn-nav__link,
+  .cn-menu__item,
+  .cn-segmented__label {
+    min-block-size: max(44px, var(--size-touch-min));
+  }
+  .cn-pagination__btn {
+    min-inline-size: max(44px, var(--size-touch-min));
+  }
+}
+
+/* ============================================================ Forced colors
+   Windows High Contrast replaces colours and drops box-shadow, so any state
+   carried only by a background or shadow disappears. Restate it with system
+   colours and real borders. */
+@media (forced-colors: active) {
+  .cn-card,
+  .cn-modal,
+  .cn-dialog,
+  .cn-drawer,
+  .cn-sheet,
+  .cn-menu,
+  .cn-tabbar,
+  .cn-toast,
+  .cn-alert,
+  .cn-tooltip__bubble,
+  .cn-nav {
+    border: 1px solid CanvasText;
+  }
+  .cn-toggle__track {
+    border-color: CanvasText;
+  }
+  .cn-toggle__thumb {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+  .cn-toggle__track:has(.cn-toggle__input:checked) {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+  }
+  .cn-toggle__input:checked ~ .cn-toggle__thumb {
+    background: HighlightText;
+  }
+  .cn-pagination__btn[aria-current="page"],
+  .cn-tabs__tab[aria-selected="true"],
+  .cn-list__item[aria-selected="true"],
+  .cn-tabbar__item[aria-current="page"],
+  .cn-nav__link[aria-current="page"],
+  .cn-segmented__input:checked + .cn-segmented__label {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+  .cn-progress__fill {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+  .cn-progress,
+  .cn-skeleton {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* ============================================================ Hidden guard
+   `[hidden]` is a user-agent `display: none`, which any component rule setting
+   display silently overrides, so `el.hidden = true` would fail to hide it. */
+.cn-scrim[hidden],
+.cn-drawer[hidden],
+.cn-dialog[hidden],
+.cn-modal[hidden],
+.cn-toast[hidden],
+.cn-tooltip__bubble[hidden],
+.cn-tabs__panel[hidden] {
+  display: none !important;
+}

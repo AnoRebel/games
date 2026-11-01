@@ -561,7 +561,7 @@ const spectatorShareUrl = computed(() => {
     <div v-else-if="meta" class="space-y-3">
       <button
         type="button"
-        class="w-full games-surface rounded-2xl p-6 text-center transition hover:-translate-y-0.5"
+        class="w-full games-surface rounded-[var(--radius-xl)] p-6 text-center transition hover:-translate-y-0.5"
         @click="setupOpen = true"
       >
         <p class="text-3xl mb-1">
@@ -573,7 +573,7 @@ const spectatorShareUrl = computed(() => {
         </p>
       </button>
       <!-- Join an existing online game by link, or room id + code -->
-      <div class="games-surface rounded-2xl p-4 space-y-3">
+      <div class="games-surface rounded-[var(--radius-xl)] p-4 space-y-3">
         <p class="text-sm font-semibold flex items-center gap-1.5">
           <UIcon name="i-lucide-link" :style="{ color: 'var(--games-accent)' }" />
           {{ $ts("lobby.joinExisting") }}

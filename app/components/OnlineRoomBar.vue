@@ -126,7 +126,9 @@ onBeforeUnmount(() => offConn?.());
       :description="$ts('game.playerLeftCountdown', { count: graceSeconds })"
     />
 
-    <div class="games-surface rounded-xl p-2.5 flex flex-wrap items-center gap-2">
+    <div
+      class="games-surface rounded-[var(--radius-lg)] p-2.5 flex flex-wrap items-center gap-2"
+    >
       <!-- Game and rule variant (host may change the variant between games) -->
       <USelect
         v-if="canConfigure"

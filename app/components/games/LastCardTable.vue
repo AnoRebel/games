@@ -505,7 +505,10 @@ async function draw() {
 </script>
 
 <template>
-  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
+  <div
+    v-if="!hasState"
+    class="games-surface rounded-[var(--radius-xl)] p-10 text-center space-y-2"
+  >
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
     <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
@@ -548,7 +551,7 @@ async function draw() {
     <!-- Felt table -->
     <div
       ref="tableRef"
-      class="relative rounded-2xl p-6 sm:p-10 flex items-center justify-center gap-8 sm:gap-14 overflow-hidden games-felt min-h-[300px]"
+      class="relative rounded-[var(--radius-xl)] p-6 sm:p-10 flex items-center justify-center gap-8 sm:gap-14 overflow-hidden games-felt min-h-[300px]"
       data-tour="table"
     >
       <div ref="drawRef" class="flex flex-col items-center gap-1">
@@ -766,7 +769,7 @@ async function draw() {
               v-for="(b, i) in pendingMulti?.bundles ?? []"
               :key="i"
               type="button"
-              class="rounded-xl p-1 transition hover:-translate-y-1"
+              class="rounded-[var(--radius-lg)] p-1 transition hover:-translate-y-1"
               :style="{ border: '2px solid var(--games-border)' }"
               :title="
                 $ts('game.topCard', {

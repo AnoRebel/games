@@ -61,14 +61,17 @@ async function play(move: BaseMove) {
 </script>
 
 <template>
-  <div v-if="!hasState" class="games-surface rounded-2xl p-10 text-center space-y-2">
+  <div
+    v-if="!hasState"
+    class="games-surface rounded-[var(--radius-xl)] p-10 text-center space-y-2"
+  >
     <UIcon name="i-lucide-loader-circle" class="animate-spin text-2xl" />
     <p class="text-sm" :style="{ color: 'var(--games-text-muted)' }">
       {{ $ts("game.waitingToStart") }}
     </p>
   </div>
 
-  <div v-else class="space-y-3 games-scene-surface rounded-2xl p-2 sm:p-4">
+  <div v-else class="space-y-3 games-scene-surface rounded-[var(--radius-xl)] p-2 sm:p-4">
     <div class="flex justify-center">
       <span
         class="text-sm font-semibold rounded-full px-4 py-1.5 min-h-11 inline-flex items-center"

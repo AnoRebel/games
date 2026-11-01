@@ -49,7 +49,7 @@ watch(open, (o) => {
         />
         <span
           v-if="unread"
-          class="absolute -top-2 -right-2 min-w-4 h-4 px-1 grid place-items-center rounded-full bg-red-500 text-white text-[10px] font-bold"
+          class="absolute -top-2 -right-2 min-w-4 h-4 px-1 grid place-items-center rounded-full bg-[var(--state-danger-strong)] text-[var(--state-danger-on)] text-[10px] font-bold"
         >
           {{ unread > 9 ? "9+" : unread }}
         </span>
@@ -85,7 +85,7 @@ watch(open, (o) => {
           <li
             v-for="(e, i) in entries"
             :key="e.id"
-            class="flex items-center gap-3 rounded-lg px-3 py-2.5"
+            class="flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5"
             :style="{
               background:
                 i === 0

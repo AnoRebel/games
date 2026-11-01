@@ -55,7 +55,10 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
 
     <!-- Stats -->
     <div v-if="stats.played" class="grid grid-cols-4 gap-2 text-center">
-      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
+      <div
+        class="rounded-[var(--radius-md)] p-2"
+        :style="{ background: 'var(--games-surface)' }"
+      >
         <p class="text-lg font-bold font-display tabular-nums">{{ stats.played }}</p>
         <p
           class="text-[10px] uppercase tracking-wide"
@@ -64,7 +67,10 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
           {{ $ts("profile.played") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
+      <div
+        class="rounded-[var(--radius-md)] p-2"
+        :style="{ background: 'var(--games-surface)' }"
+      >
         <p class="text-lg font-bold font-display tabular-nums">{{ stats.wins }}</p>
         <p
           class="text-[10px] uppercase tracking-wide"
@@ -73,7 +79,10 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
           {{ $ts("profile.wins") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
+      <div
+        class="rounded-[var(--radius-md)] p-2"
+        :style="{ background: 'var(--games-surface)' }"
+      >
         <p class="text-lg font-bold font-display tabular-nums">
           {{ pct(stats.winRate) }}
         </p>
@@ -84,7 +93,10 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
           {{ $ts("profile.winRate") }}
         </p>
       </div>
-      <div class="rounded-lg p-2" :style="{ background: 'var(--games-surface)' }">
+      <div
+        class="rounded-[var(--radius-md)] p-2"
+        :style="{ background: 'var(--games-surface)' }"
+      >
         <p class="text-lg font-bold font-display tabular-nums">
           {{ stats.currentStreak
           }}<span v-if="stats.currentStreak" class="text-sm">🔥</span>

@@ -90,7 +90,7 @@ async function nativeShare() {
         </p>
         <!-- eslint-disable-next-line vue/no-v-html -- our own generated QR SVG, not user input -->
         <div
-          class="mx-auto w-40 h-40 rounded-lg overflow-hidden bg-white p-2 [&>svg]:w-full [&>svg]:h-full"
+          class="mx-auto w-40 h-40 rounded-[var(--radius-md)] overflow-hidden bg-white p-2 [&>svg]:w-full [&>svg]:h-full"
           v-html="qrSvg"
         />
         <div class="flex gap-2">

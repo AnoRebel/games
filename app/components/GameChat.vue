@@ -95,7 +95,7 @@ function time(iso: string) {
       <div
         v-if="open"
         ref="panelRef"
-        class="fixed z-50 rounded-2xl overflow-hidden shadow-2xl flex flex-col resize"
+        class="fixed z-50 rounded-[var(--radius-xl)] overflow-hidden shadow-2xl flex flex-col resize"
         :class="positioned ? '' : 'bottom-4 right-4'"
         :style="[
           positioned ? style : {},
@@ -296,7 +296,7 @@ function time(iso: string) {
       <UIcon name="i-lucide-message-circle" class="text-xl" />
       <span
         v-if="unread"
-        class="absolute -top-1 -right-1 min-w-5 h-5 px-1 grid place-items-center rounded-full bg-red-500 text-white text-[11px] font-bold"
+        class="absolute -top-1 -right-1 min-w-5 h-5 px-1 grid place-items-center rounded-full bg-[var(--state-danger-strong)] text-[var(--state-danger-on)] text-[11px] font-bold"
       >
         {{ unread > 9 ? "9+" : unread }}
       </span>

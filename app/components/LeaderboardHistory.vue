@@ -63,7 +63,7 @@ function when(iso: string) {
       <li
         v-for="(e, i) in entries"
         :key="`${e.playerId}-${e.playedAt}-${i}`"
-        class="rounded-lg px-2.5 py-1.5 min-w-0"
+        class="rounded-[var(--radius-md)] px-2.5 py-1.5 min-w-0"
         :style="{
           background: 'var(--games-surface)',
           border: '1px solid var(--games-border)',
