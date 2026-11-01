@@ -35,7 +35,9 @@ tutorials.
 - **Themes**: built-in + user-uploaded card backs and table backgrounds, and
   scene themes (Felt, Arcade, Neon, or your own colours) that restyle boards
   and tables with contrast checked against WCAG AA.
-- **Boards that fit phones**: Bao and Checkers boards scale to the screen,
+- **Boards that fit phones**: Bao pits hold pebbles that drop in as seeds are
+  sown, Checkers kings are stacked and crowned with a short flourish, and both
+  boards scale to the screen,
   with a zoom mode, keyboard play, move hints and screen-reader announcements.
 - **Per-room chat**, per-game **leaderboards** (standings plus recent plays
   with variant, bot strength and experience tier), **tutorials** and an

@@ -457,8 +457,9 @@ function centre(el: Element) {
 }
 
 /**
- * Bao sowing: a seed travels pit to pit along the sown path, each pit pulsing
- * as it receives the seed, then the final counts settle. Subtle motion only
+ * Bao sowing: a pebble travels pit to pit along the sown path, each pit
+ * pulsing as it receives the seed (the board drops a pebble into the pile at
+ * the same moment), then the final counts settle. Subtle motion only
  * pulses the last pit; reduced motion shows the result at once. Long relays
  * speed up so a turn never drags.
  */
@@ -475,9 +476,17 @@ export function sowAlong(pits: Element[]): Promise<void> {
     return Promise.resolve();
   }
   const hop = Math.max(0.035, Math.min(0.09, 1.4 / pits.length));
+  // The travelling seed is a pebble the size of those in the pits, in the
+  // sowing side's colour (read from the scene, which body does not inherit).
   const seed = document.createElement("span");
   const start = centre(pits[0]!);
-  seed.style.cssText = `position:fixed;left:${start.x - 6}px;top:${start.y - 6}px;width:12px;height:12px;border-radius:9999px;pointer-events:none;z-index:50;background:var(--games-scene-accent, var(--games-accent));box-shadow:0 0 6px rgb(0 0 0 / 0.4);will-change:transform`;
+  const size = Math.max(8, Math.round(pits[0]!.getBoundingClientRect().width * 0.2));
+  const role = pits[0]!.closest(".is-opponent")
+    ? "--games-scene-opponent-piece"
+    : "--games-scene-own-piece";
+  const colour =
+    getComputedStyle(pits[0]!).getPropertyValue(role).trim() || "oklch(0.93 0.02 85)";
+  seed.style.cssText = `position:fixed;left:${start.x - size / 2}px;top:${start.y - size / 2}px;width:${size}px;height:${size}px;border-radius:46% 54% 50% 50% / 52% 48% 52% 48%;pointer-events:none;z-index:50;background:radial-gradient(circle at 35% 30%, color-mix(in oklch, ${colour} 70%, white), ${colour} 60%, color-mix(in oklch, ${colour} 65%, black));box-shadow:0 3px 6px rgb(0 0 0 / 0.45);will-change:transform`;
   document.body.appendChild(seed);
   return new Promise<void>((resolve) => {
     const done = () => {
@@ -580,18 +589,58 @@ export function popCapture(ghosts: HTMLElement[]): Promise<void> {
   });
 }
 
-/** A man crowned king: the crown pops in (rich) or simply appears. */
-export function promotePiece(crown: Element | null | undefined) {
+/**
+ * A man crowned king. Rich motion: the piece lifts and lands as a stacked
+ * king, a ring of light spreads from it and the crown pops in. Subtle motion
+ * fades the crown in; reduced motion shows the king at once.
+ */
+export function promotePiece(crown: Element | null | undefined, piece?: Element | null) {
   if (!canAnimate() || !crown) return;
+  if (!rich()) {
+    guarded(crown, () =>
+      gsap.fromTo(crown, { opacity: 0 }, { opacity: 1, duration: s(150) }),
+    );
+    return;
+  }
   guarded(crown, () =>
-    rich()
-      ? keyframes(
-          crown,
-          { scale: [0, 1.35, 1], rotation: [-30, 10, 0], opacity: [0, 1, 1] },
-          { duration: s(520), ease: EASE.out4 },
-        )
-      : gsap.fromTo(crown, { opacity: 0 }, { opacity: 1, duration: s(150) }),
+    keyframes(
+      crown,
+      { scale: [0, 1.35, 1], rotation: [-30, 10, 0], opacity: [0, 1, 1] },
+      { duration: s(520), delay: piece ? s(180) : 0, ease: EASE.out4 },
+    ),
   );
+  if (!piece) return;
+  guarded(piece, () =>
+    keyframes(
+      piece,
+      { yPercent: [0, -22, 0], scale: [1, 1.18, 1] },
+      { duration: s(460), ease: EASE.out3 },
+    ),
+  );
+  const r = piece.getBoundingClientRect();
+  if (!r.width) return;
+  const glow =
+    getComputedStyle(piece).getPropertyValue("--games-scene-accent").trim() ||
+    "oklch(0.85 0.15 85)";
+  const ring = document.createElement("span");
+  ring.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;border-radius:9999px;border:3px solid ${glow};pointer-events:none;z-index:40;will-change:transform,opacity`;
+  document.body.appendChild(ring);
+  try {
+    gsap.fromTo(
+      ring,
+      { scale: 0.9, opacity: 0.9 },
+      {
+        scale: 1.9,
+        opacity: 0,
+        duration: s(620),
+        delay: s(160),
+        ease: EASE.out3,
+        onComplete: () => ring.remove(),
+      },
+    );
+  } catch {
+    ring.remove();
+  }
 }
 
 /** Ghost copy of an element at its current place (for capture animations). */
